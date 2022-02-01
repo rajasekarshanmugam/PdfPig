@@ -153,7 +153,7 @@ namespace UglyToad.PdfPig.Graphics
                         OperandToDecimal(operands[2]),
                         OperandToDecimal(operands[3]));
                 case AppendRectangle.Symbol:
-                    return new AppendRectangle(OperandToDecimal(operands[0]),
+                    return !operands.Any() ? null : new AppendRectangle(OperandToDecimal(operands[0]),
                         OperandToDecimal(operands[1]),
                         OperandToDecimal(operands[2]),
                         OperandToDecimal(operands[3]));
