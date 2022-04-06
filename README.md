@@ -2,7 +2,6 @@
 
 # PdfPig
 
-[![Build Status](https://dev.azure.com/pdfpig/pdfpig/_apis/build/status/UglyToad.PdfPig?branchName=master)](https://dev.azure.com/pdfpig/pdfpig/_build/latest?definitionId=1&branchName=master)
 [![codecov](https://codecov.io/gh/UglyToad/PdfPig/branch/master/graph/badge.svg)](https://codecov.io/gh/UglyToad/PdfPig)
 [![Gitter](https://badges.gitter.im/pdfpig/community.svg)](https://gitter.im/pdfpig/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![nuget](https://img.shields.io/nuget/dt/PdfPig)](https://www.nuget.org/packages/PdfPig/)
@@ -298,6 +297,10 @@ You can merge 2 or more existing PDF files using the `PdfMerger` class:
 
     var resultFileBytes = PdfMerger.Merge(filePath1, filePath2);
     File.WriteAllBytes(@"C:\pdfs\outputfilename.pdf", resultFileBytes);
+
+## API Reference
+
+If you wish to generate doxygen documentation, run `doxygen doxygen-docs` and open `docs/doxygen/html/index.html`.
 
 ## Issues
 
