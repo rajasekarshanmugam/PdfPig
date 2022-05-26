@@ -97,7 +97,7 @@
             var crossReferenceStreamParser = new CrossReferenceStreamParser(filterProvider);
             var crossReferenceParser = new CrossReferenceParser(log, xrefValidator, crossReferenceStreamParser);
 
-            var version = FileHeaderParser.Parse(scanner, isLenientParsing, log);
+            var version = FileHeaderParser.Parse(scanner, inputBytes, isLenientParsing, log);
 
             var crossReferenceOffset = FileTrailerParser.GetFirstCrossReferenceOffset(inputBytes, scanner,
                 isLenientParsing) + version.OffsetInFile;
@@ -137,7 +137,7 @@
 
             var resourceContainer = new ResourceStore(pdfScanner, fontFactory);
 
-            var information = DocumentInformationFactory.Create(pdfScanner, crossReferenceTable.Trailer);
+            var information = DocumentInformationFactory.Create(pdfScanner, crossReferenceTable.Trailer, isLenientParsing);
 
             var catalog = CatalogFactory.Create(rootReference, rootDictionary, pdfScanner, isLenientParsing);
 

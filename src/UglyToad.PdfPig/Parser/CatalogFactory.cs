@@ -10,7 +10,17 @@
 
     internal static class CatalogFactory
     {
-        public static Catalog Create(IndirectReference rootReference, DictionaryToken dictionary, 
+
+        private class PageCounter
+        {
+            public int PageCount { get; private set; }
+            public void Increment()
+            {
+                PageCount++;
+            }
+        }
+
+        public static Catalog Create(IndirectReference rootReference, DictionaryToken dictionary,
             IPdfTokenScanner scanner,
             bool isLenientParsing)
         {
@@ -46,99 +56,130 @@
                 pages = DirectObjectFinder.Get<DictionaryToken>(value, scanner);
             }
 
-            var pageNumber = 0;
+            var pageNumber = new PageCounter();
 
             var pageTree = ProcessPagesNode(pagesReference, pages, new IndirectReference(1, 0), true,
-                scanner, isLenientParsing, ref pageNumber);
+                scanner, isLenientParsing, pageNumber);
 
             return new Catalog(dictionary, pages, pageTree);
         }
 
-        private static PageTreeNode ProcessPagesNode(IndirectReference reference, DictionaryToken nodeDictionary,
-            IndirectReference parentReference,
+        private static PageTreeNode ProcessPagesNode(IndirectReference referenceInput,
+            DictionaryToken nodeDictionaryInput,
+            IndirectReference parentReferenceInput,
             bool isRoot,
             IPdfTokenScanner pdfTokenScanner,
             bool isLenientParsing,
-            ref int pageNumber)
+            PageCounter pageNumber)
+        {
+            bool isPage = CheckIfIsPage(nodeDictionaryInput, parentReferenceInput, isRoot, pdfTokenScanner, isLenientParsing);
+
+            if (isPage)
+            {
+                pageNumber.Increment();
+
+                return new PageTreeNode(nodeDictionaryInput, referenceInput, true, pageNumber.PageCount).WithChildren(EmptyArray<PageTreeNode>.Instance);
+            }
+
+            //If we got here, we have to iterate till we manage to exit
+
+            var toProcess =
+                new Queue<(PageTreeNode thisPage, IndirectReference reference, DictionaryToken nodeDictionary, IndirectReference parentReference,
+                    List<PageTreeNode> nodeChildren)>();
+            var firstPage = new PageTreeNode(nodeDictionaryInput, referenceInput, false, null);
+            var setChildren = new List<Action>();
+            var firstPageChildren = new List<PageTreeNode>();
+
+            setChildren.Add(() => firstPage.WithChildren(firstPageChildren));
+
+            toProcess.Enqueue(
+                (thisPage: firstPage, reference: referenceInput, nodeDictionary: nodeDictionaryInput, parentReference: parentReferenceInput,
+                    nodeChildren: firstPageChildren));
+
+            do
+            {
+                var current = toProcess.Dequeue();
+
+                if (!current.nodeDictionary.TryGet(NameToken.Kids, pdfTokenScanner, out ArrayToken kids))
+                {
+                    if (!isLenientParsing)
+                    {
+                        throw new PdfDocumentFormatException($"Pages node in the document pages tree did not define a kids array: {current.nodeDictionary}.");
+                    }
+
+                    kids = new ArrayToken(EmptyArray<IToken>.Instance);
+                }
+
+                foreach (var kid in kids.Data)
+                {
+                    if (!(kid is IndirectReferenceToken kidRef))
+                    {
+                        throw new PdfDocumentFormatException($"Kids array contained invalid entry (must be indirect reference): {kid}.");
+                    }
+
+                    if (!DirectObjectFinder.TryGet(kidRef, pdfTokenScanner, out DictionaryToken kidDictionaryToken))
+                    {
+                        throw new PdfDocumentFormatException($"Could not find dictionary associated with reference in pages kids array: {kidRef}.");
+                    }
+
+                    bool isChildPage = CheckIfIsPage(kidDictionaryToken, current.reference, false, pdfTokenScanner, isLenientParsing);
+
+                    if (isChildPage)
+                    {
+                        pageNumber.Increment();
+
+                        var kidPageNode =
+                            new PageTreeNode(kidDictionaryToken, kidRef.Data, true, pageNumber.PageCount).WithChildren(EmptyArray<PageTreeNode>.Instance);
+                        current.nodeChildren.Add(kidPageNode);
+                    }
+                    else
+                    {
+                        var kidChildNode = new PageTreeNode(kidDictionaryToken, kidRef.Data, false, null);
+                        var kidChildren = new List<PageTreeNode>();
+                        toProcess.Enqueue(
+                            (thisPage: kidChildNode, reference: kidRef.Data, nodeDictionary: kidDictionaryToken, parentReference: current.reference,
+                                nodeChildren: kidChildren));
+
+                        setChildren.Add(() => kidChildNode.WithChildren(kidChildren));
+
+                        current.nodeChildren.Add(kidChildNode);
+                    }
+                }
+            } while (toProcess.Count > 0);
+
+            foreach (var action in setChildren)
+            {
+                action();
+            }
+
+            return firstPage;
+        }
+
+        private static bool CheckIfIsPage(DictionaryToken nodeDictionary, IndirectReference parentReference, bool isRoot, IPdfTokenScanner pdfTokenScanner, bool isLenientParsing)
         {
             var isPage = false;
 
             if (!nodeDictionary.TryGet(NameToken.Type, pdfTokenScanner, out NameToken type))
             {
-                if (!isLenientParsing)
-                {
-                    throw new PdfDocumentFormatException($"Node in the document pages tree did not define a type: {nodeDictionary}.");
-                }
+                if (!isLenientParsing) { throw new PdfDocumentFormatException($"Node in the document pages tree did not define a type: {nodeDictionary}."); }
 
-                if (!nodeDictionary.TryGet(NameToken.Kids, pdfTokenScanner, out ArrayToken _))
-                {
-                    isPage = true;
-                }
+                if (!nodeDictionary.TryGet(NameToken.Kids, pdfTokenScanner, out ArrayToken _)) { isPage = true; }
             }
             else
             {
                 isPage = type.Equals(NameToken.Page);
 
-                if (!isPage && !type.Equals(NameToken.Pages) && !isLenientParsing)
-                {
-                    throw new PdfDocumentFormatException($"Node in the document pages tree defined invalid type: {nodeDictionary}.");
-                }
+                if (!isPage && !type.Equals(NameToken.Pages) && !isLenientParsing) { throw new PdfDocumentFormatException($"Node in the document pages tree defined invalid type: {nodeDictionary}."); }
             }
 
             if (!isLenientParsing && !isRoot)
             {
-                if (!nodeDictionary.TryGet(NameToken.Parent, pdfTokenScanner, out IndirectReferenceToken parentReferenceToken))
-                {
-                    throw new PdfDocumentFormatException($"Could not find parent indirect reference token on pages tree node: {nodeDictionary}.");
-                }
+                if (!nodeDictionary.TryGet(NameToken.Parent, pdfTokenScanner, out IndirectReferenceToken parentReferenceToken)) { throw new PdfDocumentFormatException($"Could not find parent indirect reference token on pages tree node: {nodeDictionary}."); }
 
-                if (!parentReferenceToken.Data.Equals(parentReference))
-                {
-                    throw new PdfDocumentFormatException($"Pages tree node parent reference {parentReferenceToken.Data} did not match actual parent {parentReference}.");
-                }
+                if (!parentReferenceToken.Data.Equals(parentReference)) { throw new PdfDocumentFormatException($"Pages tree node parent reference {parentReferenceToken.Data} did not match actual parent {parentReference}."); }
             }
 
-            if (isPage)
-            {
-                pageNumber++;
-
-                var thisNode = new PageTreeNode(nodeDictionary, reference, true,
-                    pageNumber,
-                    EmptyArray<PageTreeNode>.Instance);
-
-                return thisNode;
-            }
-            
-            if (!nodeDictionary.TryGet(NameToken.Kids, pdfTokenScanner, out ArrayToken kids))
-            {
-                if (!isLenientParsing)
-                {
-                    throw new PdfDocumentFormatException($"Pages node in the document pages tree did not define a kids array: {nodeDictionary}.");
-                }
-               
-                kids = new ArrayToken(EmptyArray<IToken>.Instance);
-            }
-
-            var nodeChildren = new List<PageTreeNode>();
-
-            foreach (var kid in kids.Data)
-            {
-                if (!(kid is IndirectReferenceToken kidRef))
-                {
-                    throw new PdfDocumentFormatException($"Kids array contained invalid entry (must be indirect reference): {kid}.");
-                }
-
-                if (!DirectObjectFinder.TryGet(kidRef, pdfTokenScanner, out DictionaryToken kidDictionaryToken))
-                {
-                    throw new PdfDocumentFormatException($"Could not find dictionary associated with reference in pages kids array: {kidRef}.");
-                }
-
-                var kidNode = ProcessPagesNode(kidRef.Data, kidDictionaryToken, reference, false, pdfTokenScanner, isLenientParsing, ref pageNumber);
-
-                nodeChildren.Add(kidNode);
-            }
-
-            return new PageTreeNode(nodeDictionary, reference, false, null, nodeChildren);
+            return isPage;
         }
     }
 }

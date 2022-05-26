@@ -151,47 +151,87 @@
             outputStream.Write(Xref, 0, Xref.Length);
             WriteLineBreak(outputStream);
 
-            var min = objectOffsets.Min(x => x.Key.ObjectNumber);
-            var max = objectOffsets.Max(x => x.Key.ObjectNumber);
+            var sets = new List<XrefSeries>();
 
-            if (max - min != objectOffsets.Count - 1)
+            var orderedList = objectOffsets.OrderBy(x => x.Key.ObjectNumber).ToList();
+
+            long firstObjectNumber = 0;
+            long currentObjNum = 0;
+            var items = new List<XrefSeries.OffsetAndGeneration>
             {
-                throw new NotSupportedException("Object numbers must form a contiguous range");
+                // Zero entry
+                null
+            };
+
+            foreach (var item in orderedList)
+            {
+                var step = item.Key.ObjectNumber - currentObjNum;
+                if (step == 1)
+                {
+                    currentObjNum = item.Key.ObjectNumber;
+                    items.Add(new XrefSeries.OffsetAndGeneration(item.Value, item.Key.Generation));
+                }
+                else
+                {
+                    sets.Add(new XrefSeries(firstObjectNumber, items));
+                    items = new List<XrefSeries.OffsetAndGeneration>
+                    {
+                        new XrefSeries.OffsetAndGeneration(item.Value, item.Key.Generation)
+                    };
+
+                    currentObjNum = item.Key.ObjectNumber;
+                    firstObjectNumber = item.Key.ObjectNumber;
+                }
             }
 
-            WriteLong(0, outputStream);
-            WriteWhitespace(outputStream);
-            // 1 extra for the free entry.
-            WriteLong(objectOffsets.Count + 1, outputStream);
-            WriteWhitespace(outputStream);
-            WriteLineBreak(outputStream);
-
-            WriteFirstXrefEmptyEntry(outputStream);
-
-            foreach (var keyValuePair in objectOffsets.OrderBy(x => x.Key.ObjectNumber))
+            if (items.Count > 0)
             {
-                /*
-                 * nnnnnnnnnn ggggg n eol
-                 * where:
-                 * nnnnnnnnnn is a 10-digit byte offset
-                 * ggggg is a 5-digit generation number
-                 * n is a literal keyword identifying this as an in-use entry
-                 * eol is a 2-character end-of-line sequence ('\r\n' or ' \n')
-                 */
-                var paddedOffset = OtherEncodings.StringAsLatin1Bytes(keyValuePair.Value.ToString("D10"));
-                outputStream.Write(paddedOffset, 0, paddedOffset.Length);
+                sets.Add(new XrefSeries(firstObjectNumber, items));
+            }
 
+            foreach (var series in sets)
+            {
+                WriteLong(series.First, outputStream);
                 WriteWhitespace(outputStream);
 
-                var generation = OtherEncodings.StringAsLatin1Bytes(keyValuePair.Key.Generation.ToString("D5"));
-                outputStream.Write(generation, 0, generation.Length);
-
-                WriteWhitespace(outputStream);
-
-                outputStream.WriteByte(InUseEntry);
+                WriteLong(series.Offsets.Count, outputStream);
 
                 WriteWhitespace(outputStream);
                 WriteLineBreak(outputStream);
+
+                foreach (var offset in series.Offsets)
+                {
+                    if (offset != null)
+                    {
+                        /*
+                     * nnnnnnnnnn ggggg n eol
+                     * where:
+                     * nnnnnnnnnn is a 10-digit byte offset
+                     * ggggg is a 5-digit generation number
+                     * n is a literal keyword identifying this as an in-use entry
+                     * eol is a 2-character end-of-line sequence ('\r\n' or ' \n')
+                     */
+                        var paddedOffset = OtherEncodings.StringAsLatin1Bytes(offset.Offset.ToString("D10", CultureInfo.InvariantCulture));
+                        outputStream.Write(paddedOffset, 0, paddedOffset.Length);
+
+                        WriteWhitespace(outputStream);
+
+                        var generation = OtherEncodings.StringAsLatin1Bytes(offset.Generation.ToString("D5", CultureInfo.InvariantCulture));
+                        outputStream.Write(generation, 0, generation.Length);
+
+                        WriteWhitespace(outputStream);
+
+                        outputStream.WriteByte(InUseEntry);
+
+                        WriteWhitespace(outputStream);
+                        WriteLineBreak(outputStream);
+
+                    }
+                    else
+                    {
+                        WriteFirstXrefEmptyEntry(outputStream);
+                    }
+                }
             }
 
             outputStream.Write(Trailer, 0, Trailer.Length);
@@ -523,6 +563,32 @@
             }
 
             return bytes[0];
+        }
+
+        private class XrefSeries
+        {
+            public long First { get; }
+
+            public IReadOnlyList<OffsetAndGeneration> Offsets { get; }
+
+            public XrefSeries(long first, IReadOnlyList<OffsetAndGeneration> offsets)
+            {
+                First = first;
+                Offsets = offsets;
+            }
+
+            public class OffsetAndGeneration
+            {
+                public long Offset { get; }
+
+                public long Generation { get; }
+
+                public OffsetAndGeneration(long offset, long generation)
+                {
+                    Offset = offset;
+                    Generation = generation;
+                }
+            }
         }
     }
 }
