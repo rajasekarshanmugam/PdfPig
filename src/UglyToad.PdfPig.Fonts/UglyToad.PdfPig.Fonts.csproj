@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net7.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <Version>0.1.7-alpha-001</Version>
+    <Version>0.1.8-alpha-001</Version>
     <IsTestProject>False</IsTestProject>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
