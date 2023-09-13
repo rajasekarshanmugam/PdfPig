@@ -61,7 +61,7 @@
                 return false;
             }
 
-            CurrentByte = (byte) b;
+            CurrentByte = (byte)b;
             return true;
         }
 
@@ -136,7 +136,7 @@
             }
 
             isAtEnd = stream.Position == stream.Length;
-            
+
             return read;
         }
 

@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat.Dictionaries
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
-    using Core;
 
     internal abstract class CompactFontFormatDictionaryReader<TResult, TBuilder>
     {
@@ -34,7 +34,7 @@
                     // Operands and operators are distinguished by the first byte, 0 - 21 specify operators
                     if (byte0 <= 21)
                     {
-                        var key = byte0 == 12 ? new OperandKey(byte0, data.ReadByte()) : new OperandKey(byte0); 
+                        var key = byte0 == 12 ? new OperandKey(byte0, data.ReadByte()) : new OperandKey(byte0);
 
                         ApplyOperation(builder, operands, key, stringIndex);
                         break;

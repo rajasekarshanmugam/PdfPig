@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Encryption
 {
+    using Core;
     using System;
     using System.Linq;
-    using Core;
     using Tokenization.Scanner;
     using Tokens;
     using Util;
@@ -15,18 +15,18 @@
             {
                 throw new ArgumentNullException(nameof(encryptionDictionary));
             }
-            
+
             var filter = encryptionDictionary.Get<NameToken>(NameToken.Filter, tokenScanner);
 
             var code = EncryptionAlgorithmCode.Unrecognized;
 
             if (encryptionDictionary.TryGetOptionalTokenDirect(NameToken.V, tokenScanner, out NumericToken vNum))
             {
-                code = (EncryptionAlgorithmCode) vNum.Int;
+                code = (EncryptionAlgorithmCode)vNum.Int;
             }
 
             var length = default(int?);
-            
+
             if (encryptionDictionary.TryGetOptionalTokenDirect(NameToken.Length, tokenScanner, out NumericToken lengthToken))
             {
                 length = lengthToken.Int;
@@ -50,7 +50,7 @@
                     ownerBytes = ownerHex.Bytes.ToArray();
                 }
             }
-            
+
             byte[] userBytes = null;
             if (encryptionDictionary.TryGet(NameToken.U, out IToken userToken))
             {
@@ -63,13 +63,13 @@
                     userBytes = userHex.Bytes.ToArray();
                 }
             }
-            
+
             var access = default(UserAccessPermissions);
 
             if (encryptionDictionary.TryGetOptionalTokenDirect(NameToken.P, tokenScanner, out NumericToken accessToken))
             {
                 // This can be bigger than an integer.
-                access = (UserAccessPermissions) accessToken.Long;
+                access = (UserAccessPermissions)accessToken.Long;
             }
 
             byte[] userEncryptionBytes = null, ownerEncryptionBytes = null;
@@ -81,10 +81,10 @@
 
             encryptionDictionary.TryGetOptionalTokenDirect(NameToken.EncryptMetaData, tokenScanner, out BooleanToken encryptMetadata);
 
-            return new EncryptionDictionary(filter.Data, code, length, revision, ownerBytes, userBytes, 
+            return new EncryptionDictionary(filter.Data, code, length, revision, ownerBytes, userBytes,
                 ownerEncryptionBytes,
                 userEncryptionBytes,
-                access, 
+                access,
                 encryptionDictionary,
                 encryptMetadata?.Data ?? true);
         }

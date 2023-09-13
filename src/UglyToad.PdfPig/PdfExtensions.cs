@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig
 {
-    using System.Collections.Generic;
     using Core;
     using Filters;
     using Parser.Parts;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
 

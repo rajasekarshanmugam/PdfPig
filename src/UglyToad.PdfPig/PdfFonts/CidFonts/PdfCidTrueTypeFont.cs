@@ -1,16 +1,16 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.CidFonts
 {
-    using System;
     using Core;
     using Fonts.TrueType;
     using Fonts.TrueType.Tables;
+    using System;
 
     internal class PdfCidTrueTypeFont : ICidFontProgram
     {
         private readonly TrueTypeFont font;
 
         public FontDetails Details { get; }
-        
+
         public PdfCidTrueTypeFont(TrueTypeFont font)
         {
             this.font = font ?? throw new ArgumentNullException(nameof(font));

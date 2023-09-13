@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.CrossReference
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
     using Util.JetBrains.Annotations;
 
     /// <summary>
@@ -40,7 +40,7 @@
         [NotNull]
         public IReadOnlyList<CrossReferenceOffset> CrossReferenceOffsets { get; }
 
-        internal CrossReferenceTable(CrossReferenceType type, IReadOnlyDictionary<IndirectReference, long> objectOffsets, 
+        internal CrossReferenceTable(CrossReferenceType type, IReadOnlyDictionary<IndirectReference, long> objectOffsets,
             TrailerDictionary trailer,
             IReadOnlyList<CrossReferenceOffset> crossReferenceOffsets)
         {
@@ -61,7 +61,7 @@
 
             this.objectOffsets = result;
         }
-        
+
         /// <summary>
         /// The offset of a cross-reference table or stream in the document.
         /// </summary>

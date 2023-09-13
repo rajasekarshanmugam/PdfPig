@@ -15,8 +15,8 @@
         /// </summary>
         internal AcroCheckboxesField(DictionaryToken dictionary, string fieldType, AcroButtonFieldFlags fieldFlags,
             AcroFieldCommonInformation information,
-            IReadOnlyList<AcroFieldBase> children) : 
-            base(dictionary, fieldType, (uint)fieldFlags, information, 
+            IReadOnlyList<AcroFieldBase> children) :
+            base(dictionary, fieldType, (uint)fieldFlags, information,
                 AcroFieldType.Checkboxes, children)
         {
         }

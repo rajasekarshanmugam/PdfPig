@@ -1,7 +1,6 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.PathConstruction
 {
     using System.IO;
-    using PdfPig.Core;
 
     /// <inheritdoc />
     /// <summary>
@@ -37,7 +36,7 @@
         /// The y coordinate of the end point.
         /// </summary>
         public decimal Y3 { get; }
-        
+
         /// <summary>
         /// Create a new <see cref="AppendEndControlPointBezierCurve"/>.
         /// </summary>
@@ -52,7 +51,7 @@
             X3 = x3;
             Y3 = y3;
         }
-        
+
         /// <inheritdoc />
         public void Run(IOperationContext operationContext)
         {

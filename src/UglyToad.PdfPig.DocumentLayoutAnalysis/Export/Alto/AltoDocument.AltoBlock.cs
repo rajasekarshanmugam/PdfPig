@@ -25,7 +25,7 @@
             private bool correctionStatus;
             private AltoBlockTypeShow show;
             private AltoBlockTypeActuate actuate;
-            
+
             /// <remarks/>
             public AltoShape Shape { get; set; }
 

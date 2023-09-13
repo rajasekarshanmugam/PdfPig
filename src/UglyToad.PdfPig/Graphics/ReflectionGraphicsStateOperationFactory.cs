@@ -9,6 +9,7 @@ namespace UglyToad.PdfPig.Graphics
     using Operations.InlineImages;
     using Operations.MarkedContent;
     using Operations.PathConstruction;
+    using Operations.PathPainting;
     using Operations.SpecialGraphicsState;
     using Operations.TextObjects;
     using Operations.TextPositioning;
@@ -20,7 +21,6 @@ namespace UglyToad.PdfPig.Graphics
     using System.Linq;
     using System.Reflection;
     using Tokens;
-    using Operations.PathPainting;
 
     internal class ReflectionGraphicsStateOperationFactory : IGraphicsStateOperationFactory
     {

@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
+    using Core;
     using System;
     using System.Globalization;
     using System.Text;
-    using Core;
     using Tokens;
 
     internal class NumericTokenizer : ITokenizer
@@ -30,7 +30,7 @@
             else if (initialSymbol)
             {
                 characters = stringBuilder;
-                characters.Append((char) currentByte);
+                characters.Append((char)currentByte);
             }
             else
             {
@@ -50,7 +50,7 @@
                         continue;
                     }
 
-                    characters.Append((char) b);
+                    characters.Append((char)b);
                     previousSymbol = true;
                 }
                 else if ((b >= Zero && b <= Nine) ||

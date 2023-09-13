@@ -14,7 +14,7 @@ namespace UglyToad.PdfPig.Fonts.Type1.CharStrings.Commands.Hint
 
         public static bool TakeFromStackBottom { get; } = true;
         public static bool ClearsOperandStack { get; } = true;
-        
+
         public static LazyType1Command Lazy { get; } = new LazyType1Command(Name, Run);
 
         public static void Run(Type1BuildCharContext context)

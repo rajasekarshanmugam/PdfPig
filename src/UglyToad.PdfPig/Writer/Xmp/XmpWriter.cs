@@ -35,7 +35,7 @@ namespace UglyToad.PdfPig.Writer.Xmp
 
         private const string PdfAIdentificationExtensionPrefix = "pdfaid";
         private const string PdfAIdentificationExtensionNamespace = "http://www.aiim.org/pdfa/ns/id/";
-        
+
         public static StreamToken GenerateXmpStream(PdfDocumentBuilder.DocumentInformationBuilder builder, decimal version,
             PdfAStandard standard)
         {
@@ -72,7 +72,7 @@ namespace UglyToad.PdfPig.Writer.Xmp
                 });
 
             var pdfAIdContainer = GetVersionAndConformanceLevelIdentificationElement(rdf, emptyRdfAbout, standard);
-            
+
             var document = new XDocument(
                 new XElement(xmpMeta + "xmpmeta", GetNamespaceAttribute(XmpMetaPrefix, XmpMetaNamespace),
                     new XAttribute(xmpMeta + "xmptk", Xmptk),
@@ -172,7 +172,7 @@ namespace UglyToad.PdfPig.Writer.Xmp
             XNamespace pdfaSchema = pdfASchemaValueTypeUri;
             XNamespace pdfaProperty = pdfAPropertyValueTypeUri;
 
-            var pdfaSchemaContainer = new XElement(rdf + "Description", emptyRdfAbout, 
+            var pdfaSchemaContainer = new XElement(rdf + "Description", emptyRdfAbout,
                 GetNamespaceAttribute(pdfAExtensionSchemaContainerSchemaPrefix, pdfaExtension),
                 GetNamespaceAttribute(pdfASchemaValueTypePrefix, pdfaSchema),
                 GetNamespaceAttribute(pdfAPropertyValueTypePrefix, pdfaProperty));

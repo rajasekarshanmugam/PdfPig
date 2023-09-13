@@ -48,7 +48,7 @@
         {
             return CodeToName.ContainsKey(code);
         }
-        
+
         /// <summary>
         /// Get the character name corresponding to the given code.
         /// </summary>
@@ -90,7 +90,7 @@
                 NameToCode[name] = code;
             }
         }
-        
+
         /// <summary>
         /// Get a known encoding instance with the given name.
         /// </summary>

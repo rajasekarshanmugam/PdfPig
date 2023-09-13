@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Filters
 {
+    using IO;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using IO;
 
     internal static class PngPredictor
     {

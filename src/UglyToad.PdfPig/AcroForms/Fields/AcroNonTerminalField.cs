@@ -19,10 +19,10 @@
         /// <summary>
         /// Create a new <see cref="AcroNonTerminalField"/>.
         /// </summary>
-        internal AcroNonTerminalField(DictionaryToken dictionary, string fieldType, uint fieldFlags, 
+        internal AcroNonTerminalField(DictionaryToken dictionary, string fieldType, uint fieldFlags,
             AcroFieldCommonInformation information,
             AcroFieldType acroFieldType,
-            IReadOnlyList<AcroFieldBase> children) : 
+            IReadOnlyList<AcroFieldBase> children) :
             base(dictionary, fieldType, fieldFlags, acroFieldType, information,
                 null, null)
         {

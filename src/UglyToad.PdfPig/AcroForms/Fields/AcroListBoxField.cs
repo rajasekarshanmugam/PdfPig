@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.AcroForms.Fields
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
     using Tokens;
     using Util.JetBrains.Annotations;
 
@@ -61,11 +61,11 @@
         /// <param name="bounds">The location of this field on the page.</param>
         public AcroListBoxField(DictionaryToken dictionary, string fieldType, AcroChoiceFieldFlags fieldFlags,
             AcroFieldCommonInformation information, IReadOnlyList<AcroChoiceOption> options,
-            IReadOnlyList<string> selectedOptions, 
+            IReadOnlyList<string> selectedOptions,
             IReadOnlyList<int> selectedOptionIndices,
             int? topIndex,
             int? pageNumber,
-            PdfRectangle? bounds) : 
+            PdfRectangle? bounds) :
             base(dictionary, fieldType, (uint)fieldFlags, AcroFieldType.ListBox, information, pageNumber, bounds)
         {
             Flags = fieldFlags;

@@ -62,7 +62,7 @@
 
             return this;
         }
-        
+
         /// <summary>
         /// Get the bytes of the PNG file for this builder.
         /// </summary>
@@ -138,7 +138,7 @@
                 var i = 0;
                 while ((streamValue = compressStream.ReadByte()) != -1)
                 {
-                    result[headerLength + i] = (byte) streamValue;
+                    result[headerLength + i] = (byte)streamValue;
                     i++;
                 }
 

@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.CrossReference
 {
+    using Core;
+    using Logging;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
-    using Logging;
     using Tokens;
 
     /// <summary>
@@ -17,7 +17,7 @@
     {
         private readonly List<CrossReferenceTablePart> parts = new List<CrossReferenceTablePart>();
         public IReadOnlyList<CrossReferenceTablePart> Parts => parts;
-        
+
         public void Add(CrossReferenceTablePart part)
         {
             if (part == null)
@@ -37,7 +37,7 @@
             var xrefPartToBytePositionOrder = new List<long>();
 
             var currentPart = parts.FirstOrDefault(x => x.Offset == firstCrossReferenceOffset);
-            
+
             if (currentPart == null)
             {
                 // no XRef at given position
@@ -118,7 +118,7 @@
                 }
             }
 
-            return new CrossReferenceTable(type, objectOffsets, new TrailerDictionary(trailerDictionary), 
+            return new CrossReferenceTable(type, objectOffsets, new TrailerDictionary(trailerDictionary),
                 parts.Select(x =>
                 {
                     var prev = x.GetPreviousOffset();

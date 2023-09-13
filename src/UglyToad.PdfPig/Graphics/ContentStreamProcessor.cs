@@ -6,6 +6,7 @@
     using Filters;
     using Geometry;
     using Operations;
+    using Operations.TextPositioning;
     using Parser;
     using PdfFonts;
     using PdfPig.Core;
@@ -15,7 +16,6 @@
     using System.Linq;
     using Tokenization.Scanner;
     using Tokens;
-    using Operations.TextPositioning;
     using Util;
     using XObjects;
     using static PdfPig.Core.PdfSubpath;

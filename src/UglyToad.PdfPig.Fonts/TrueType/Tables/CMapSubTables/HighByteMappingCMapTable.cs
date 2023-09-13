@@ -15,7 +15,7 @@
         public TrueTypeCMapPlatform PlatformId { get; }
 
         public ushort EncodingId { get; }
-        
+
         private HighByteMappingCMapTable(TrueTypeCMapPlatform platformId, ushort encodingId, IReadOnlyDictionary<int, int> characterCodesToGlyphIndices)
         {
             this.characterCodesToGlyphIndices = characterCodesToGlyphIndices ?? throw new ArgumentNullException(nameof(characterCodesToGlyphIndices));

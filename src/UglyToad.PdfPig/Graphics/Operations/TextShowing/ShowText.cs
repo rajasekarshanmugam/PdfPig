@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.TextShowing
 {
-    using System.IO;
     using PdfPig.Core;
+    using System.IO;
     using Util.JetBrains.Annotations;
 
     /// <inheritdoc />

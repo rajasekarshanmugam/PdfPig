@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Parser
 {
-    using System;
-    using System.Collections.Generic;
     using Content;
     using Core;
     using Parts;
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Tokenization.Scanner;
     using Tokens;
@@ -122,7 +122,7 @@
                         var listOfLastVisitedToken = visitedTokensWorkingWindow.ToList();
                         var indexOfCurrentTokenInListOfLastVisitedToken = listOfLastVisitedToken.IndexOf((currentReferenceObjectNumber, currentReferenceGeneration));
                         var howManyTokensBack = Math.Abs(indexOfCurrentTokenInListOfLastVisitedToken - listOfLastVisitedToken.Count); //eg initate loop is taking us back to last token or five token back
-                        System.Diagnostics.Debug.WriteLine($"Break infinite loop while processing page {pageNumber.PageCount+1} tokens. Token with object number {currentReferenceObjectNumber} and generation {currentReferenceGeneration} processed {howManyTokensBack} token(s) back. ");
+                        System.Diagnostics.Debug.WriteLine($"Break infinite loop while processing page {pageNumber.PageCount + 1} tokens. Token with object number {currentReferenceObjectNumber} and generation {currentReferenceGeneration} processed {howManyTokensBack} token(s) back. ");
                         continue; // don't reprocess token already processed. break infinite loop. Issue #519
                     }
                     else
@@ -204,7 +204,7 @@
                 action();
             }
 
-            foreach (var child in firstPage.Children.ToRecursiveOrderList(x=>x.Children).Where(child => child.IsPage))
+            foreach (var child in firstPage.Children.ToRecursiveOrderList(x => x.Children).Where(child => child.IsPage))
             {
                 pageNumber.Increment();
                 child.PageNumber = pageNumber.PageCount;

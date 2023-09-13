@@ -1,12 +1,12 @@
 ﻿namespace UglyToad.PdfPig.XObjects
 {
-    using System;
-    using System.Collections.Generic;
     using Content;
     using Core;
     using Graphics.Colors;
     using Graphics.Core;
     using Images.Png;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
     using Util.JetBrains.Annotations;
 

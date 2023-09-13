@@ -1,13 +1,11 @@
 ﻿// ReSharper disable CompareOfFloatsByEqualityOperator
 namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
     using Charsets;
     using Core;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Decodes the commands and numbers making up a Type 2 CharString. A Type 2 CharString extends on the Type 1 CharString format.

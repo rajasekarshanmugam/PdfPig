@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.PathPainting
 {
     using System.IO;
-    
+
     /// <inheritdoc />
     /// <summary>
     /// Close, fill, and then stroke the path, using the even-odd rule to determine the region to fill.

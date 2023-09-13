@@ -1,7 +1,6 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.CharStrings.Commands.PathConstruction
 {
     using Core;
-    using System;
 
     /// <summary>
     /// Vertical move to. Moves relative to the current point.

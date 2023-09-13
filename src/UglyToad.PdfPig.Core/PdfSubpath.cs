@@ -166,7 +166,7 @@
         /// </summary>
         public void Rectangle(double x, double y, double width, double height)
         {
-                                                // is equivalent to:
+            // is equivalent to:
             MoveTo(x, y);                       // x y m
             LineTo(x + width, y);               // (x + width) y l
             LineTo(x + width, y + height);      // (x + width) (y + height) l
@@ -196,7 +196,7 @@
                 throw new ArgumentNullException("BezierCurveTo(): currentPosition is null.");
             }
         }
-        
+
         /// <summary>
         /// Close the path.
         /// </summary>
@@ -212,7 +212,7 @@
             }
             commands.Add(new Close());
         }
-        
+
         /// <summary>
         /// Determines if the path is currently closed.
         /// </summary>
@@ -599,7 +599,7 @@
             /// <inheritdoc />
             public void WriteSvg(StringBuilder builder, double height)
             {
-                builder.Append($"C {FirstControlPoint.X} { height - FirstControlPoint.Y}, { SecondControlPoint.X} {height - SecondControlPoint.Y}, {EndPoint.X} {height - EndPoint.Y} ");
+                builder.Append($"C {FirstControlPoint.X} {height - FirstControlPoint.Y}, {SecondControlPoint.X} {height - SecondControlPoint.Y}, {EndPoint.X} {height - EndPoint.Y} ");
             }
 
             private bool TrySolveQuadratic(bool isX, double currentMin, double currentMax, out (double min, double max) solutions)

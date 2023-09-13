@@ -7,7 +7,7 @@
     using System.Xml.Serialization;
 
     public partial class PageXmlDocument
-    {  
+    {
         /// <remarks/>
         [EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         [GeneratedCode("xsd", "4.6.1055.0")]

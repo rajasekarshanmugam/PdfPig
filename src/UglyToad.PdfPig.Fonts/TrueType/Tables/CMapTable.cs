@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using CMapSubTables;
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using CMapSubTables;
-    using Core;
 
     /// <inheritdoc cref="ITrueTypeTable"/>.
     /// <summary>

@@ -1,11 +1,11 @@
 ﻿namespace UglyToad.PdfPig.Geometry
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using ClipperLibrary;
     using Core;
     using Graphics;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using UglyToad.PdfPig.Logging;
     using static Core.PdfSubpath;
 

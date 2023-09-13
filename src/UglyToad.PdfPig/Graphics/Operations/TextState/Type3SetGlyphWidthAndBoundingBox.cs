@@ -46,7 +46,7 @@
         /// The upper right y coordinate of the glyph bounding box.
         /// </summary>
         public decimal UpperRightY { get; }
-        
+
         /// <summary>
         /// Create a new <see cref="Type3SetGlyphWidthAndBoundingBox"/>.
         /// </summary>
@@ -57,8 +57,8 @@
         /// <param name="upperRightX">The upper right x coordinate of the glyph bounding box.</param>
         /// <param name="upperRightY">The upper right y coordinate of the glyph bounding box.</param>
         public Type3SetGlyphWidthAndBoundingBox(decimal horizontalDisplacement, decimal verticalDisplacement,
-            decimal lowerLeftX, 
-            decimal lowerLeftY, 
+            decimal lowerLeftX,
+            decimal lowerLeftY,
             decimal upperRightX,
             decimal upperRightY)
         {

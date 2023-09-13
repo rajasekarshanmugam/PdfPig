@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Subsetting
 {
+    using Core;
+    using Glyphs;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Core;
-    using Glyphs;
     using TrueType;
     using IndexMap = TrueTypeSubsetter.OldToNewGlyphIndex;
 
@@ -123,7 +123,7 @@
                         glyphBytes[offset] = (byte)(newIndex >> 8);
                         glyphBytes[offset + 1] = (byte)newIndex;
                     }
-                    
+
                     stream.Write(glyphBytes, 0, glyphBytes.Length);
 
                     // Each glyph description must start at a 4 byte boundary.

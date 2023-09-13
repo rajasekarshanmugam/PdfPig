@@ -1,7 +1,5 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Encodings
 {
-    using Core;
-
     internal class MacExpertEncoding : Encoding
     {
         /// <summary>
@@ -177,7 +175,7 @@
         };
 
         public static MacExpertEncoding Instance { get; } = new MacExpertEncoding();
-        
+
         public override string EncodingName => "MacExpertEncoding";
 
         private MacExpertEncoding()

@@ -1,11 +1,11 @@
 ﻿namespace UglyToad.PdfPig.Outline
 {
     using Content;
+    using Core;
     using Destinations;
     using Logging;
     using Parser.Parts;
     using System.Collections.Generic;
-    using Core;
     using Tokenization.Scanner;
     using Tokens;
     using Util;

@@ -1,7 +1,5 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser.Parts
 {
-    using System;
-    using System.Collections.Generic;
     using CidFonts;
     using Core;
     using Filters;
@@ -11,6 +9,8 @@
     using Fonts.TrueType.Parser;
     using Geometry;
     using PdfPig.Parser.Parts;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
     using Util;
@@ -27,7 +27,7 @@
         }
 
         public ICidFont Generate(DictionaryToken dictionary)
-        { 
+        {
             var type = dictionary.GetNameOrDefault(NameToken.Type);
             if (!NameToken.Font.Equals(type))
             {
@@ -114,11 +114,11 @@
             switch (descriptor.FontFile.FileType)
             {
                 case DescriptorFontFile.FontFileType.TrueType:
-                {
-                    var input = new TrueTypeDataBytes(new ByteArrayInputBytes(fontFile));
-                    var ttf = TrueTypeFontParser.Parse(input);
-                    return new PdfCidTrueTypeFont(ttf);
-                }
+                    {
+                        var input = new TrueTypeDataBytes(new ByteArrayInputBytes(fontFile));
+                        var ttf = TrueTypeFontParser.Parse(input);
+                        return new PdfCidTrueTypeFont(ttf);
+                    }
                 case DescriptorFontFile.FontFileType.FromSubtype:
                     {
                         if (!DirectObjectFinder.TryGet(descriptor.FontFile.ObjectKey, pdfScanner, out StreamToken str))
@@ -145,7 +145,7 @@
                             var ttf = TrueTypeFontParser.Parse(new TrueTypeDataBytes(new ByteArrayInputBytes(bytes)));
                             return new PdfCidTrueTypeFont(ttf);
                         }
-                        
+
                         throw new PdfDocumentFormatException($"Unexpected subtype for CID font: {subtypeName}.");
                     }
                 default:

@@ -1,16 +1,16 @@
 ﻿namespace UglyToad.PdfPig.Parser.FileStructure
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using CrossReference;
     using Logging;
     using Parts;
+    using System;
+    using System.Collections.Generic;
 
     internal static class CrossReferenceObjectOffsetValidator
     {
         private const long MinimumSearchOffset = 6;
-        
+
         /// <summary>
         /// Check that the offsets in the cross reference are correct.
         /// </summary>
@@ -25,7 +25,7 @@
             }
 
             var builderOffsets = new Dictionary<IndirectReference, long>();
-            
+
             var bruteForceOffsets = BruteForceSearcher.GetObjectLocations(bytes);
             if (bruteForceOffsets.Count > 0)
             {
@@ -51,7 +51,7 @@
 
             return false;
         }
-        
+
         private static bool ValidateXrefOffsets(IInputBytes bytes, IReadOnlyDictionary<IndirectReference, long> objectOffsets, ILog log)
         {
             if (objectOffsets == null)

@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig
 {
-    using System.Collections.Generic;
     using Logging;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Configures options used by the parser when reading PDF documents.

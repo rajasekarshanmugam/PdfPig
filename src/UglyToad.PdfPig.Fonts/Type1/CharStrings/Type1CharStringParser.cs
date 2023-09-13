@@ -1,14 +1,13 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.CharStrings
 {
-    using System;
-    using System.Collections.Generic;
     using Commands;
     using Commands.Arithmetic;
     using Commands.Hint;
     using Commands.PathConstruction;
     using Commands.StartFinishOutline;
     using Core;
-    using Parser;
+    using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Decodes a set of CharStrings to their corresponding Type 1 BuildChar operations.

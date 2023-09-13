@@ -7,20 +7,20 @@
     using Graphics.Operations;
     using Graphics.Operations.General;
     using Graphics.Operations.PathConstruction;
+    using Graphics.Operations.PathPainting;
     using Graphics.Operations.SpecialGraphicsState;
     using Graphics.Operations.TextObjects;
     using Graphics.Operations.TextPositioning;
     using Graphics.Operations.TextShowing;
     using Graphics.Operations.TextState;
     using Images;
+    using Images.Png;
+    using PdfFonts;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using PdfFonts;
     using Tokens;
-    using Graphics.Operations.PathPainting;
-    using Images.Png;
 
     /// <summary>
     /// A builder used to add construct a page in a PDF document.
@@ -32,11 +32,11 @@
 
         // all page data other than content streams
         internal readonly Dictionary<NameToken, IToken> pageDictionary = new Dictionary<NameToken, IToken>();
-        
+
         // streams
         internal readonly List<IPageContentStream> contentStreams;
         private IPageContentStream currentStream;
-        
+
         // maps fonts added using PdfDocumentBuilder to page font names
         private readonly Dictionary<Guid, NameToken> documentFonts = new Dictionary<Guid, NameToken>();
         internal int nextFontId = 1;
@@ -76,7 +76,7 @@
             PageNumber = number;
 
             currentStream = new DefaultContentStream();
-            contentStreams = new List<IPageContentStream>() {currentStream};
+            contentStreams = new List<IPageContentStream>() { currentStream };
         }
 
         internal PdfPageBuilder(int number, PdfDocumentBuilder documentBuilder, IEnumerable<CopiedContentStream> copied,
@@ -89,7 +89,7 @@
             contentStreams.AddRange(copied);
             currentStream = new DefaultContentStream();
             contentStreams.Add(currentStream);
-        }	        
+        }
 
         /// <summary>
         /// Allow to append a new content stream before the current one and select it
@@ -493,7 +493,7 @@
             {
                 value = NameToken.Create($"F{nextFontId++}");
                 var resources = pageDictionary.GetOrCreateDict(NameToken.Resources);
-                var fonts  = resources.GetOrCreateDict(NameToken.Font);
+                var fonts = resources.GetOrCreateDict(NameToken.Font);
                 while (fonts.ContainsKey(value))
                 {
                     value = NameToken.Create($"F{nextFontId++}");
@@ -516,7 +516,7 @@
                 return AddJpeg(stream, placementRectangle);
             }
         }
-        
+
         /// <summary>
         /// Adds the JPEG image represented by the input stream at the specified location.
         /// </summary>
@@ -554,7 +554,7 @@
 
             currentStream.Add(Push.Value);
             // This needs to be the placement rectangle.
-            currentStream.Add(new ModifyCurrentTransformationMatrix(new []
+            currentStream.Add(new ModifyCurrentTransformationMatrix(new[]
             {
                 (decimal)placementRectangle.Width, 0,
                 0, (decimal)placementRectangle.Height,
@@ -693,7 +693,7 @@
             {
                 imgDictionary.Add(NameToken.Smask, smaskReference);
             }
-            
+
             var reference = documentBuilder.AddImage(new DictionaryToken(imgDictionary), compressed);
 
             var resources = pageDictionary.GetOrCreateDict(NameToken.Resources);
@@ -772,7 +772,7 @@
 
             // Special cases
             // Since we don't directly add font's to the pages resources, we have to go look at the document's font
-            if(srcResourceDictionary.TryGet(NameToken.Font, srcPage.pdfScanner, out DictionaryToken fontsDictionary))
+            if (srcResourceDictionary.TryGet(NameToken.Font, srcPage.pdfScanner, out DictionaryToken fontsDictionary))
             {
                 var pageFontsDictionary = resources.GetOrCreateDict(NameToken.Font);
 
@@ -964,7 +964,7 @@
 
             public DefaultContentStream() : this(new List<IGraphicsStateOperation>())
             {
-                
+
             }
             public DefaultContentStream(List<IGraphicsStateOperation> operations)
             {
@@ -1005,7 +1005,7 @@
             private readonly IndirectReferenceToken token;
             public bool ReadOnly => true;
             public bool HasContent => true;
-            
+
             public CopiedContentStream(IndirectReferenceToken indirectReferenceToken)
             {
                 token = indirectReferenceToken;
@@ -1021,7 +1021,7 @@
                 throw new NotSupportedException("Writing to a copied content stream is not supported.");
             }
 
-            public List<IGraphicsStateOperation> Operations => 
+            public List<IGraphicsStateOperation> Operations =>
                 throw new NotSupportedException("Reading raw operations is not supported from a copied content stream.");
         }
 
@@ -1064,6 +1064,6 @@
             }
         }
 
-        
+
     }
 }

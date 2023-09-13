@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.General
 {
+    using Core;
     using System;
     using System.IO;
-    using Core;
 
     /// <inheritdoc />
     /// <summary>
@@ -57,7 +57,7 @@
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{(int) Cap} {Symbol}";
+            return $"{(int)Cap} {Symbol}";
         }
     }
 }

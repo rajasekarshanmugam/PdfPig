@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System.Collections.Generic;
     using Core;
     using Scanner;
+    using System.Collections.Generic;
     using Tokens;
 
     internal class ArrayTokenizer : ITokenizer
@@ -31,7 +31,7 @@
                 {
                     continue;
                 }
-                
+
                 contents.Add(scanner.CurrentToken);
             }
 

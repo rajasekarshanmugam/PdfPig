@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
-    using System.Collections.Generic;
     using Kerning;
+    using System.Collections.Generic;
 
     internal class KerningTable
     {
@@ -40,7 +40,7 @@
                 var subtableLength = data.ReadUnsignedShort();
                 var coverage = data.ReadUnsignedShort();
 
-                var kernCoverage = (KernCoverage) coverage;
+                var kernCoverage = (KernCoverage)coverage;
                 var format = ((coverage & 255) >> 8);
 
                 switch (format)

@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor
 {
-    using System;
-    using System.Text;
     using Content;
+    using System;
     using System.Collections.Generic;
+    using System.Text;
     using Util;
 
     /// <summary>

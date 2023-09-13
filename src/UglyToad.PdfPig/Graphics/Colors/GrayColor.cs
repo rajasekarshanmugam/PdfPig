@@ -55,7 +55,7 @@ namespace UglyToad.PdfPig.Graphics.Colors
 
         /// <inheritdoc />
         public override int GetHashCode() => Gray.GetHashCode();
-        
+
         /// <summary>
         /// Equals.
         /// </summary>

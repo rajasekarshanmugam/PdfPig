@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Cmap
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
     using Util.JetBrains.Annotations;
 
     /// <summary>
@@ -67,10 +67,10 @@
         private readonly int minCodeLength = 4;
         private readonly int maxCodeLength;
 
-        public CMap(CharacterIdentifierSystemInfo info, int type, int wMode, string name, string version, 
-            IReadOnlyDictionary<int, string> baseFontCharacterMap, 
-            IReadOnlyList<CodespaceRange> codespaceRanges, 
-            IReadOnlyList<CidRange> cidRanges, 
+        public CMap(CharacterIdentifierSystemInfo info, int type, int wMode, string name, string version,
+            IReadOnlyDictionary<int, string> baseFontCharacterMap,
+            IReadOnlyList<CodespaceRange> codespaceRanges,
+            IReadOnlyList<CidRange> cidRanges,
             IReadOnlyList<CidCharacterMapping> cidCharacterMappings)
         {
             if (cidCharacterMappings == null)
@@ -132,7 +132,7 @@
             {
                 return mapping.DestinationCid;
             }
-            
+
             foreach (CidRange range in CidRanges)
             {
                 if (range.TryMap(code, out var cid))

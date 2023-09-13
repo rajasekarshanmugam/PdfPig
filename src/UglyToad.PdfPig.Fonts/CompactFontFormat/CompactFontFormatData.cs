@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Text;
-    using Core;
 
     /// <summary>
     /// Provides access to the raw bytes of this Compact Font Format file with utility methods for reading data types from it.

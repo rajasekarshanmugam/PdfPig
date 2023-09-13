@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts
 {
-    using System.Globalization;
     using CidFonts;
+    using System.Globalization;
 
     /// <summary>
     /// Specifies the character collection associated with the <see cref="ICidFont"/> (CIDFont).

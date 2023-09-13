@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.CidFonts
 {
-    using System.Collections.Generic;
     using Geometry;
+    using System.Collections.Generic;
     using Util.JetBrains.Annotations;
 
     /// <summary>
@@ -31,8 +31,8 @@
         /// <summary>
         /// Create new <see cref="VerticalWritingMetrics"/>.
         /// </summary>
-        public VerticalWritingMetrics(VerticalVectorComponents defaultVerticalWritingMetrics, 
-            [CanBeNull] IReadOnlyDictionary<int, double> individualVerticalWritingDisplacements, 
+        public VerticalWritingMetrics(VerticalVectorComponents defaultVerticalWritingMetrics,
+            [CanBeNull] IReadOnlyDictionary<int, double> individualVerticalWritingDisplacements,
             [CanBeNull] IReadOnlyDictionary<int, PdfVector> individualVerticalWritingPositions)
         {
             DefaultVerticalWritingMetrics = defaultVerticalWritingMetrics;

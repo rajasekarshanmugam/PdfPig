@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Subsetting
 {
+    using Core;
     using System;
     using System.IO;
-    using Core;
 
     internal class TrueTypeOffsetSubtable : IWriteable
     {

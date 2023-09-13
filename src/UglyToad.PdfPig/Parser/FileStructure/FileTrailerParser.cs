@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Parser.FileStructure
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -127,7 +127,7 @@
 
                 actualStartOffset = Math.Max(0, fileLength - (offsetFromEnd * multiple));
             } while (startXrefs.Count == 0 && actualStartOffset > 0);
-            
+
             if (startXrefs.Count == 0)
             {
                 throw new PdfDocumentFormatException($"Could not find the startxref within the last {offsetFromEnd} characters.");

@@ -16,7 +16,7 @@ namespace UglyToad.PdfPig.Outline
         {
             Roots = roots;
         }
-        
+
         /// <summary>
         /// Get all nodes.
         /// </summary>

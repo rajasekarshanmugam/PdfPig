@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Util
 {
+    using Content;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Content;
 
     /// <summary>
     /// Default Word Extractor.

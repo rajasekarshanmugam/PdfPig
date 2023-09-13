@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Parser.Parts
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
-    using Core;
     using Util.JetBrains.Annotations;
 
     /// <summary>
@@ -163,10 +163,10 @@
                 bytes.Seek(currentOffset);
                 loopProtection = 0;
             } while (currentOffset < lastEndOfFile && !bytes.IsAtEnd());
-            
+
             // reestablish origin position
             bytes.Seek(originPosition);
-            
+
             return results;
         }
 

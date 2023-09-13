@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
 
     /// <summary>
     /// A Compact Font Format (CFF) font program as described in The Compact Font Format specification (Adobe Technical Note #5176).

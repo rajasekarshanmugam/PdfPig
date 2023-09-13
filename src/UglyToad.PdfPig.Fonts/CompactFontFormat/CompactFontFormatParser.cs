@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Dictionaries;
+    using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Parse the Compact Font Format (CFF).
@@ -13,7 +13,7 @@
         private const string TagOtto = "OTTO";
         private const string TagTtcf = "ttcf";
         private const string TagTtfonly = "\u0000\u0001\u0000\u0000";
-        
+
         /// <summary>
         /// Read the Compact Font Format font from the input data.
         /// </summary>

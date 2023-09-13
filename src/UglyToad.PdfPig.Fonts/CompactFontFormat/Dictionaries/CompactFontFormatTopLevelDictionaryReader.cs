@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat.Dictionaries
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
 
     internal class CompactFontFormatTopLevelDictionaryReader : CompactFontFormatDictionaryReader<CompactFontFormatTopLevelDictionary, CompactFontFormatTopLevelDictionary>
     {

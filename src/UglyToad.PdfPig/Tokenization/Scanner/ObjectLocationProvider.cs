@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Tokenization.Scanner
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using CrossReference;
     using Parser.Parts;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
 
     internal class ObjectLocationProvider : IObjectLocationProvider

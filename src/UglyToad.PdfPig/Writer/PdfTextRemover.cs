@@ -87,7 +87,7 @@ namespace UglyToad.PdfPig.Writer
                     {
                         document.AddPage(file, i);
                     }
-                } 
+                }
                 else
                 {
                     foreach (var i in pagesBundle)

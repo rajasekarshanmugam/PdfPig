@@ -16,7 +16,7 @@
         /// Platform specific encoding indentifier. Interpretation depends on the value of the <see cref="PlatformId"/>.
         /// </summary>
         ushort EncodingId { get; }
-        
+
         /// <summary>
         /// Maps from a character code to the array index of the glyph in the font data.
         /// </summary>

@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations
 {
+    using Colors;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Colors;
     using Tokens;
     using Writer;
 

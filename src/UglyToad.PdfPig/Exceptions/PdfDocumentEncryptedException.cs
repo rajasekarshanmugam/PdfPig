@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Exceptions
 {
+    using Encryption;
     using System;
     using System.Runtime.Serialization;
-    using Encryption;
 
     /// <inheritdoc />
     /// <summary>

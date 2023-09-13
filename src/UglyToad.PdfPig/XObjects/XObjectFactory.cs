@@ -1,17 +1,16 @@
 ﻿namespace UglyToad.PdfPig.XObjects
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Content;
     using Core;
     using Filters;
     using Graphics;
     using Graphics.Colors;
     using Graphics.Core;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Tokenization.Scanner;
     using Tokens;
-    using UglyToad.PdfPig.Parser.Parts;
     using Util;
 
     internal static class XObjectFactory
@@ -107,7 +106,7 @@
             }
 
             var streamToken = new StreamToken(dictionary, xObject.Stream.Data);
-            
+
             var decodedBytes = supportsFilters ? new Lazy<IReadOnlyList<byte>>(() => streamToken.Decode(filterProvider, pdfScanner))
                 : null;
 
@@ -164,7 +163,7 @@
                 details);
         }
 
-        
+
 
         private static bool TryMapColorSpace(NameToken name, IResourceStore resourceStore, out ColorSpace colorSpaceResult)
         {

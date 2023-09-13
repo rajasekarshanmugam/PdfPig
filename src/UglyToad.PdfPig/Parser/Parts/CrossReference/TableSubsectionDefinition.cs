@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Parser.Parts.CrossReference
 {
-    using System;
-    using System.Globalization;
     using Core;
     using Logging;
+    using System;
+    using System.Globalization;
 
     /// <summary>
     /// Each subsection of the cross-reference table starts with a line defining the starting object number

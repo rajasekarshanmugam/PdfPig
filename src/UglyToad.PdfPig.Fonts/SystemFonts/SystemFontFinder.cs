@@ -2,13 +2,12 @@
 
 namespace UglyToad.PdfPig.Fonts.SystemFonts
 {
+    using Core;
+    using Standard14Fonts;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Runtime.InteropServices;
-    using Core;
-    using Standard14Fonts;
     using TrueType;
     using TrueType.Parser;
 

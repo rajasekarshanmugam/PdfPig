@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.Parser
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
-    using Core;
 
     internal class Type1Tokenizer
     {
@@ -377,7 +377,7 @@
             // Skip preceding space.
             bytes.MoveNext();
             // TODO: may be wrong
-           // bytes.MoveNext();
+            // bytes.MoveNext();
 
             byte[] data = new byte[length];
             for (int i = 0; i < length; i++)

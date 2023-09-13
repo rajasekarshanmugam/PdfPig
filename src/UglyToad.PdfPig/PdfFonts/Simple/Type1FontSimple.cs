@@ -1,6 +1,5 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Simple
 {
-    using System.Collections.Generic;
     using Cmap;
     using Composite;
     using Core;
@@ -8,6 +7,7 @@
     using Fonts.CompactFontFormat;
     using Fonts.Encodings;
     using Fonts.Type1;
+    using System.Collections.Generic;
     using Tokens;
     using Util.JetBrains.Annotations;
 
@@ -43,7 +43,7 @@
 
         public FontDetails Details { get; }
 
-        public Type1FontSimple(NameToken name, int firstChar, int lastChar, double[] widths, FontDescriptor fontDescriptor, Encoding encoding, 
+        public Type1FontSimple(NameToken name, int firstChar, int lastChar, double[] widths, FontDescriptor fontDescriptor, Encoding encoding,
             CMap toUnicodeCMap,
             Union<Type1Font, CompactFontFormatFontCollection> fontProgram)
         {
@@ -72,7 +72,7 @@
             fontMatrix = matrix;
 
             Name = name;
-            Details = fontDescriptor?.ToDetails(name?.Data) 
+            Details = fontDescriptor?.ToDetails(name?.Data)
                       ?? FontDetails.GetDefault(name?.Data);
         }
 
@@ -116,7 +116,7 @@
             }
 
             var name = encoding.GetName(characterCode);
-            
+
             try
             {
                 value = GlyphList.AdobeGlyphList.NameToUnicode(name);
@@ -135,7 +135,7 @@
             {
                 return box;
             }
-            
+
             var boundingBox = GetBoundingBoxInGlyphSpace(characterCode);
 
             var matrix = fontMatrix;
@@ -144,7 +144,7 @@
 
             var width = GetWidth(characterCode, boundingBox);
 
-            var result = new CharacterBoundingBox(boundingBox, width/1000.0);
+            var result = new CharacterBoundingBox(boundingBox, width / 1000.0);
 
             cachedBoundingBoxes[characterCode] = result;
 
@@ -167,7 +167,7 @@
 
             return boundingBox.Width;
         }
-        
+
         private PdfRectangle GetBoundingBoxInGlyphSpace(int characterCode)
         {
             if (characterCode < firstChar || characterCode > lastChar)
@@ -183,23 +183,23 @@
             PdfRectangle? rect = null;
             if (fontProgram.TryGetFirst(out var t1Font))
             {
-                 var name = encoding.GetName(characterCode);
-                    rect = t1Font.GetCharacterBoundingBox(name);
+                var name = encoding.GetName(characterCode);
+                rect = t1Font.GetCharacterBoundingBox(name);
             }
             else if (fontProgram.TryGetSecond(out var cffFont))
             {
-                    var first = cffFont.FirstFont;
-                    string characterName;
-                    if (encoding != null)
-                    {
-                        characterName = encoding.GetName(characterCode);
-                    }
-                    else
-                    {
-                        characterName = cffFont.GetCharacterName(characterCode);
-                    }
+                var first = cffFont.FirstFont;
+                string characterName;
+                if (encoding != null)
+                {
+                    characterName = encoding.GetName(characterCode);
+                }
+                else
+                {
+                    characterName = cffFont.GetCharacterName(characterCode);
+                }
 
-                    rect = first.GetCharacterBoundingBox(characterName);
+                rect = first.GetCharacterBoundingBox(characterName);
             }
 
 

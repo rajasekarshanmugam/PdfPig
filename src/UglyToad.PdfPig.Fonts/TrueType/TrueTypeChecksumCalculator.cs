@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
 
     /// <summary>
     /// Calculates checksums for TrueType fonts.
@@ -13,7 +13,7 @@
 
         // Preceded by 2 32-fixed fraction values.
         private const int ChecksumAdjustmentPosition = 8;
-        
+
         /// <summary>
         /// Calculate the checksum for the whole font by setting checksum adjustment in the head table to 0.
         /// </summary>

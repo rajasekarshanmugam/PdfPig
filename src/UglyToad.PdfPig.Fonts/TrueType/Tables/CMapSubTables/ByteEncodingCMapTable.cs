@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables.CMapSubTables
 {
-    using System.IO;
     using Core;
+    using System.IO;
 
     /// <summary>
     /// The format 0 sub-table where character codes and glyph indices are restricted to a single bytes.
@@ -54,7 +54,7 @@
             stream.WriteUShort(Format);
             stream.WriteUShort(GlyphMappingLength + (SizeOfShort * 3));
             stream.WriteUShort(DefaultLanguageId);
-            
+
             for (var i = 0; i < glyphMapping.Length; i++)
             {
                 stream.WriteByte(glyphMapping[i]);

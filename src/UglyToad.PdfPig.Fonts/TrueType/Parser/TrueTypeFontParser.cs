@@ -102,7 +102,7 @@
             {
                 builder.Os2Table = TableParser.Parse<Os2Table>(os2Table, data, builder);
             }
-            
+
             if (!isPostScript)
             {
                 if (!tables.TryGetValue(TrueTypeHeaderTable.Loca, out var indexToLocationHeaderTable))
@@ -134,7 +134,7 @@
             {
                 throw new ArgumentNullException(nameof(data));
             }
-            
+
             // Read these data points to move to the correct data location.
             data.Read32Fixed();
             int numberOfTables = data.ReadUnsignedShort();

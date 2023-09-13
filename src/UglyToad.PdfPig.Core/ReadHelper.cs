@@ -78,7 +78,7 @@
 
             return buffer.ToString();
         }
-        
+
         /// <summary>
         /// Skip any whitespace characters.
         /// </summary>
@@ -113,7 +113,7 @@
                 bytes.Seek(bytes.CurrentOffset - 1);
             }
         }
-        
+
         /// <summary>
         /// Whether the given character value is the end of a PDF Name token.
         /// </summary>
@@ -121,7 +121,7 @@
         {
             return EndOfNameCharacters.Contains(ch);
         }
-        
+
         /// <summary>
         /// Determines if a character is whitespace or not, this includes newlines.
         /// </summary>
@@ -136,7 +136,7 @@
         /// <summary>
         /// Whether the character is an end of line character.
         /// </summary>
-        public static bool IsEndOfLine(char c) => IsEndOfLine((byte) c);
+        public static bool IsEndOfLine(char c) => IsEndOfLine((byte)c);
 
         /// <summary>
         /// Whether the character is an end of line character.
@@ -187,7 +187,7 @@
 
             return found;
         }
-        
+
         /// <summary>
         /// Read a long from the input.
         /// </summary>
@@ -213,7 +213,7 @@
             return retval;
         }
 
-        
+
         /// <summary>
         /// Whether the given value is a digit or not.
         /// </summary>
@@ -250,7 +250,7 @@
 
             return result;
         }
-        
+
         /// <summary>
         /// Whether the given character is a space.
         /// </summary>
@@ -262,7 +262,7 @@
         /// <summary>
         /// Whether the given character value is a valid hex value.
         /// </summary>
-        public static bool IsHex(byte b) => IsHex((char) b);
+        public static bool IsHex(byte b) => IsHex((char)b);
 
         /// <summary>
         /// Whether the given character value is a valid hex value.

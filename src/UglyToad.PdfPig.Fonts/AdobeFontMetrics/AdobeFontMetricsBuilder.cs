@@ -1,9 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.AdobeFontMetrics
 {
+    using Core;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
-    using Standard14Fonts;
 
     internal class AdobeFontMetricsBuilder
     {
@@ -11,7 +10,7 @@
 
         public List<string> Comments { get; }
 
-        public List<AdobeFontMetricsIndividualCharacterMetric> CharacterMetrics { get; } 
+        public List<AdobeFontMetricsIndividualCharacterMetric> CharacterMetrics { get; }
             = new List<AdobeFontMetricsIndividualCharacterMetric>();
 
         /// <summary>
@@ -150,7 +149,7 @@
 
             return new AdobeFontMetrics(AfmVersion, Comments, 0, FontName, FullName,
                 FamilyName, Weight, PdfBoundingBox, Version, Notice, EncodingScheme,
-                MappingScheme, EscapeCharacter, CharacterSet, Characters, IsBaseFont, VVector, 
+                MappingScheme, EscapeCharacter, CharacterSet, Characters, IsBaseFont, VVector,
                 IsFixedV, CapHeight, XHeight, Ascender, Descender, UnderlinePosition, UnderlineThickness,
                 ItalicAngle, CharacterWidth, StdHw, StdVw, dictionary);
         }

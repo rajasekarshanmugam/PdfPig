@@ -1,11 +1,11 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser
 {
-    using System;
-    using System.IO;
-    using System.Linq;
     using Cmap;
     using Core;
     using Parts;
+    using System;
+    using System.IO;
+    using System.Linq;
     using Tokenization.Scanner;
     using Tokens;
 

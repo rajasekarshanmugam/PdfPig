@@ -31,7 +31,7 @@
         /// Width for writing direction 1.
         /// </summary>
         public AdobeFontMetricsVector WidthDirection1 { get; }
-        
+
         /// <summary>
         /// Vector from origin of writing direction 1 to origin of writing direction 0.
         /// </summary>
@@ -50,10 +50,10 @@
         /// <summary>
         /// Create a new <see cref="AdobeFontMetricsIndividualCharacterMetric"/>.
         /// </summary>
-        public AdobeFontMetricsIndividualCharacterMetric(int characterCode, string name, AdobeFontMetricsVector width, 
-            AdobeFontMetricsVector widthDirection0, 
-            AdobeFontMetricsVector widthDirection1, 
-            AdobeFontMetricsVector vVector, 
+        public AdobeFontMetricsIndividualCharacterMetric(int characterCode, string name, AdobeFontMetricsVector width,
+            AdobeFontMetricsVector widthDirection0,
+            AdobeFontMetricsVector widthDirection1,
+            AdobeFontMetricsVector vVector,
             PdfRectangle boundingBox,
             AdobeFontMetricsLigature ligature)
         {

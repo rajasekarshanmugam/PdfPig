@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System.Collections.Generic;
     using Core;
+    using System.Collections.Generic;
     using Tokens;
 
     internal class HexTokenizer : ITokenizer
@@ -16,7 +16,7 @@
             {
                 return false;
             }
-            
+
             var characters = new List<char>();
 
             while (inputBytes.MoveNext())

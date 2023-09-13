@@ -92,7 +92,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
         {
         }
     }
-    
+
     internal struct ClipperIntPoint
     {
         public long X;
@@ -101,7 +101,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
 
         public ClipperIntPoint(long x, long y)
         {
-            X = x; 
+            X = x;
             Y = y;
         }
 

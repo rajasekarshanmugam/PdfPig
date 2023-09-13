@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Core;
     using System.Collections.Generic;
     using System.IO;
-    using Core;
 
     /// <summary>
     /// Version 4 was defined in OpenType 1.5. Version 4 has the same fields as in version 2 and version 3. 
@@ -43,44 +43,44 @@
         /// <summary>
         /// Create a new <see cref="Os2Version2To4OpenTypeTable"/>.
         /// </summary>
-        public Os2Version2To4OpenTypeTable(TrueTypeHeaderTable directoryTable, ushort version, 
-            short xAverageCharacterWidth, 
-            ushort weightClass, 
-            ushort widthClass, 
-            ushort typeFlags, 
-            short ySubscriptXSize, 
-            short ySubscriptYSize, 
+        public Os2Version2To4OpenTypeTable(TrueTypeHeaderTable directoryTable, ushort version,
+            short xAverageCharacterWidth,
+            ushort weightClass,
+            ushort widthClass,
+            ushort typeFlags,
+            short ySubscriptXSize,
+            short ySubscriptYSize,
             short ySubscriptXOffset,
-            short ySubscriptYOffset, 
-            short ySuperscriptXSize, 
-            short ySuperscriptYSize, 
+            short ySubscriptYOffset,
+            short ySuperscriptXSize,
+            short ySuperscriptYSize,
             short ySuperscriptXOffset,
-            short ySuperscriptYOffset, 
+            short ySuperscriptYOffset,
             short yStrikeoutSize,
-            short yStrikeoutPosition, 
-            short familyClass, 
+            short yStrikeoutPosition,
+            short familyClass,
             IReadOnlyList<byte> panose,
-            IReadOnlyList<uint> unicodeRanges, 
-            string vendorId, 
+            IReadOnlyList<uint> unicodeRanges,
+            string vendorId,
             ushort fontSelectionFlags,
-            ushort firstCharacterIndex, 
-            ushort lastCharacterIndex, 
+            ushort firstCharacterIndex,
+            ushort lastCharacterIndex,
             short typographicAscender,
-            short typographicDescender, 
-            short typographicLineGap, 
+            short typographicDescender,
+            short typographicLineGap,
             ushort windowsAscent,
-            ushort windowsDescent, 
+            ushort windowsDescent,
             uint codePage1,
-            uint codePage2, 
+            uint codePage2,
             short xHeight,
-            short capHeight, 
+            short capHeight,
             ushort defaultCharacter,
             ushort breakCharacter,
-            ushort maximumContext) : base(directoryTable, version, xAverageCharacterWidth, weightClass, widthClass, 
+            ushort maximumContext) : base(directoryTable, version, xAverageCharacterWidth, weightClass, widthClass,
             typeFlags, ySubscriptXSize, ySubscriptYSize, ySubscriptXOffset, ySubscriptYOffset, ySuperscriptXSize,
             ySuperscriptYSize, ySuperscriptXOffset, ySuperscriptYOffset, yStrikeoutSize, yStrikeoutPosition,
             familyClass, panose, unicodeRanges, vendorId, fontSelectionFlags, firstCharacterIndex, lastCharacterIndex,
-            typographicAscender, typographicDescender, typographicLineGap, windowsAscent, windowsDescent, 
+            typographicAscender, typographicDescender, typographicLineGap, windowsAscent, windowsDescent,
             codePage1, codePage2)
         {
             XHeight = xHeight;

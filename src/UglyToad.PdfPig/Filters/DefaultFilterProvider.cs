@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Filters
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
     using Tokens;
     using UglyToad.PdfPig.Util;
 
@@ -13,7 +13,7 @@
     /// </summary>
     public class DefaultFilterProvider : IFilterProvider
     {
-        private readonly IReadOnlyDictionary<string, IFilter> filterInstances; 
+        private readonly IReadOnlyDictionary<string, IFilter> filterInstances;
 
         /// <summary>
         /// The single instance of this provider.
@@ -74,7 +74,7 @@
                     for (var i = 0; i < filters.Data.Count; i++)
                     {
                         var filterToken = filters.Data[i];
-                        var filterName = ((NameToken) filterToken).Data;
+                        var filterName = ((NameToken)filterToken).Data;
                         result[i] = GetFilterStrict(filterName);
                     }
 
@@ -103,7 +103,7 @@
 
             return result;
         }
-        
+
         private IFilter GetFilterStrict(string name)
         {
             if (!filterInstances.TryGetValue(name, out var factory))

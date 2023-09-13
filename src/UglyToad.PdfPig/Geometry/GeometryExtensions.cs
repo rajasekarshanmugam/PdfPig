@@ -433,10 +433,10 @@
                 if (IntersectsWith(rectangle.BottomLeft, rectangle.BottomRight, other.BottomLeft, other.BottomRight)) return true;
                 if (IntersectsWith(rectangle.BottomLeft, rectangle.BottomRight, other.BottomRight, other.TopRight)) return true;
                 if (IntersectsWith(rectangle.BottomLeft, rectangle.BottomRight, other.TopRight, other.TopLeft)) return true;
-                if (IntersectsWith(rectangle.BottomLeft, rectangle.BottomRight,other.TopLeft, other.BottomLeft)) return true;
+                if (IntersectsWith(rectangle.BottomLeft, rectangle.BottomRight, other.TopLeft, other.BottomLeft)) return true;
 
                 if (IntersectsWith(rectangle.BottomRight, rectangle.TopRight, other.BottomLeft, other.BottomRight)) return true;
-                if (IntersectsWith(rectangle.BottomRight, rectangle.TopRight,other.BottomRight, other.TopRight)) return true;
+                if (IntersectsWith(rectangle.BottomRight, rectangle.TopRight, other.BottomRight, other.TopRight)) return true;
                 if (IntersectsWith(rectangle.BottomRight, rectangle.TopRight, other.TopRight, other.TopLeft)) return true;
                 if (IntersectsWith(rectangle.BottomRight, rectangle.TopRight, other.TopLeft, other.BottomLeft)) return true;
 
@@ -1298,7 +1298,7 @@
                 x3 = vietTrigonometricSolution(p, q, 2) - bOver3a;
             }
 
-            return new[] {x1, x2, x3};
+            return new[] { x1, x2, x3 };
         }
 
         internal static string ToSvg(this PdfSubpath p, double height)

@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Tokens
 {
-    using System;
     using Core;
+    using System;
 
     /// <summary>
     /// Any object in a PDF file may be labeled as an indirect object. This gives the object a unique object identifier by which other objects can refer to it.

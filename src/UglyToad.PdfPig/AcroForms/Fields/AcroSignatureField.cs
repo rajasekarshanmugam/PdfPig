@@ -13,10 +13,10 @@
         /// <summary>
         /// Create a new <see cref="T:UglyToad.PdfPig.AcroForms.Fields.AcroSignatureField" />.
         /// </summary>
-        public AcroSignatureField(DictionaryToken dictionary, string fieldType, uint fieldFlags, 
+        public AcroSignatureField(DictionaryToken dictionary, string fieldType, uint fieldFlags,
             AcroFieldCommonInformation information,
             int? pageNumber,
-            PdfRectangle? bounds) : 
+            PdfRectangle? bounds) :
             base(dictionary, fieldType, fieldFlags, AcroFieldType.Signature, information, pageNumber, bounds)
         {
         }

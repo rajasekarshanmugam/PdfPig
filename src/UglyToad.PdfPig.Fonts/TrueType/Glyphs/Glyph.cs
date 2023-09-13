@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Glyphs
 {
-    using System;
     using Core;
+    using System;
 
     internal class Glyph : IGlyphDescription
     {

@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Parser
 {
-    using System;
     using Content;
+    using System;
 
     /// <summary>
     /// For objects which provide document scoped caching.

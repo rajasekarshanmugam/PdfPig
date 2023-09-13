@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.General
 {
+    using Core;
     using System;
     using System.IO;
-    using Core;
 
     /// <inheritdoc />
     public class SetLineJoin : IGraphicsStateOperation

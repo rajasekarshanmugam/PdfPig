@@ -18,9 +18,9 @@
         /// <summary>
         /// Create a new <see cref="AcroRadioButtonsField"/>.
         /// </summary>
-        public AcroRadioButtonsField(DictionaryToken dictionary, string fieldType, AcroButtonFieldFlags fieldFlags, 
+        public AcroRadioButtonsField(DictionaryToken dictionary, string fieldType, AcroButtonFieldFlags fieldFlags,
             AcroFieldCommonInformation information,
-            IReadOnlyList<AcroFieldBase> children) : 
+            IReadOnlyList<AcroFieldBase> children) :
             base(dictionary, fieldType, (uint)fieldFlags, information, AcroFieldType.RadioButtons, children)
         {
             Flags = fieldFlags;

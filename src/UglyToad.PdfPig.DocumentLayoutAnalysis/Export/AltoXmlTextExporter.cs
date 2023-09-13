@@ -314,8 +314,8 @@
                 Processings = new[] { processing },
                 SourceImageInformation = new AltoDocument.AltoSourceImageInformation
                 {
-                    DocumentIdentifiers = new [] { documentIdentifier },
-                    FileIdentifiers = new [] { fileIdentifier },
+                    DocumentIdentifiers = new[] { documentIdentifier },
+                    FileIdentifiers = new[] { fileIdentifier },
                     FileName = fileName
                 }
             };

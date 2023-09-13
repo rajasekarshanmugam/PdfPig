@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Core;
+    using Glyphs;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Core;
-    using Glyphs;
 
     /// <inheritdoc cref="ITrueTypeTable" />
     /// <summary>
@@ -35,14 +35,14 @@
         /// <summary>
         /// Create a new <see cref="HorizontalMetricsTable"/>.
         /// </summary>
-        public HorizontalMetricsTable(TrueTypeHeaderTable directoryTable, 
+        public HorizontalMetricsTable(TrueTypeHeaderTable directoryTable,
             IReadOnlyList<HorizontalMetric> horizontalMetrics,
             IReadOnlyList<short> additionalLeftSideBearings)
         {
             DirectoryTable = directoryTable;
-            HorizontalMetrics = horizontalMetrics 
+            HorizontalMetrics = horizontalMetrics
                                 ?? throw new ArgumentNullException(nameof(horizontalMetrics));
-            AdditionalLeftSideBearings = additionalLeftSideBearings 
+            AdditionalLeftSideBearings = additionalLeftSideBearings
                                          ?? throw new ArgumentNullException(nameof(additionalLeftSideBearings));
         }
 

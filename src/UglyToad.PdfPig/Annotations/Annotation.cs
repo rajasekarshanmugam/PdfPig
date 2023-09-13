@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Annotations
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
     using Tokens;
     using Util.JetBrains.Annotations;
 

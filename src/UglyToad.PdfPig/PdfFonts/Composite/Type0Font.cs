@@ -1,11 +1,11 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Composite
 {
-    using System;
-    using System.Collections.Generic;
     using CidFonts;
     using Cmap;
     using Core;
     using Geometry;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
     using Util.JetBrains.Annotations;
     using Debug = System.Diagnostics.Debug;
@@ -49,7 +49,7 @@
             CidFont = cidFont ?? throw new ArgumentNullException(nameof(cidFont));
             CMap = cmap ?? throw new ArgumentNullException(nameof(cmap));
             ToUnicode = new ToUnicodeCMap(toUnicodeCMap);
-            Details = cidFont.Details?.WithName(Name.Data) 
+            Details = cidFont.Details?.WithName(Name.Data)
                       ?? FontDetails.GetDefault(Name.Data);
         }
 
@@ -71,7 +71,7 @@
             var HaveCMap = ToUnicode.CanMapToUnicode;
             if (HaveCMap == false)
             {
-                var HaveUnicode2CMap = (ucs2CMap is null == false); 
+                var HaveUnicode2CMap = (ucs2CMap is null == false);
                 if (HaveUnicode2CMap)
                 {
                     // Have both ucs2Map and CMap convert to unicode by

@@ -1,7 +1,5 @@
 ﻿namespace UglyToad.PdfPig.Parser
 {
-    using System;
-    using System.Collections.Generic;
     using Annotations;
     using Content;
     using Core;
@@ -11,6 +9,8 @@
     using Graphics.Operations;
     using Logging;
     using Parts;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
     using Util;
@@ -76,8 +76,8 @@
             // Apply rotation.
             if (rotation.SwapsAxis)
             {
-                mediaBox = new MediaBox(new PdfRectangle(mediaBox.Bounds.Bottom, 
-                    mediaBox.Bounds.Left, 
+                mediaBox = new MediaBox(new PdfRectangle(mediaBox.Bounds.Bottom,
+                    mediaBox.Bounds.Left,
                     mediaBox.Bounds.Top,
                     mediaBox.Bounds.Right));
                 cropBox = new CropBox(new PdfRectangle(cropBox.Bounds.Bottom,
@@ -85,7 +85,7 @@
                     cropBox.Bounds.Top,
                     cropBox.Bounds.Right));
             }
-            
+
             UserSpaceUnit userSpaceUnit = GetUserSpaceUnits(dictionary);
 
             PageContent content;
@@ -100,7 +100,7 @@
                     pdfScanner,
                     filterProvider,
                     resourceStore);
-                 // ignored for now, is it possible? check the spec...
+                // ignored for now, is it possible? check the spec...
             }
             else if (DirectObjectFinder.TryGet<ArrayToken>(contents, pdfScanner, out var array))
             {
@@ -146,7 +146,7 @@
                 content = GetContent(number, bytes, cropBox, userSpaceUnit, rotation, mediaBox, parsingOptions);
             }
 
-            var page = new Page(number, dictionary, mediaBox, cropBox, rotation, content, 
+            var page = new Page(number, dictionary, mediaBox, cropBox, rotation, content,
                 new AnnotationProvider(pdfScanner, dictionary),
                 pdfScanner);
 
@@ -208,7 +208,7 @@
                 if (cropBoxArray.Length != 4)
                 {
                     log.Error($"The CropBox was the wrong length in the dictionary: {dictionary}. Array was: {cropBoxArray}. Using MediaBox.");
-                    
+
                     cropBox = new CropBox(mediaBox.Bounds);
 
                     return cropBox;
@@ -231,7 +231,7 @@
             ILog log)
         {
             MediaBox mediaBox;
-            if (dictionary.TryGet(NameToken.MediaBox, out var mediaboxObject) 
+            if (dictionary.TryGet(NameToken.MediaBox, out var mediaboxObject)
                 && DirectObjectFinder.TryGet(mediaboxObject, pdfScanner, out ArrayToken mediaboxArray))
             {
                 if (mediaboxArray.Length != 4)

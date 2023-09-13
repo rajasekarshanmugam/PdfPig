@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Cmap
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Parser;
+    using System;
+    using System.Collections.Generic;
 
     internal static class CMapCache
     {

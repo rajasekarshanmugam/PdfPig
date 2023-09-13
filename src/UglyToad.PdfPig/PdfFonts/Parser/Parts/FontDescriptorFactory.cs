@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser.Parts
 {
-    using System;
     using Core;
+    using System;
     using Tokenization.Scanner;
     using Tokens;
     using Util;
@@ -26,23 +26,23 @@
 
             return new FontDescriptor.Builder(name, flags)
             {
-                 FontFamily = family,
-                 Stretch = stretch,
-                 FontWeight = GetDecimalOrDefault(dictionary, NameToken.FontWeight),
-                 BoundingBox = bounding,
-                 ItalicAngle = GetDecimalOrDefault(dictionary, NameToken.ItalicAngle),
-                 Ascent = GetDecimalOrDefault(dictionary, NameToken.Ascent),
-                 Descent = GetDecimalOrDefault(dictionary, NameToken.Descent),
-                 Leading = GetDecimalOrDefault(dictionary, NameToken.Leading),
-                 CapHeight = Math.Abs(GetDecimalOrDefault(dictionary, NameToken.CapHeight)),
-                 XHeight = Math.Abs(GetDecimalOrDefault(dictionary, NameToken.Xheight)),
-                 StemVertical = GetDecimalOrDefault(dictionary, NameToken.StemV),
-                 StemHorizontal = GetDecimalOrDefault(dictionary, NameToken.StemH),
-                 AverageWidth = GetDecimalOrDefault(dictionary, NameToken.AvgWidth),
-                 MaxWidth = GetDecimalOrDefault(dictionary, NameToken.MaxWidth),
-                 MissingWidth = GetDecimalOrDefault(dictionary, NameToken.MissingWidth),
-                 FontFile = fontFile,
-                 CharSet = charSet
+                FontFamily = family,
+                Stretch = stretch,
+                FontWeight = GetDecimalOrDefault(dictionary, NameToken.FontWeight),
+                BoundingBox = bounding,
+                ItalicAngle = GetDecimalOrDefault(dictionary, NameToken.ItalicAngle),
+                Ascent = GetDecimalOrDefault(dictionary, NameToken.Ascent),
+                Descent = GetDecimalOrDefault(dictionary, NameToken.Descent),
+                Leading = GetDecimalOrDefault(dictionary, NameToken.Leading),
+                CapHeight = Math.Abs(GetDecimalOrDefault(dictionary, NameToken.CapHeight)),
+                XHeight = Math.Abs(GetDecimalOrDefault(dictionary, NameToken.Xheight)),
+                StemVertical = GetDecimalOrDefault(dictionary, NameToken.StemV),
+                StemHorizontal = GetDecimalOrDefault(dictionary, NameToken.StemH),
+                AverageWidth = GetDecimalOrDefault(dictionary, NameToken.AvgWidth),
+                MaxWidth = GetDecimalOrDefault(dictionary, NameToken.MaxWidth),
+                MissingWidth = GetDecimalOrDefault(dictionary, NameToken.MissingWidth),
+                FontFile = fontFile,
+                CharSet = charSet
             }.Build();
         }
 
@@ -95,7 +95,7 @@
                 flags = 0;
             }
 
-            return (FontDescriptorFlags) flags;
+            return (FontDescriptorFlags)flags;
         }
 
         private static PdfRectangle GetBoundingBox(DictionaryToken dictionary, IPdfTokenScanner pdfScanner)

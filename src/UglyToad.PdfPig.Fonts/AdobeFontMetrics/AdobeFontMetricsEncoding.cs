@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.AdobeFontMetrics
 {
-    using System;
     using Encodings;
+    using System;
 
     /// <inheritdoc />
     /// <summary>

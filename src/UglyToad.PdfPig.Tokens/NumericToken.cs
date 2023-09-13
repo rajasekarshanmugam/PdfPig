@@ -73,7 +73,7 @@
         /// Single instance of numeric token for 11.
         /// </summary>
         public static readonly NumericToken Eleven = new NumericToken(11);
-        
+
         /// <summary>
         /// Single instance of numeric token for 12.
         /// </summary>

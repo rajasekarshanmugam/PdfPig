@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Tokenization.Scanner
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
     using Tokens;
 
     /// <summary>
@@ -25,7 +25,7 @@
         private readonly ScannerScope scope;
         private readonly IInputBytes inputBytes;
         private readonly List<(byte firstByte, ITokenizer tokenizer)> customTokenizers = new List<(byte, ITokenizer)>();
-        
+
         /// <summary>
         /// The offset in the input data at which the <see cref="CurrentToken"/> starts.
         /// </summary>
@@ -87,7 +87,7 @@
             {
                 hasBytePreRead = false;
                 var currentByte = inputBytes.CurrentByte;
-                var c = (char) currentByte;
+                var c = (char)currentByte;
 
                 ITokenizer tokenizer = null;
                 foreach (var customTokenizer in customTokenizers)
@@ -237,7 +237,7 @@
             var data = new List<byte>();
 
             inputBytes.Seek(lastEndImageOffset);
-            
+
             if (!inputBytes.MoveNext() || inputBytes.CurrentByte != 'E')
             {
                 var message = $"Failed to recover the image data stream for an inline image at offset {lastEndImageOffset}. " +

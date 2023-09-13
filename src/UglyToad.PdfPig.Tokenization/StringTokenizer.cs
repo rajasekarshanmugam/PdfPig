@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System.Text;
     using Core;
+    using System.Text;
     using Tokens;
 
     internal class StringTokenizer : ITokenizer

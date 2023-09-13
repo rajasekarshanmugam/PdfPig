@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
     using Tokens;
     using Util.JetBrains.Annotations;
 
@@ -55,14 +55,14 @@
         /// Create a new <see cref="PageTreeNode"/>.
         /// </summary>
         internal PageTreeNode(DictionaryToken nodeDictionary, IndirectReference reference,
-            bool isPage, 
+            bool isPage,
             int? pageNumber)
         {
             NodeDictionary = nodeDictionary ?? throw new ArgumentNullException(nameof(nodeDictionary));
             Reference = reference;
             IsPage = isPage;
             PageNumber = pageNumber;
-            
+
             if (!IsPage && PageNumber.HasValue)
             {
                 throw new ArgumentException("Cannot define page number for a pages node.", nameof(pageNumber));

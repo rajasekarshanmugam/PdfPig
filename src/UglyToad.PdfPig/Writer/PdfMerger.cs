@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Writer
 {
+    using Filters;
+    using Logging;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Filters;
-    using Logging;
     using System.Linq;
 
     /// <summary>
@@ -115,7 +115,7 @@
 
         private static void Merge(IReadOnlyList<PdfDocument> files, Stream output, IReadOnlyList<IReadOnlyList<int>> pagesBundle)
         {
-            var maxVersion = files.Select(x=>x.Version).Max();
+            var maxVersion = files.Select(x => x.Version).Max();
             using (var document = new PdfDocumentBuilder(output, false, PdfWriterType.Default, maxVersion))
             {
                 foreach (var fileIndex in Enumerable.Range(0, files.Count))
@@ -133,7 +133,8 @@
                         {
                             document.AddPage(existing, i);
                         }
-                    } else
+                    }
+                    else
                     {
                         foreach (var i in pages)
                         {

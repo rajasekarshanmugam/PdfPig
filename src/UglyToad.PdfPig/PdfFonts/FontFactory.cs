@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts
 {
-    using System;
-    using System.Collections.Generic;
     using Logging;
     using Parser.Handlers;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
     using Util;
 

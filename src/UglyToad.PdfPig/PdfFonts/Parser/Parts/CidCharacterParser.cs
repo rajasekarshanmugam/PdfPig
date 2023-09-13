@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser.Parts
 {
+    using Cmap;
     using System;
     using System.Collections.Generic;
-    using Cmap;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -29,7 +29,7 @@
 
                 results.Add(mapping);
             }
-            
+
             builder.CidCharacterMappings = results;
         }
     }

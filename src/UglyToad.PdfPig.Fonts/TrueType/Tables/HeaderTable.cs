@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
-    using System;
     using Core;
+    using System;
 
     /// <inheritdoc />
     /// <summary>
@@ -89,15 +89,15 @@
         /// <summary>
         /// Create a new <see cref="HeaderTable"/>.
         /// </summary>
-        public HeaderTable(TrueTypeHeaderTable directoryTable, float version, float revision, uint checkSumAdjustment, 
-            uint magicNumber, ushort flags, ushort unitsPerEm, 
-            DateTime created, DateTime modified, 
-            short xMin, short yMin, 
-            short xMax, short yMax, 
-            ushort macStyle, 
-            ushort lowestRecommendedPpem, 
+        public HeaderTable(TrueTypeHeaderTable directoryTable, float version, float revision, uint checkSumAdjustment,
+            uint magicNumber, ushort flags, ushort unitsPerEm,
+            DateTime created, DateTime modified,
+            short xMin, short yMin,
+            short xMax, short yMax,
+            ushort macStyle,
+            ushort lowestRecommendedPpem,
             short fontDirectionHint,
-            IndexToLocationTable.EntryFormat indexToLocFormat, 
+            IndexToLocationTable.EntryFormat indexToLocFormat,
             short glyphDataFormat)
         {
             DirectoryTable = directoryTable;

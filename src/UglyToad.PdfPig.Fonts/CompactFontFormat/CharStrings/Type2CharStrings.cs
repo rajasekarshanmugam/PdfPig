@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
-    using Core;
 
     /// <summary>
     /// Stores the decoded command sequences for Type 2 CharStrings from a Compact Font Format font as well
@@ -70,7 +70,7 @@
         private static Type2Glyph Run(CommandSequence sequence, double defaultWidthX, double nominalWidthX)
         {
             var context = new Type2BuildCharContext();
-            
+
             var hasRunStackClearingCommand = false;
             for (var i = -1; i < sequence.Values.Count; i++)
             {

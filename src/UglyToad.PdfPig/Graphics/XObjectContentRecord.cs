@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Graphics
 {
-    using System;
     using Colors;
     using Core;
     using PdfPig.Core;
+    using System;
     using Tokens;
     using Util.JetBrains.Annotations;
     using XObjects;

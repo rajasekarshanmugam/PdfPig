@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Graphics
 {
-    using System;
-    using System.Collections.Generic;
     using Content;
     using Filters;
     using PdfPig.Core;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
     using XObjects;
@@ -27,7 +27,7 @@
             {
                 number++;
             }
-            
+
             top = new MarkedContentElementActiveBuilder(number, name, properties);
             builderStack.Push(top);
         }
@@ -35,7 +35,7 @@
         public MarkedContentElement Pop(IPdfTokenScanner pdfScanner)
         {
             var builder = builderStack.Pop();
-            
+
             var result = builder.Build(pdfScanner);
 
             if (builderStack.Count > 0)
@@ -78,7 +78,7 @@
                 top?.AddImage(image);
             }
         }
-        
+
         private class MarkedContentElementActiveBuilder
         {
             private readonly int number;
@@ -125,7 +125,7 @@
                 var actualText = GetOptional(NameToken.ActualText, pdfScanner);
                 var alternateDescription = GetOptional(NameToken.Alternate, pdfScanner);
                 var expandedForm = GetOptional(NameToken.E, pdfScanner);
-                
+
                 if (name != NameToken.Artifact)
                 {
                     return new MarkedContentElement(mcid, name, properties,

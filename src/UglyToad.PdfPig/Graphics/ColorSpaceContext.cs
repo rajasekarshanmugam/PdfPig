@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Graphics
 {
-    using System;
     using Colors;
     using Content;
+    using System;
     using Tokens;
 
     internal class ColorSpaceContext : IColorSpaceContext

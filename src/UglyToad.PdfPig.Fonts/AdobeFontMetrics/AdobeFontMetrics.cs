@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.AdobeFontMetrics
 {
-    using System.Collections.Generic;
     using Core;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The global metrics for a font program and the metrics of each character.

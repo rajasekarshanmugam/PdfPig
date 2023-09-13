@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
-    using System.Collections.Generic;
     using Core;
     using Graphics.Colors;
     using Graphics.Core;
+    using System.Collections.Generic;
     using UglyToad.PdfPig.Tokens;
     using XObjects;
 
@@ -48,7 +48,7 @@
         /// </summary>
         IReadOnlyList<byte> RawBytes { get; }
 
-            /// <summary>
+        /// <summary>
         /// The color rendering intent to be used when rendering the image.
         /// </summary>
         RenderingIntent RenderingIntent { get; }

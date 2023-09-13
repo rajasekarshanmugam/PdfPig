@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Writer.Colors
 {
+    using PdfFonts.Parser;
     using System;
     using System.IO;
     using System.Linq;
-    using PdfFonts.Parser;
 
     internal static class ProfileStreamReader
     {

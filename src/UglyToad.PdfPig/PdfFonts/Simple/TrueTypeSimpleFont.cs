@@ -1,13 +1,13 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Simple
 {
-    using System;
-    using System.Collections.Generic;
     using Cmap;
     using Composite;
     using Core;
     using Fonts;
     using Fonts.Encodings;
     using Fonts.TrueType;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
     using Util.JetBrains.Annotations;
 
@@ -57,7 +57,7 @@
             Name = name;
             IsVertical = false;
             ToUnicode = new ToUnicodeCMap(toUnicodeCMap);
-            Details = descriptor?.ToDetails(Name?.Data) 
+            Details = descriptor?.ToDetails(Name?.Data)
                       ?? FontDetails.GetDefault(Name?.Data);
         }
 

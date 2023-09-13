@@ -26,7 +26,7 @@
                     return FontStretch.UltraExpanded;
                 default:
                     return FontStretch.Unknown;
-            } 
+            }
         }
     }
 }

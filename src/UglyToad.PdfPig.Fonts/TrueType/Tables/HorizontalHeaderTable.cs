@@ -86,11 +86,11 @@
         /// <summary>
         /// Create a new <see cref="HorizontalHeaderTable"/>.
         /// </summary>
-        public HorizontalHeaderTable(TrueTypeHeaderTable directoryTable, int majorVersion, int minorVersion, short ascent, short descent, 
-            short lineGap, ushort advanceWidthMaximum, 
+        public HorizontalHeaderTable(TrueTypeHeaderTable directoryTable, int majorVersion, int minorVersion, short ascent, short descent,
+            short lineGap, ushort advanceWidthMaximum,
             short minimumLeftSideBearing, short minimumRightSideBearing,
-            short xMaxExtent, short caretSlopeRise, 
-            short caretSlopeRun, short caretOffset, 
+            short xMaxExtent, short caretSlopeRise,
+            short caretSlopeRun, short caretOffset,
             short metricDataFormat, ushort numberOfHeaderMetrics)
         {
             DirectoryTable = directoryTable;

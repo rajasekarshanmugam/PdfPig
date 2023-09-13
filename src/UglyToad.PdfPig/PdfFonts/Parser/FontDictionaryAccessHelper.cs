@@ -59,12 +59,12 @@
             {
                 throw new InvalidFontFormatException($"No font descriptor indirect reference found in the TrueType font: {dictionary}.");
             }
-            
+
             var descriptor = FontDescriptorFactory.Generate(parsed, pdfScanner);
 
             return descriptor;
         }
-        
+
         public static NameToken GetName(IPdfTokenScanner pdfScanner, DictionaryToken dictionary, FontDescriptor descriptor)
         {
             if (dictionary.TryGet(NameToken.BaseFont, out var nameBase))
@@ -78,7 +78,7 @@
             {
                 return descriptor.FontName;
             }
-            
+
             throw new InvalidFontFormatException($"Could not find a name for this font {dictionary}.");
         }
     }

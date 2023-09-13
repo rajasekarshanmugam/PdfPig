@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser.Parts
 {
+    using Cmap;
+    using Fonts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Cmap;
-    using Fonts;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -75,7 +75,7 @@
                         {
                             builder.AddBaseFontCharacter(startCode, hex.Bytes);
                         }
-                        
+
                         Increment(startCode, startCode.Count - 1);
 
                         arrayIndex++;

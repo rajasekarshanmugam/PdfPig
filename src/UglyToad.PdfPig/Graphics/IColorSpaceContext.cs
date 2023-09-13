@@ -27,7 +27,7 @@
         /// The name of the advanced ColorSpace active for non-stroking operations, if any.
         /// </summary>
         NameToken AdvancedNonStrokingColorSpace { get; }
-        
+
         /// <summary>
         ///  Set the current color space to use for stroking operations.
         /// </summary>

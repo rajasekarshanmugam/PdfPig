@@ -1,12 +1,12 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.Parser
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
-    using Core;
-    using Tokens;
     using Tokenization;
+    using Tokens;
 
     /// <inheritdoc />
     public class Type1ArrayTokenizer : ITokenizer
@@ -33,10 +33,10 @@
                     break;
                 }
 
-                builder.Append((char) inputBytes.CurrentByte);
+                builder.Append((char)inputBytes.CurrentByte);
             }
 
-            var parts = builder.ToString().Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
+            var parts = builder.ToString().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
             var tokens = new List<IToken>();
 

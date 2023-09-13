@@ -1,5 +1,5 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Encodings
-{    
+{
     /// <summary>
     /// The standard PDF encoding.
     /// </summary>

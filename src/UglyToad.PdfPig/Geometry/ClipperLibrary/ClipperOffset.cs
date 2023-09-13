@@ -77,7 +77,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
     internal class ClipperOffset
     {
         private const double DefArcTolerance = 0.25;
-        
+
         private ClipperIntPoint lowest;
         private readonly ClipperPolyNode polyNodes = new ClipperPolyNode();
 
@@ -167,7 +167,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
                 AddPath(p, joinType, endType);
             }
         }
-        
+
         public static long Round(double value) => value < 0 ? (long)(value - 0.5) : (long)(value + 0.5);
 
         public static ClipperDoublePoint GetUnitNormal(ClipperIntPoint pt1, ClipperIntPoint pt2)

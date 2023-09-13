@@ -28,7 +28,7 @@
         /// The underlying embedded file stream.
         /// </summary>
         public StreamToken Stream { get; }
-        
+
         internal EmbeddedFile(string name, string fileSpecification, IReadOnlyList<byte> bytes, StreamToken stream)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));

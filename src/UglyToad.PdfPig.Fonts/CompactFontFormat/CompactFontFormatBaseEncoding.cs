@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
-    using System.Collections.Generic;
     using Encodings;
+    using System.Collections.Generic;
 
     internal abstract class CompactFontFormatBaseEncoding : Encoding
     {

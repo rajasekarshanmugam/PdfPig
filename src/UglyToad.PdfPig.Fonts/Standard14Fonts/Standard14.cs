@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Standard14Fonts
 {
+    using AdobeFontMetrics;
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using AdobeFontMetrics;
-    using Core;
 
     /// <summary>
     /// There are 14 special Type 1 fonts which must be available. The list of PostScript names for these is given in the remarks section.

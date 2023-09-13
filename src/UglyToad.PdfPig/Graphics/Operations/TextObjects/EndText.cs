@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.TextObjects
 {
-    using System.IO;
     using PdfPig.Core;
+    using System.IO;
 
     /// <inheritdoc />
     /// <summary>
@@ -13,7 +13,7 @@
         /// The symbol for this operation in a stream.
         /// </summary>
         public const string Symbol = "ET";
-        
+
         /// <summary>
         /// The instance of the <see cref="EndText"/> operation.
         /// </summary>

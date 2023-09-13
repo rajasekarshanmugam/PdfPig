@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType
 {
+    using Core;
     using System;
     using System.Text;
-    using Core;
 
     /// <summary>
     /// Wraps the <see cref="IInputBytes"/> to support reading TrueType data types.
@@ -139,7 +139,7 @@
             var result = (upper << 32) + (lower & 0xFFFFFFFF);
             return result;
         }
-        
+
         /// <summary>
         /// Read a <see cref="DateTime"/> from the data in UTC time.
         /// In TrueType dates are specified as the number of seconds since 1904-01-01.

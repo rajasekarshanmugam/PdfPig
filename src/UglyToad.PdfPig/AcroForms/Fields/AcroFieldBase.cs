@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.AcroForms.Fields
 {
-    using System;
     using Core;
+    using System;
     using Tokens;
     using Util.JetBrains.Annotations;
 
@@ -59,7 +59,7 @@
         /// <param name="pageNumber">The number of the page this field appears on.</param>
         /// <param name="bounds">The location of this field on the page.</param>
         protected AcroFieldBase(DictionaryToken dictionary, string rawFieldType,
-            uint fieldFlags, 
+            uint fieldFlags,
             AcroFieldType fieldType,
             AcroFieldCommonInformation information,
             int? pageNumber,

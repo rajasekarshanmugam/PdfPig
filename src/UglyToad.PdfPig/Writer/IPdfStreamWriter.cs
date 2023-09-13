@@ -1,9 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Writer
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Text;
     using Tokens;
 
     internal interface IPdfStreamWriter : IDisposable
@@ -54,6 +52,6 @@
         /// </summary>
         /// <param name="catalogReference">Indirect reference of catalog.</param>
         /// <param name="documentInformationReference">Reference to document information (optional)</param>
-        void CompletePdf(IndirectReferenceToken catalogReference, IndirectReferenceToken documentInformationReference=null);
+        void CompletePdf(IndirectReferenceToken catalogReference, IndirectReferenceToken documentInformationReference = null);
     }
 }

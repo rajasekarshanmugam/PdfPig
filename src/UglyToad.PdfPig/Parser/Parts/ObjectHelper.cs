@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Parser.Parts
 {
-    using System;
     using Core;
+    using System;
 
     internal static class ObjectHelper
     {

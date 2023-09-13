@@ -32,7 +32,7 @@
         /// Returns the next byte if available.
         /// </summary>
         byte? Peek();
-        
+
         /// <summary>
         /// Whether we are at the end of the available data.
         /// </summary>

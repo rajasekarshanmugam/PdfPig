@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.TextObjects
 {
-    using System.IO;
     using PdfPig.Core;
+    using System.IO;
 
     /// <inheritdoc />
     /// <summary>

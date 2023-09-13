@@ -32,7 +32,7 @@
             {
                 case "AbsoluteColorimetric":
                     return RenderingIntent.AbsoluteColorimetric;
-                   case "RelativeColorimetric":
+                case "RelativeColorimetric":
                     return RenderingIntent.RelativeColorimetric;
                 case "Saturation":
                     return RenderingIntent.Saturation;

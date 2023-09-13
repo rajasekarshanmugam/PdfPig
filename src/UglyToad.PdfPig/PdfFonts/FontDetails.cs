@@ -14,7 +14,7 @@
         /// The bold weight for a font.
         /// </summary>
         public const int BoldWeight = 700;
-        
+
         /// <summary>
         /// The font name.
         /// </summary>
@@ -29,7 +29,7 @@
         /// The font weight, values above 500 represent bold.
         /// </summary>
         public int Weight { get; }
-        
+
         /// <summary>
         /// Whether the font is italic.
         /// </summary>

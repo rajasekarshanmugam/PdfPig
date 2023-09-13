@@ -18,11 +18,11 @@
         /// <summary>
         /// Create a new <see cref="AcroPushButtonField"/>.
         /// </summary>
-        public AcroPushButtonField(DictionaryToken dictionary, string fieldType, 
-            AcroButtonFieldFlags fieldFlags, 
+        public AcroPushButtonField(DictionaryToken dictionary, string fieldType,
+            AcroButtonFieldFlags fieldFlags,
             AcroFieldCommonInformation information,
             int? pageNumber,
-            PdfRectangle? bounds) : 
+            PdfRectangle? bounds) :
             base(dictionary, fieldType, (uint)fieldFlags, AcroFieldType.PushButton, information, pageNumber, bounds)
         {
             Flags = fieldFlags;

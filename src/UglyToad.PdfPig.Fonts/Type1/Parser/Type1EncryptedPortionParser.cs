@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.Parser
 {
-    using System;
-    using System.Collections.Generic;
     using CharStrings;
     using Core;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
 
     internal class Type1EncryptedPortionParser

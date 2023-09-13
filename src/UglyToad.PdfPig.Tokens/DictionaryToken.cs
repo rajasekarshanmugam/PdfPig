@@ -172,7 +172,7 @@
         public bool Equals(DictionaryToken other)
         {
             if (other == null)
-            { 
+            {
                 return false;
             }
 
@@ -202,6 +202,6 @@
         {
             return string.Join(", ", Data.Select(x => $"<{x.Key}, {x.Value}>"));
         }
-       
+
     }
 }

@@ -6,7 +6,7 @@
     internal interface IFont
     {
         NameToken Name { get; }
-        
+
         bool IsVertical { get; }
 
         FontDetails Details { get; }

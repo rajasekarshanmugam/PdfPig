@@ -1,13 +1,13 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.Parser
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Encodings;
     using Fonts;
-    using Type1;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
+    using Type1;
 
     /// <summary>
     /// Parse Adobe Type 1 font format.
@@ -19,7 +19,7 @@
         private const int PfbFileIndicator = 0x80;
 
         private static readonly Type1EncryptedPortionParser EncryptedPortionParser = new Type1EncryptedPortionParser();
-        
+
         /// <summary>
         /// Parses an embedded Adobe Type 1 font file.
         /// </summary>
@@ -74,7 +74,7 @@
             var nameTokenizer = new Type1NameTokenizer();
             scanner.RegisterCustomTokenizer((byte)'{', arrayTokenizer);
             scanner.RegisterCustomTokenizer((byte)'/', nameTokenizer);
-            
+
             try
             {
                 var tempEexecPortion = new List<byte>();
@@ -391,8 +391,8 @@
                     {
                         for (var i = 0; i < encodingArray.Data.Count; i += 2)
                         {
-                            var code = (NumericToken) encodingArray.Data[i];
-                            var name = (NameToken) encodingArray.Data[i + 1];
+                            var code = (NumericToken)encodingArray.Data[i];
+                            var name = (NameToken)encodingArray.Data[i + 1];
 
                             result[code.Int] = name.Data;
                         }

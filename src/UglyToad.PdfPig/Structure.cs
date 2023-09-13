@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig
 {
-    using System;
     using Content;
     using Core;
     using CrossReference;
+    using System;
     using Tokenization.Scanner;
     using Tokens;
     using Util.JetBrains.Annotations;
@@ -18,7 +18,7 @@
         /// </summary>
         [NotNull]
         public Catalog Catalog { get; }
-        
+
         /// <summary>
         /// The cross-reference table enables direct access to objects by number.
         /// </summary>

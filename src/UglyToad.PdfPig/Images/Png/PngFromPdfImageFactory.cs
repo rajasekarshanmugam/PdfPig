@@ -16,7 +16,7 @@
 
             var isColorSpaceSupported =
                 actualColorSpace == ColorSpace.DeviceGray || actualColorSpace == ColorSpace.DeviceRGB
-                || actualColorSpace == ColorSpace.DeviceCMYK || actualColorSpace == ColorSpace.CalGray 
+                || actualColorSpace == ColorSpace.DeviceCMYK || actualColorSpace == ColorSpace.CalGray
                 || actualColorSpace == ColorSpace.CalRGB;
 
             if (!isColorSpaceSupported || !image.TryGetBytes(out var bytesPure))
@@ -70,10 +70,10 @@
                              * B = 255 × (1-Y) × (1-K)
                              */
 
-                            var c = (bytesPure[i++]/255d);
-                            var m = (bytesPure[i++]/255d);
-                            var y = (bytesPure[i++]/255d);
-                            var k = (bytesPure[i++]/255d);
+                            var c = (bytesPure[i++] / 255d);
+                            var m = (bytesPure[i++] / 255d);
+                            var y = (bytesPure[i++] / 255d);
+                            var k = (bytesPure[i++] / 255d);
                             var r = (byte)(255 * (1 - c) * (1 - k));
                             var g = (byte)(255 * (1 - m) * (1 - k));
                             var b = (byte)(255 * (1 - y) * (1 - k));

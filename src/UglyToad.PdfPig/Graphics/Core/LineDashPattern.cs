@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="phase">The phase. <see cref="Phase"/>.</param>
         /// <param name="array">The array. <see cref="Array"/>.</param>
-        public LineDashPattern(int phase, [NotNull]IReadOnlyList<decimal> array)
+        public LineDashPattern(int phase, [NotNull] IReadOnlyList<decimal> array)
         {
             Phase = phase;
             Array = array ?? throw new ArgumentNullException(nameof(array));

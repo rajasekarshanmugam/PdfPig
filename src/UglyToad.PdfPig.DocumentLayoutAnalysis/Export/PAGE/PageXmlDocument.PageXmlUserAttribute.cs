@@ -7,7 +7,7 @@
     using System.Xml.Serialization;
 
     public partial class PageXmlDocument
-    { 
+    {
         /// <summary>
         /// Structured custom data defined by name, type and value.
         /// </summary>

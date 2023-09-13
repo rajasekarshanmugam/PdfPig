@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Parser;
+    using System;
+    using System.Collections.Generic;
     using Tables.CMapSubTables;
 
     /// <summary>
@@ -112,7 +112,7 @@
             {
                 return false;
             }
-            
+
             if (!TableRegister.GlyphTable.TryGetGlyphBounds(index, out boundingBox))
             {
                 return false;

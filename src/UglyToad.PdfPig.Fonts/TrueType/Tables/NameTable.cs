@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Names;
     using System;
     using System.Collections.Generic;
-    using Names;
 
     /// <inheritdoc />
     /// <summary>
@@ -25,7 +25,7 @@
         /// Font family name.
         /// </summary>
         public string FontFamilyName { get; }
-        
+
         /// <summary>
         /// Font sub-family name.
         /// </summary>
@@ -39,9 +39,9 @@
         /// <summary>
         /// Creaye a new <see cref="NameTable"/>.
         /// </summary>
-        public NameTable(TrueTypeHeaderTable directoryTable, 
+        public NameTable(TrueTypeHeaderTable directoryTable,
             string fontName,
-            string fontFamilyName, 
+            string fontFamilyName,
             string fontSubFamilyName,
             IReadOnlyList<TrueTypeNameRecord> nameRecords)
         {

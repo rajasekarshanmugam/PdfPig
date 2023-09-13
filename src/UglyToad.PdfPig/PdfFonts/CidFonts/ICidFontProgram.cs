@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.CidFonts
 {
-    using System;
     using Core;
+    using System;
 
     /// <summary>
     /// Represents either an Adobe Type 1 or TrueType font program for a CIDFont.

@@ -34,7 +34,7 @@
             var firstCharacter = FontDictionaryAccessHelper.GetFirstCharacter(dictionary);
             var lastCharacter = FontDictionaryAccessHelper.GetLastCharacter(dictionary);
             var widths = FontDictionaryAccessHelper.GetWidths(scanner, dictionary);
-            
+
             Encoding encoding = encodingReader.Read(dictionary);
 
             CMap toUnicodeCMap = null;
@@ -74,12 +74,12 @@
             }
 
             var matrixArray = DirectObjectFinder.Get<ArrayToken>(matrixObject, scanner);
-            
+
             return TransformationMatrix.FromValues(matrixArray.GetNumeric(0).Double, matrixArray.GetNumeric(1).Double,
                 matrixArray.GetNumeric(2).Double, matrixArray.GetNumeric(3).Double, matrixArray.GetNumeric(4).Double,
                 matrixArray.GetNumeric(5).Double);
         }
-        
+
         private static PdfRectangle GetBoundingBox(DictionaryToken dictionary)
         {
             if (!dictionary.TryGet(NameToken.FontBbox, out var bboxObject))

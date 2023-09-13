@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1
 {
-    using System;
-    using System.Collections.Generic;
     using CharStrings;
     using Core;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
 
     /// <summary>
@@ -15,7 +15,7 @@
         /// The name of the font.
         /// </summary>
         public string Name { get; }
-        
+
         /// <summary>
         /// The encoding dictionary defining a name for each character code.
         /// </summary>
@@ -31,7 +31,7 @@
         /// This is the smallest rectangle enclosing the shape that would result if all of the glyphs were overlayed on each other. 
         /// </summary>
         public PdfRectangle BoundingBox { get; }
-        
+
         /// <summary>
         /// The private dictionary for this font.
         /// </summary>

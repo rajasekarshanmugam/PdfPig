@@ -17,7 +17,7 @@
         public class AltoProcessingStep
         {
             private AltoProcessingCategory processingCategory;
-            
+
             /// <summary>
             /// Classification of the category of operation, how the file was created, including 
             /// generation, modification, preprocessing, postprocessing or any other steps.

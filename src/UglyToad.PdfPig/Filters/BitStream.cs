@@ -56,7 +56,7 @@
             // 'And' out the leading bits.
             var firstBitOfDataWithinInt = (sizeof(int) * 8) - numberOfBits;
             result &= (int)(0xffffffff >> firstBitOfDataWithinInt);
-            
+
             currentWithinByteBitOffset = endWithinByteBitOffset;
 
             return result;

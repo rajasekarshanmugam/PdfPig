@@ -1,9 +1,5 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser.Handlers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
     using Cmap;
     using Core;
     using Filters;
@@ -17,6 +13,10 @@
     using Logging;
     using PdfPig.Parser.Parts;
     using Simple;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
     using Tokenization.Scanner;
     using Tokens;
     using Util;

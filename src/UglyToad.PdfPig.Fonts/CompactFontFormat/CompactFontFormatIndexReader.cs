@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
-    using System;
     using Core;
+    using System;
 
     internal static class CompactFontFormatIndexReader
     {

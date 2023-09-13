@@ -1,12 +1,12 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
-    using System;
-    using System.Collections.Generic;
     using Charsets;
     using CharStrings;
     using Core;
     using Dictionaries;
     using Encodings;
+    using System;
+    using System.Collections.Generic;
     using Type1.CharStrings;
 
     /// <summary>

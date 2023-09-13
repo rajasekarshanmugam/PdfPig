@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser.Parts
 {
-    using System;
     using Cmap;
+    using System;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -14,7 +14,7 @@
                 if (!tokenScanner.MoveNext() || !(tokenScanner.CurrentToken is HexToken inputCode))
                 {
                     if (tokenScanner.CurrentToken is OperatorToken op
-                    && (string.Equals(op.Data, "endbfchar", StringComparison.OrdinalIgnoreCase) 
+                    && (string.Equals(op.Data, "endbfchar", StringComparison.OrdinalIgnoreCase)
                         || string.Equals(op.Data, "endcmap", StringComparison.OrdinalIgnoreCase)))
                     {
                         return;

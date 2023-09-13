@@ -1,20 +1,19 @@
 ﻿
 namespace UglyToad.PdfPig.Writer
 {
+    using Content;
+    using Core;
+    using Fonts;
+    using PdfPig.Fonts.Standard14Fonts;
+    using PdfPig.Fonts.TrueType;
+    using PdfPig.Fonts.TrueType.Parser;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Content;
-    using Core;
-    using Fonts;
-    using PdfPig.Fonts.TrueType;
-    using PdfPig.Fonts.Standard14Fonts;
-    using PdfPig.Fonts.TrueType.Parser;
     using System.Runtime.CompilerServices;
     using Tokenization.Scanner;
     using Tokens;
-
     using Util.JetBrains.Annotations;
 
     /// <summary>
@@ -103,7 +102,7 @@ namespace UglyToad.PdfPig.Writer
             }
             context.InitializePdf(version);
         }
-        
+
         /// <summary>
         /// Determines whether the bytes of the TrueType font file provided can be used in a PDF document.
         /// </summary>
@@ -408,7 +407,7 @@ namespace UglyToad.PdfPig.Writer
                         }
                         val = tk.Data;
                     }
-                                                    
+
                     if (!(val is ArrayToken arr))
                     {
                         // should be array... ignore and remove bad dict
@@ -589,7 +588,7 @@ namespace UglyToad.PdfPig.Writer
                     }
                     pageDictionary[NameToken.Contents] = new ArrayToken(streams);
                 }
-                context.AttemptDeduplication = prev;;
+                context.AttemptDeduplication = prev; ;
 
                 leafChildren[leafNum].Add(context.WriteToken(new DictionaryToken(pageDictionary)));
 

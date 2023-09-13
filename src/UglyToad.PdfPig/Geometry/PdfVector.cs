@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Geometry
 {
-    using System;
     using Core;
+    using System;
 
     internal struct PdfVector
     {

@@ -10,7 +10,7 @@
 
         public static readonly byte First = 12;
         public static readonly byte? Second = 17;
-        
+
         public static bool TakeFromStackBottom { get; } = false;
         public static bool ClearsOperandStack { get; } = false;
 

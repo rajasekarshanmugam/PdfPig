@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Core;
 
     /// <inheritdoc />
     /// <summary>
@@ -76,14 +76,14 @@
         /// Create a new <see cref="PostScriptTable"/>.
         /// </summary>
         public PostScriptTable(TrueTypeHeaderTable directoryTable, float format,
-            float italicAngle, 
+            float italicAngle,
             short underlinePosition,
             short underlineThickness,
             uint isFixedPitch,
             uint minimumMemoryType42,
             uint maximumMemoryType42,
             uint minimumMemoryType1,
-            uint maximumMemoryType1, 
+            uint maximumMemoryType1,
             string[] glyphNames)
         {
             DirectoryTable = directoryTable;

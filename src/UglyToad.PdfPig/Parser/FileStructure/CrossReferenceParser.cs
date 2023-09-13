@@ -1,11 +1,11 @@
 ﻿namespace UglyToad.PdfPig.Parser.FileStructure
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using CrossReference;
     using Logging;
     using Parts.CrossReference;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -22,10 +22,10 @@
             this.offsetValidator = offsetValidator;
             this.crossReferenceStreamParser = crossReferenceStreamParser;
         }
-        
+
         public CrossReferenceTable Parse(IInputBytes bytes, bool isLenientParsing, long crossReferenceLocation,
             long offsetCorrection,
-            IPdfTokenScanner pdfScanner, 
+            IPdfTokenScanner pdfScanner,
             ISeekableTokenScanner tokenScanner)
         {
             long fixedOffset = offsetValidator.CheckXRefOffset(crossReferenceLocation, tokenScanner, bytes, isLenientParsing);
@@ -86,7 +86,7 @@
 
                         var tiedToTableAtOffset = tablePart.Offset;
 
-                        int streamOffset = ((NumericToken) tableDictionary.Data[NameToken.XrefStm]).Int;
+                        int streamOffset = ((NumericToken)tableDictionary.Data[NameToken.XrefStm]).Int;
 
                         // check the xref stream reference
                         fixedOffset = offsetValidator.CheckXRefOffset(streamOffset, tokenScanner, bytes, isLenientParsing);
@@ -138,7 +138,7 @@
                             }
                         }
                     }
-                    
+
                     table.Add(tablePart);
 
                     if (streamPart != null)
@@ -238,13 +238,13 @@
             }
 
             var resolved = table.Build(crossReferenceLocation, offsetCorrection, log);
-            
+
             // check the offsets of all referenced objects
             if (!CrossReferenceObjectOffsetValidator.ValidateCrossReferenceOffsets(bytes, resolved, log, out var actualOffsets))
             {
                 resolved = new CrossReferenceTable(resolved.Type, actualOffsets, resolved.Trailer, resolved.CrossReferenceOffsets);
             }
-            
+
             return resolved;
         }
 
@@ -268,13 +268,13 @@
 
                 return false;
             }
-            
+
             xrefTablePart = crossReferenceStreamParser.Parse(objByteOffset, fromTableAtOffset, objectStream);
 
             return true;
         }
 
-        private bool TryBruteForceXrefTableLocate(IInputBytes bytes, long expectedOffset, 
+        private bool TryBruteForceXrefTableLocate(IInputBytes bytes, long expectedOffset,
             out long actualOffset)
         {
             actualOffset = expectedOffset;

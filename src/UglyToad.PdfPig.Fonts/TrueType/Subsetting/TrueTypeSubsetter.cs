@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Subsetting
 {
+    using Core;
+    using Parser;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Core;
-    using Parser;
     using Tables;
     using Tables.CMapSubTables;
     using TrueType;
@@ -53,8 +53,8 @@
             // TrueTypeHeaderTable.Post
         };
 
-        private static readonly byte[] PaddingBytes = {0, 0, 0, 0};
-        
+        private static readonly byte[] PaddingBytes = { 0, 0, 0, 0 };
+
         /// <summary>
         /// Generate a subset of the input font containing only the data required for the glyphs specified in the encoding.
         /// </summary>
@@ -125,7 +125,7 @@
                 for (var i = 0; i < directoryEntries.Length; i++)
                 {
                     var entry = directoryEntries[i];
-                    
+
                     entry.OutputTableOffset = stream.Position;
 
                     if (entry.Tag == TrueTypeHeaderTable.Cmap)

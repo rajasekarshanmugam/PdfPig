@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
 {
-    using System.Collections.Generic;
     using Core;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The context used and updated when interpreting the commands for a charstring.

@@ -30,17 +30,17 @@
 
             if (typeof(T) == typeof(CMapTable))
             {
-                return (T) (object) CMapTableParser.Parse(table, data, register);
+                return (T)(object)CMapTableParser.Parse(table, data, register);
             }
 
             if (typeof(T) == typeof(HorizontalMetricsTable))
             {
-                return (T) (object) HorizontalMetricsTableParser.Parse(table, data, register);
+                return (T)(object)HorizontalMetricsTableParser.Parse(table, data, register);
             }
 
             if (typeof(T) == typeof(NameTable))
             {
-                return (T) (object) NameTableParser.Parse(table, data, register);
+                return (T)(object)NameTableParser.Parse(table, data, register);
             }
 
             if (typeof(T) == typeof(Os2Table))
@@ -50,7 +50,7 @@
 
             if (typeof(T) == typeof(HorizontalHeaderTable))
             {
-                return (T) (object) HorizontalHeaderTableParser.Parse(table, data, register);
+                return (T)(object)HorizontalHeaderTableParser.Parse(table, data, register);
             }
 
             throw new NotImplementedException();

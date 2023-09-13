@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Parser
 {
-    using System.Text;
     using Core;
     using Names;
+    using System.Text;
     using Tables;
 
     internal class NameTableParser : ITrueTypeTableParser<NameTable>
@@ -81,7 +81,7 @@
                 data.Seek(position);
 
                 if (data.TryReadString(nameRecord.Length, encoding, out var str))
-                { 
+                {
                     return nameRecord.ToNameRecord(str);
                 }
 

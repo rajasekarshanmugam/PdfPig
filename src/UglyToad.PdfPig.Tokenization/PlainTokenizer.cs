@@ -36,7 +36,7 @@
                     break;
                 }
 
-                builder.Append((char) inputBytes.CurrentByte);
+                builder.Append((char)inputBytes.CurrentByte);
             }
 
             var text = builder.ToString();

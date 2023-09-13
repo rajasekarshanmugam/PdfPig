@@ -38,7 +38,7 @@ namespace UglyToad.PdfPig.Content
         /// </summary>
         public MarkedContentElement MarkedContent { get; }
 
-        internal OptionalContentGroupElement(MarkedContentElement markedContentElement, IPdfTokenScanner  pdfTokenScanner)
+        internal OptionalContentGroupElement(MarkedContentElement markedContentElement, IPdfTokenScanner pdfTokenScanner)
         {
             MarkedContent = markedContentElement;
 

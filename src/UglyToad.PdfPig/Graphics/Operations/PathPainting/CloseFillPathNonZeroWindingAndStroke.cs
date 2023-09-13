@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.PathPainting
 {
     using System.IO;
-    
+
     /// <inheritdoc />
     /// <summary>
     /// Close, fill, and then stroke the path, using the nonzero winding number rule to determine the region to fill. 
@@ -12,7 +12,7 @@
         /// The symbol for this operation in a stream.
         /// </summary>
         public const string Symbol = "b";
-        
+
         /// <summary>
         /// The instance of the <see cref="CloseFillPathNonZeroWindingAndStroke"/> operation.
         /// </summary>
@@ -22,7 +22,7 @@
         public string Operator => Symbol;
 
         private CloseFillPathNonZeroWindingAndStroke()
-        {            
+        {
         }
 
         /// <inheritdoc />

@@ -17,7 +17,7 @@
         /// The object containing the stream for this font program.
         /// </summary>
         public IndirectReferenceToken ObjectKey { get; }
-        
+
         /// <summary>
         /// The type of the font program represented by this descriptor.
         /// </summary>

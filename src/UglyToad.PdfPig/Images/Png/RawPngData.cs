@@ -2,7 +2,7 @@
 {
     using System;
 
-/// <summary>
+    /// <summary>
     /// Provides convenience methods for indexing into a raw byte array to extract pixel values.
     /// </summary>
     internal class RawPngData
@@ -32,7 +32,7 @@
             this.data = data ?? throw new ArgumentNullException(nameof(data));
             this.bytesPerPixel = bytesPerPixel;
             this.palette = palette;
-            
+
             width = imageHeader.Width;
             colorType = imageHeader.ColorType;
             rowOffset = imageHeader.InterlaceMethod == InterlaceMethod.Adam7 ? 0 : 1;
@@ -78,12 +78,12 @@
                     switch (colorType)
                     {
                         case ColorType.None:
-                        {
-                            byte second = data[pixelStartIndex + 1];
-                            var value = ToSingleByte(first, second);
-                            return new Pixel(value, value, value, 255, true);
+                            {
+                                byte second = data[pixelStartIndex + 1];
+                                var value = ToSingleByte(first, second);
+                                return new Pixel(value, value, value, 255, true);
 
-                        }
+                            }
                         default:
                             return new Pixel(first, first, first, data[pixelStartIndex + 1], true);
                     }
@@ -94,14 +94,14 @@
                     switch (colorType)
                     {
                         case ColorType.None | ColorType.AlphaChannelUsed:
-                        {
-                            var second = data[pixelStartIndex + 1];
-                            var firstAlpha = data[pixelStartIndex + 2];
-                            var secondAlpha = data[pixelStartIndex + 3];
-                            var gray = ToSingleByte(first, second);
-                            var alpha = ToSingleByte(firstAlpha, secondAlpha);
-                            return new Pixel(gray, gray, gray, alpha, true);
-                        }
+                            {
+                                var second = data[pixelStartIndex + 1];
+                                var firstAlpha = data[pixelStartIndex + 2];
+                                var secondAlpha = data[pixelStartIndex + 3];
+                                var gray = ToSingleByte(first, second);
+                                var alpha = ToSingleByte(firstAlpha, secondAlpha);
+                                return new Pixel(gray, gray, gray, alpha, true);
+                            }
                         default:
                             return new Pixel(first, data[pixelStartIndex + 1], data[pixelStartIndex + 2], data[pixelStartIndex + 3], false);
                     }

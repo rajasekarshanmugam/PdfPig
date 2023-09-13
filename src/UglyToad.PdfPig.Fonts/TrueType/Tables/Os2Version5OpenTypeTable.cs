@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Core;
     using System.Collections.Generic;
     using System.IO;
-    using Core;
 
     /// <summary>
     /// Version 5 was defined in OpenType 1.7. 
@@ -27,47 +27,47 @@
         /// <summary>
         /// Create a new <see cref="Os2Version5OpenTypeTable"/>.
         /// </summary>
-        public Os2Version5OpenTypeTable(TrueTypeHeaderTable directoryTable, 
+        public Os2Version5OpenTypeTable(TrueTypeHeaderTable directoryTable,
             ushort version, short xAverageCharacterWidth,
-            ushort weightClass, 
+            ushort weightClass,
             ushort widthClass,
             ushort typeFlags,
-            short ySubscriptXSize, 
-            short ySubscriptYSize, 
+            short ySubscriptXSize,
+            short ySubscriptYSize,
             short ySubscriptXOffset,
-            short ySubscriptYOffset, 
-            short ySuperscriptXSize, 
-            short ySuperscriptYSize, 
+            short ySubscriptYOffset,
+            short ySuperscriptXSize,
+            short ySuperscriptYSize,
             short ySuperscriptXOffset,
-            short ySuperscriptYOffset, 
-            short yStrikeoutSize, 
-            short yStrikeoutPosition, 
+            short ySuperscriptYOffset,
+            short yStrikeoutSize,
+            short yStrikeoutPosition,
             short familyClass,
             IReadOnlyList<byte> panose,
-            IReadOnlyList<uint> unicodeRanges, 
-            string vendorId, 
+            IReadOnlyList<uint> unicodeRanges,
+            string vendorId,
             ushort fontSelectionFlags,
             ushort firstCharacterIndex,
-            ushort lastCharacterIndex, 
-            short typographicAscender, 
-            short typographicDescender, 
+            ushort lastCharacterIndex,
+            short typographicAscender,
+            short typographicDescender,
             short typographicLineGap,
-            ushort windowsAscent, 
-            ushort windowsDescent, 
+            ushort windowsAscent,
+            ushort windowsDescent,
             uint codePage1,
-            uint codePage2, 
-            short xHeight, 
-            short capHeight, 
+            uint codePage2,
+            short xHeight,
+            short capHeight,
             ushort defaultCharacter,
-            ushort breakCharacter, 
+            ushort breakCharacter,
             ushort maximumContext,
-            ushort lowerOpticalPointSize, 
-            ushort upperOpticalPointSize) : base(directoryTable, version, xAverageCharacterWidth, weightClass, 
+            ushort lowerOpticalPointSize,
+            ushort upperOpticalPointSize) : base(directoryTable, version, xAverageCharacterWidth, weightClass,
             widthClass, typeFlags, ySubscriptXSize, ySubscriptYSize, ySubscriptXOffset, ySubscriptYOffset,
             ySuperscriptXSize, ySuperscriptYSize, ySuperscriptXOffset, ySuperscriptYOffset, yStrikeoutSize,
             yStrikeoutPosition, familyClass, panose, unicodeRanges, vendorId, fontSelectionFlags,
             firstCharacterIndex, lastCharacterIndex, typographicAscender, typographicDescender,
-            typographicLineGap, windowsAscent, windowsDescent, codePage1, codePage2, xHeight, 
+            typographicLineGap, windowsAscent, windowsDescent, codePage1, codePage2, xHeight,
             capHeight, defaultCharacter, breakCharacter, maximumContext)
         {
             LowerOpticalPointSize = lowerOpticalPointSize;

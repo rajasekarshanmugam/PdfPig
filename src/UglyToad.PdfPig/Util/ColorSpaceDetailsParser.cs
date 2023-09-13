@@ -1,12 +1,12 @@
 ﻿namespace UglyToad.PdfPig.Util
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Content;
     using Core;
     using Filters;
     using Graphics.Colors;
     using Parser.Parts;
+    using System.Collections.Generic;
+    using System.Linq;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -85,7 +85,7 @@
                 }
 
                 var colorSpaceDetails = GetColorSpaceDetails(colorSpace, imageDictionary.Without(NameToken.Filter).Without(NameToken.F), scanner, resourceStore, filterProvider, true);
-                
+
                 var decodeRaw = imageDictionary.GetObjectOrDefault(NameToken.Decode, NameToken.D) as ArrayToken
                     ?? new ArrayToken(EmptyArray<IToken>.Instance);
                 var decode = decodeRaw.Data.OfType<NumericToken>().Select(x => x.Data).ToArray();

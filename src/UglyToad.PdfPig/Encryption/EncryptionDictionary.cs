@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Encryption
 {
-    using System;
     using Exceptions;
+    using System;
     using Tokens;
     using Util.JetBrains.Annotations;
 
@@ -39,15 +39,15 @@
 
         public DictionaryToken Dictionary { get; }
 
-        public EncryptionDictionary(string filter, EncryptionAlgorithmCode encryptionAlgorithmCode, 
-            int? keyLength, 
-            int revision, 
-            byte[] ownerBytes, 
-            byte[] userBytes, 
+        public EncryptionDictionary(string filter, EncryptionAlgorithmCode encryptionAlgorithmCode,
+            int? keyLength,
+            int revision,
+            byte[] ownerBytes,
+            byte[] userBytes,
             byte[] ownerEncryptionBytes,
             byte[] userEncryptionBytes,
-            UserAccessPermissions userAccessPermissions, 
-            DictionaryToken dictionary, 
+            UserAccessPermissions userAccessPermissions,
+            DictionaryToken dictionary,
             bool encryptMetadata)
         {
             Filter = filter;

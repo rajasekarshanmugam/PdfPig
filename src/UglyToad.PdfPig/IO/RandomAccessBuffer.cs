@@ -100,9 +100,9 @@
         public RandomAccessBuffer Clone()
         {
             RandomAccessBuffer copy = new RandomAccessBuffer(chunkSize)
-                {
-                    bufferList = new List<byte[]>(bufferList.Count)
-                };
+            {
+                bufferList = new List<byte[]>(bufferList.Count)
+            };
 
             foreach (byte[] buffer in bufferList)
             {
@@ -128,9 +128,9 @@
             return copy;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public void Dispose()
         {
@@ -142,9 +142,9 @@
             bufferListIndex = 0;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public void clear()
         {
@@ -158,9 +158,9 @@
             bufferListMaxIndex = 0;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public void Seek(long position)
         {
@@ -173,8 +173,8 @@
             if (pointer < size)
             {
                 // calculate the chunk list index
-                bufferListIndex = (int) (pointer / chunkSize);
-                currentBufferPointer = (int) (pointer % chunkSize);
+                bufferListIndex = (int)(pointer / chunkSize);
+                currentBufferPointer = (int)(pointer % chunkSize);
                 currentBuffer = bufferList[bufferListIndex];
             }
             else
@@ -183,13 +183,13 @@
                 // jump to the end of the buffer
                 bufferListIndex = bufferListMaxIndex;
                 currentBuffer = bufferList[bufferListIndex];
-                currentBufferPointer = (int) (size % chunkSize);
+                currentBufferPointer = (int)(size % chunkSize);
             }
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public long GetPosition()
         {
@@ -197,9 +197,9 @@
             return pointer;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public int Read()
         {
@@ -224,9 +224,9 @@
             return currentBuffer[currentBufferPointer++] & 0xff;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public int Read(byte[] b, int offset, int length)
         {
@@ -253,7 +253,7 @@
             {
                 return 0;
             }
-            int maxLength = (int) Math.Min(length, size - pointer);
+            int maxLength = (int)Math.Min(length, size - pointer);
             int remainingBytes = chunkSize - currentBufferPointer;
             // no more bytes left
             if (remainingBytes == 0)
@@ -280,9 +280,9 @@
             }
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public long Length()
         {
@@ -290,9 +290,9 @@
             return size;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public void write(int b)
         {
@@ -306,7 +306,7 @@
                 }
                 ExpandBuffer();
             }
-            currentBuffer[currentBufferPointer++] = (byte) b;
+            currentBuffer[currentBufferPointer++] = (byte)b;
             pointer++;
             if (pointer > this.size)
             {
@@ -324,18 +324,18 @@
         }
 
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public void write(byte[] b)
         {
             write(b, 0, b.Length);
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public void write(byte[] b, int offset, int length)
         {
@@ -353,7 +353,7 @@
                 int newOffset = offset + remainingBytes;
                 long remainingBytes2Write = length - remainingBytes;
                 // determine how many buffers are needed for the remaining bytes
-                int numberOfNewArrays = (int) remainingBytes2Write / chunkSize;
+                int numberOfNewArrays = (int)remainingBytes2Write / chunkSize;
                 for (int i = 0; i < numberOfNewArrays; i++)
                 {
                     ExpandBuffer();
@@ -361,15 +361,15 @@
                     newOffset += chunkSize;
                 }
                 // are there still some bytes to be written?
-                remainingBytes2Write -= numberOfNewArrays * (long) chunkSize;
+                remainingBytes2Write -= numberOfNewArrays * (long)chunkSize;
                 if (remainingBytes2Write >= 0)
                 {
                     ExpandBuffer();
                     if (remainingBytes2Write > 0)
                     {
-                        Array.Copy(b, newOffset, currentBuffer, currentBufferPointer, (int) remainingBytes2Write);
+                        Array.Copy(b, newOffset, currentBuffer, currentBufferPointer, (int)remainingBytes2Write);
                     }
-                    currentBufferPointer = (int) remainingBytes2Write;
+                    currentBufferPointer = (int)remainingBytes2Write;
                 }
             }
             else
@@ -384,9 +384,9 @@
             }
         }
 
-/**
- * create a new buffer chunk and adjust all pointers and indices.
- */
+        /**
+         * create a new buffer chunk and adjust all pointers and indices.
+         */
         private void ExpandBuffer()
         {
             if (bufferListMaxIndex > bufferListIndex)
@@ -405,9 +405,9 @@
             }
         }
 
-/**
- * switch to the next buffer chunk and reset the buffer pointer.
- */
+        /**
+         * switch to the next buffer chunk and reset the buffer pointer.
+         */
         private void NextBuffer()
         {
             if (bufferListIndex == bufferListMaxIndex)
@@ -432,18 +432,18 @@
 
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public bool IsClosed()
         {
             return currentBuffer == null;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public bool IsEof()
         {
@@ -451,13 +451,13 @@
             return pointer >= size;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public int Available()
         {
-            return (int) Math.Min(Length() - GetPosition(), int.MaxValue);
+            return (int)Math.Min(Length() - GetPosition(), int.MaxValue);
         }
 
         public void ReturnToBeginning()
@@ -465,9 +465,9 @@
             Seek(0);
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public int Peek()
         {
@@ -479,9 +479,9 @@
             return result;
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public void Rewind(int bytes)
         {
@@ -489,9 +489,9 @@
             Seek(GetPosition() - bytes);
         }
 
-/**
- * {@inheritDoc}
- */
+        /**
+         * {@inheritDoc}
+         */
 
         public byte[] ReadFully(int length)
         {

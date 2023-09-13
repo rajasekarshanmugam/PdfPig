@@ -1,16 +1,15 @@
 ﻿namespace UglyToad.PdfPig.Writer.Fonts
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using Core;
     using PdfFonts;
-    using Tokens;
     using PdfPig.Fonts;
     using PdfPig.Fonts.TrueType;
     using PdfPig.Fonts.TrueType.Subsetting;
     using PdfPig.Fonts.TrueType.Tables;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Tokens;
 
     internal class TrueTypeWritingFont : IWritingFont
     {
@@ -47,7 +46,7 @@
             return TransformationMatrix.FromValues(1.0 / unitsPerEm, 0, 0, 1.0 / unitsPerEm, 0, 0);
         }
 
-        public IndirectReferenceToken  WriteFont(IPdfStreamWriter writer, IndirectReferenceToken reservedIndirect=null)
+        public IndirectReferenceToken WriteFont(IPdfStreamWriter writer, IndirectReferenceToken reservedIndirect = null)
         {
             var newEncoding = new TrueTypeSubsetEncoding(characterMapping.Keys.ToList());
             var subsetBytes = TrueTypeSubsetter.Subset(fontFileBytes.ToArray(), newEncoding);

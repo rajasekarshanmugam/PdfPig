@@ -20,7 +20,7 @@
 
         /// <inheritdoc />
         public string Operator => Symbol;
-        
+
         private EndMarkedContent()
         {
         }

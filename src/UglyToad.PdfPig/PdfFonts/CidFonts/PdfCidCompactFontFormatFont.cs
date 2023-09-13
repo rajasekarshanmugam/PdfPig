@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.CidFonts
 {
-    using System;
     using Core;
     using Fonts.CompactFontFormat;
+    using System;
 
     internal class PdfCidCompactFontFormatFont : ICidFontProgram
     {

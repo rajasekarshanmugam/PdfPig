@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System.Text;
     using Core;
+    using System.Text;
     using Tokens;
 
     internal class CommentTokenizer : ITokenizer
@@ -21,7 +21,7 @@
 
             while (inputBytes.MoveNext() && !ReadHelper.IsEndOfLine(inputBytes.CurrentByte))
             {
-                builder.Append((char) inputBytes.CurrentByte);
+                builder.Append((char)inputBytes.CurrentByte);
             }
 
             token = new CommentToken(builder.ToString());

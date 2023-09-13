@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.CharStrings.Commands
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
 
     internal class Type1BuildCharContext
     {

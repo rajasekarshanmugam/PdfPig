@@ -1,14 +1,14 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Core;
     using Filters;
     using Graphics.Colors;
     using Graphics.Core;
-    using Tokens;
     using Images.Png;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Tokens;
     using UglyToad.PdfPig.Util.JetBrains.Annotations;
 
     /// <inheritdoc />

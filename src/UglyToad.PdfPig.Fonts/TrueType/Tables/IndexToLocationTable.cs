@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Core;
+    using Parser;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Core;
-    using Parser;
 
     /// <inheritdoc cref="ITrueTypeTable"/>
     /// <summary>
@@ -79,12 +79,12 @@
 
             var glyphCount = maximumProfileTable.NumberOfGlyphs + 1;
 
-            uint[] offsets; 
+            uint[] offsets;
 
             switch (format)
             {
                 case EntryFormat.Short:
-                    { 
+                    {
                         // The local offset divided by 2 is stored.
                         offsets = new uint[glyphCount];
                         for (var i = 0; i < glyphCount; i++)
@@ -116,7 +116,7 @@
                 switch (Format)
                 {
                     case EntryFormat.Short:
-                        stream.WriteUShort((ushort)offset/2);
+                        stream.WriteUShort((ushort)offset / 2);
                         break;
                     case EntryFormat.Long:
                         stream.WriteUInt(offset);

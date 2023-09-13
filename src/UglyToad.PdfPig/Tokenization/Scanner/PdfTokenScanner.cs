@@ -1,14 +1,14 @@
 ﻿namespace UglyToad.PdfPig.Tokenization.Scanner
 {
+    using Core;
+    using Encryption;
+    using Filters;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Text.RegularExpressions;
-    using Core;
-    using Encryption;
-    using Filters;
     using Tokens;
 
     internal class PdfTokenScanner : IPdfTokenScanner

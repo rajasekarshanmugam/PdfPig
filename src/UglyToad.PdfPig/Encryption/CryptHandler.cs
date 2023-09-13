@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Encryption
 {
-    using System;
     using Exceptions;
+    using System;
     using Tokens;
 
     internal class CryptHandler
@@ -25,7 +25,7 @@
                 throw new ArgumentNullException(nameof(stringName));
             }
 
-            this.cryptDictionary = cryptDictionary ?? throw new ArgumentNullException(nameof(cryptDictionary));            
+            this.cryptDictionary = cryptDictionary ?? throw new ArgumentNullException(nameof(cryptDictionary));
             StreamDictionary = ParseCryptDictionary(cryptDictionary, streamName);
             StringDictionary = ParseCryptDictionary(cryptDictionary, stringName);
         }

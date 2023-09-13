@@ -12,7 +12,7 @@
         /// <summary>
         /// The 258 standard mac glyph names used in 'post' format 1 and 2.
         /// </summary>
-        public static readonly IReadOnlyList<string> MacGlyphNames = new []
+        public static readonly IReadOnlyList<string> MacGlyphNames = new[]
         {
             ".notdef", ".null", "nonmarkingreturn", "space", "exclam", "quotedbl",
             "numbersign", "dollar", "percent", "ampersand", "quotesingle",

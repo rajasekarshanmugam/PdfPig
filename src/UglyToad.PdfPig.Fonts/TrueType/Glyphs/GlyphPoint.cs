@@ -8,7 +8,7 @@
 
         public bool IsOnCurve { get; }
 
-        public GlyphPoint(short x, short y, bool isOnCurve) 
+        public GlyphPoint(short x, short y, bool isOnCurve)
         {
             X = x;
             Y = y;

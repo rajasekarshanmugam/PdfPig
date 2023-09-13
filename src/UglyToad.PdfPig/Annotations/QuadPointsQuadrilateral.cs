@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Annotations
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
 
     /// <summary>
     /// A QuadPoints quadrilateral is four points defining the region for an annotation to use.

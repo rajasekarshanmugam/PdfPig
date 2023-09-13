@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.General
 {
-    using System.IO;
     using Core;
+    using System.IO;
 
     /// <inheritdoc />
     /// <summary>
@@ -21,7 +21,7 @@
         /// The line dash pattern.
         /// </summary>
         public LineDashPattern Pattern { get; }
-        
+
         /// <summary>
         /// Create a new <see cref="SetLineDashPattern"/>.
         /// </summary>

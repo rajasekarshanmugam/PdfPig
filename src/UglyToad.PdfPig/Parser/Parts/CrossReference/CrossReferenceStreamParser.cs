@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Parser.Parts.CrossReference
 {
-    using System.Collections.Generic;
     using Core;
     using Filters;
     using PdfPig.CrossReference;
+    using System.Collections.Generic;
     using Tokens;
     using Util;
 
@@ -26,7 +26,7 @@
             var fieldSizes = new CrossReferenceStreamFieldSize(stream.StreamDictionary);
 
             var lineCount = decoded.Count / fieldSizes.LineLength;
-            
+
             long previousOffset = -1;
             if (stream.StreamDictionary.TryGet(NameToken.Prev, out var prevToken) && prevToken is NumericToken prevNumeric)
             {
@@ -142,7 +142,7 @@
             {
                 throw new PdfDocumentFormatException($"The stream dictionary must contain a numeric size value: {dictionary}.");
             }
-            
+
             var objNums = new List<long>();
 
             if (dictionary.TryGet(NameToken.Index, out var indexToken) && indexToken is ArrayToken indexArrayToken)

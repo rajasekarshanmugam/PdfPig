@@ -8,7 +8,7 @@
     internal class CompactFontFormatFormat0Charset : CompactFontFormatCharset
     {
         public CompactFontFormatFormat0Charset(IReadOnlyList<(int glyphId, int stringId, string name)> data)
-        :base(data)
+        : base(data)
         {
         }
     }

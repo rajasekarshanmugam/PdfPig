@@ -321,7 +321,7 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(matrix), matrix, $"Must consist of exactly nine numbers, but was passed {matrix.Count}.");
             }
-           
+
             colorSpaceTransformer =
                 new CIEBasedColorSpaceTransformer(((double)WhitePoint[0], (double)WhitePoint[1], (double)WhitePoint[2]), RGBWorkingSpace.sRGB)
                 {
@@ -345,7 +345,7 @@
         internal RGBColor TransformToRGB((decimal A, decimal B, decimal C) colorAbc)
         {
             var colorRgb = colorSpaceTransformer.TransformToRGB(((double)colorAbc.A, (double)colorAbc.B, (double)colorAbc.C));
-            return new RGBColor((decimal)colorRgb.R, (decimal) colorRgb.G, (decimal) colorRgb.B);
+            return new RGBColor((decimal)colorRgb.R, (decimal)colorRgb.G, (decimal)colorRgb.B);
         }
     }
 
@@ -410,8 +410,8 @@
 
             NumberOfColorComponents = numberOfColorComponents;
             AlternateColorSpaceDetails = alternateColorSpaceDetails ??
-                (NumberOfColorComponents == 1 ? (ColorSpaceDetails) DeviceGrayColorSpaceDetails.Instance :
-                NumberOfColorComponents == 3 ? (ColorSpaceDetails) DeviceRgbColorSpaceDetails.Instance : (ColorSpaceDetails) DeviceCmykColorSpaceDetails.Instance);
+                (NumberOfColorComponents == 1 ? (ColorSpaceDetails)DeviceGrayColorSpaceDetails.Instance :
+                NumberOfColorComponents == 3 ? (ColorSpaceDetails)DeviceRgbColorSpaceDetails.Instance : (ColorSpaceDetails)DeviceCmykColorSpaceDetails.Instance);
 
             BaseType = AlternateColorSpaceDetails.BaseType;
             Range = range ??
@@ -419,7 +419,7 @@
             if (Range.Count != 2 * numberOfColorComponents)
             {
                 throw new ArgumentOutOfRangeException(nameof(range), range,
-                    $"Must consist of exactly {2 * numberOfColorComponents } (2 x NumberOfColorComponents), but was passed {range.Count }");
+                    $"Must consist of exactly {2 * numberOfColorComponents} (2 x NumberOfColorComponents), but was passed {range.Count}");
             }
             Metadata = metadata;
         }

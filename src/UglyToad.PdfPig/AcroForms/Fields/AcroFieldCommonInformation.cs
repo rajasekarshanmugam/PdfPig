@@ -66,7 +66,7 @@
             }
 
             var s = string.Empty;
-            
+
             if (Parent != null)
             {
                 s += $"Parent: {Parent}.";

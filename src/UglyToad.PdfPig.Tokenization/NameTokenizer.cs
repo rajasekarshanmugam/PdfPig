@@ -1,9 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
     using Core;
+    using System;
+    using System.Text;
     using Tokens;
 
     internal class NameTokenizer : ITokenizer

@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1
 {
+    using CharStrings;
     using System;
     using System.Collections.Generic;
-    using CharStrings;
 
     /// <summary>
     /// The Private dictionary for a Type 1 font contains hints that apply across all characters in the font. These hints
@@ -18,7 +18,7 @@
         /// Optional: Uniquely identifies this font.
         /// </summary>
         public int? UniqueId { get; set; }
-        
+
         /// <summary>
         /// Optional: Indicates the number of random bytes used for charstring encryption/decryption.
         /// Default: 4
@@ -98,7 +98,7 @@
             /// <see cref="Type1PrivateDictionary.UniqueId"/>.
             /// </summary>
             public int? UniqueId { get; set; }
-            
+
             /// <summary>
             /// <see cref="Type1PrivateDictionary.Password"/>.
             /// </summary>
@@ -123,7 +123,7 @@
             /// Generate a <see cref="Type1PrivateDictionary"/> from the values in this builder.
             /// </summary>
             /// <returns>The generated <see cref="Type1PrivateDictionary"/>.</returns>
-            public  Type1PrivateDictionary Build()
+            public Type1PrivateDictionary Build()
             {
                 return new Type1PrivateDictionary(this);
             }

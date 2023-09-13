@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Core;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Core;
 
     /// <inheritdoc cref="ITrueTypeTable"/>.
     /// <summary>
@@ -135,24 +135,24 @@
         /// <summary>
         /// Create a new <see cref="Os2Table"/>.
         /// </summary>
-        public Os2Table(TrueTypeHeaderTable directoryTable, ushort version, short xAverageCharacterWidth, ushort weightClass, 
-            ushort widthClass, 
-            ushort typeFlags, 
+        public Os2Table(TrueTypeHeaderTable directoryTable, ushort version, short xAverageCharacterWidth, ushort weightClass,
+            ushort widthClass,
+            ushort typeFlags,
             short ySubscriptXSize,
             short ySubscriptYSize,
-            short ySubscriptXOffset, 
+            short ySubscriptXOffset,
             short ySubscriptYOffset,
-            short ySuperscriptXSize, 
+            short ySuperscriptXSize,
             short ySuperscriptYSize,
-            short ySuperscriptXOffset, 
-            short ySuperscriptYOffset, 
-            short yStrikeoutSize, 
-            short yStrikeoutPosition, 
-            short familyClass, 
-            IReadOnlyList<byte> panose, 
-            IReadOnlyList<uint> unicodeRanges, 
-            string vendorId, 
-            ushort fontSelectionFlags, 
+            short ySuperscriptXOffset,
+            short ySuperscriptYOffset,
+            short yStrikeoutSize,
+            short yStrikeoutPosition,
+            short familyClass,
+            IReadOnlyList<byte> panose,
+            IReadOnlyList<uint> unicodeRanges,
+            string vendorId,
+            ushort fontSelectionFlags,
             ushort firstCharacterIndex,
             ushort lastCharacterIndex)
         {

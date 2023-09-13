@@ -25,9 +25,9 @@
 
         public AdobeFontMetricsIndividualCharacterMetric Build()
         {
-            return new AdobeFontMetricsIndividualCharacterMetric(CharacterCode, Name, new AdobeFontMetricsVector(WidthX, WidthY), 
-                new AdobeFontMetricsVector(WidthXDirection0, WidthYDirection0), 
-                new AdobeFontMetricsVector(WidthXDirection1, WidthYDirection1), 
+            return new AdobeFontMetricsIndividualCharacterMetric(CharacterCode, Name, new AdobeFontMetricsVector(WidthX, WidthY),
+                new AdobeFontMetricsVector(WidthXDirection0, WidthYDirection0),
+                new AdobeFontMetricsVector(WidthXDirection1, WidthYDirection1),
                 VVector,
                 BoundingBox,
                 Ligature);

@@ -15,7 +15,7 @@
         /// The string representation of the name.
         /// </summary>
         public string Data { get; }
-        
+
         private NameToken(string text)
         {
             NameMap[text] = this;

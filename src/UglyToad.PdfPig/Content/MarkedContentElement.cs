@@ -76,16 +76,16 @@
         /// The abbreviation expansion text.
         /// </summary>
         public string ExpandedForm { get; }
-        
+
         /// <summary>
         /// Create a new <see cref="MarkedContentElement"/>.
         /// </summary>
-        public MarkedContentElement(int markedContentIdentifier, NameToken tag, DictionaryToken properties, 
+        public MarkedContentElement(int markedContentIdentifier, NameToken tag, DictionaryToken properties,
             string language,
             string actualText,
             string alternateDescription,
             string expandedForm,
-            bool isArtifact, 
+            bool isArtifact,
             IReadOnlyList<MarkedContentElement> children,
             IReadOnlyList<Letter> letters,
             IReadOnlyList<PdfPath> paths,

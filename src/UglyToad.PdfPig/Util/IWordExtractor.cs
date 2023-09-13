@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Util
 {
-    using System.Collections.Generic;
     using Content;
+    using System.Collections.Generic;
 
     /// <summary>
     /// An approach used to generate words from a set of letters.

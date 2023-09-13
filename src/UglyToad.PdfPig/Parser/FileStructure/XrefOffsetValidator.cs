@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Parser.FileStructure
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Logging;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -42,7 +42,7 @@
             {
                 return startXRefOffset;
             }
-            
+
             if (startXRefOffset > 0)
             {
                 if (CheckXRefStreamOffset(startXRefOffset, scanner, true))
@@ -80,7 +80,7 @@
             return 0;
         }
 
-       
+
 
         private long BruteForceSearchForXref(long xrefOffset, ISeekableTokenScanner scanner, IInputBytes reader)
         {
@@ -309,7 +309,7 @@
                     {
                         log.Debug($"When checking offset at {startXRefOffset} did not find the generation number. Got: {objectNumber} {generation}.");
                     }
-                    
+
                     scanner.MoveNext();
 
                     var obj = scanner.CurrentToken;

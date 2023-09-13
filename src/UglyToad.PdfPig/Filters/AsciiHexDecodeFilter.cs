@@ -11,7 +11,7 @@
     /// </summary>
     internal class AsciiHexDecodeFilter : IFilter
     {
-        private static readonly short[] ReverseHex = 
+        private static readonly short[] ReverseHex =
         {
             /*   0 */  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             /*  10 */  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -65,7 +65,7 @@
                 {
                     if (index == 1)
                     {
-                        pair[1] = (byte) '0';
+                        pair[1] = (byte)'0';
                     }
 
                     WriteHexToByte(pair, binaryWriter);
@@ -91,7 +91,7 @@
                 throw new InvalidOperationException("Invalid character encountered in hex encoded stream: " + (char)hexBytes[0]);
             }
 
-            var value = (byte) (first * 16 + second);
+            var value = (byte)(first * 16 + second);
 
             writer.Write(value);
         }

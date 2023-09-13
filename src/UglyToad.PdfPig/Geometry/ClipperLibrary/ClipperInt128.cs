@@ -110,7 +110,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
 
         public static bool operator ==(ClipperInt128 val1, ClipperInt128 val2)
         {
-            if ((object) val1 == (object) val2)
+            if ((object)val1 == (object)val2)
             {
                 return true;
             }
@@ -187,7 +187,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
 
                 return -(double)(~val.lo + ~val.hi * shift64);
             }
-            
+
             return (double)(val.lo + val.hi * shift64);
         }
 

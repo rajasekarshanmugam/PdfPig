@@ -1,9 +1,9 @@
 ﻿// ReSharper disable UnusedVariable
 namespace UglyToad.PdfPig.Fonts.TrueType.Tables.CMapSubTables
 {
+    using Core;
     using System;
     using System.IO;
-    using Core;
 
     /// <summary>
     /// A format 6 CMap sub-table which uses 2 bytes to map a contiguous range of character codes to glyph indices.
@@ -68,7 +68,7 @@ namespace UglyToad.PdfPig.Fonts.TrueType.Tables.CMapSubTables
 
             // Number of character codes in the range.
             var entryCount = data.ReadUnsignedShort();
-            
+
             var glyphIndices = data.ReadUnsignedShortArray(entryCount);
 
             return new TrimmedTableMappingCMapTable(platformId, encodingId, firstCode, entryCount, glyphIndices);

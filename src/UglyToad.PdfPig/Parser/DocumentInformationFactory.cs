@@ -1,11 +1,11 @@
 ﻿namespace UglyToad.PdfPig.Parser
 {
     using Content;
+    using Core;
     using CrossReference;
     using Parts;
     using Tokenization.Scanner;
     using Tokens;
-    using Core;
 
     /// <summary>
     /// Parse the dictionary from a PDF file trailer.

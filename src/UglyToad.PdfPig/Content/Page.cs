@@ -1,16 +1,16 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
+    using Annotations;
+    using Graphics;
+    using Graphics.Operations;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
-    using Annotations;
-    using Graphics.Operations;
+    using Tokenization.Scanner;
     using Tokens;
     using Util;
     using Util.JetBrains.Annotations;
-    using Tokenization.Scanner;
-    using Graphics;
-    using System.Linq;
 
     /// <summary>
     /// Contains the content and provides access to methods of a single page in the <see cref="PdfDocument"/>.

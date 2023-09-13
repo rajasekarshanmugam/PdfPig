@@ -29,14 +29,14 @@
                 Count = numberOfDiscoveredPages.Value;
             }
         }
-        
+
         public Page GetPage(int pageNumber, InternalParsingOptions parsingOptions)
         {
             if (pageNumber <= 0 || pageNumber > Count)
             {
                 parsingOptions.Logger.Error($"Page {pageNumber} requested but is out of range.");
 
-                throw new ArgumentOutOfRangeException(nameof(pageNumber), 
+                throw new ArgumentOutOfRangeException(nameof(pageNumber),
                     $"Page number {pageNumber} invalid, must be between 1 and {Count}.");
             }
 
@@ -51,7 +51,7 @@
             }
 
             var pageTreeMembers = new PageTreeMembers();
-            
+
             while (pageStack.Count > 0)
             {
                 currentNode = pageStack.Pop();
@@ -60,7 +60,7 @@
                 {
                     pageTreeMembers.ParentResources.Enqueue(resourcesDictionary);
                 }
-                
+
                 if (currentNode.NodeDictionary.TryGet(NameToken.MediaBox, pdfScanner, out ArrayToken mediaBox))
                 {
                     pageTreeMembers.MediaBox = new MediaBox(mediaBox.ToRectangle(pdfScanner));
@@ -77,7 +77,7 @@
                 pageNode.NodeDictionary,
                 pageTreeMembers,
                 parsingOptions);
-            
+
             return page;
         }
     }

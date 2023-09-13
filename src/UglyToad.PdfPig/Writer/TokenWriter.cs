@@ -1,13 +1,13 @@
 ﻿namespace UglyToad.PdfPig.Writer
 {
+    using Core;
+    using Graphics.Operations;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Text;
     using System.IO;
     using System.Linq;
-    using Core;
-    using Graphics.Operations;
+    using System.Text;
     using Tokens;
     using Util;
 

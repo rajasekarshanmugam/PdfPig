@@ -22,7 +22,7 @@
         private const int NineBitBoundary = 511;
         private const int TenBitBoundary = 1023;
         private const int ElevenBitBoundary = 2047;
-        
+
         /// <inheritdoc />
         public bool IsSupported { get; } = true;
 
@@ -76,7 +76,7 @@
                 {
                     break;
                 }
-                
+
                 if (next == ClearTable)
                 {
                     table = GetDefaultTable();
@@ -116,7 +116,7 @@
 
                     table[table.Count] = newSequence;
                 }
-                
+
                 previous = next;
 
                 if (table.Count >= ElevenBitBoundary + codeOffset)

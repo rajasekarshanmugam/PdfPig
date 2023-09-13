@@ -36,7 +36,7 @@
         public void Write(Stream stream)
         {
             // Although PDF reader applications shall be able to accept this operator, PDF writer applications should use f instead.
-            stream.WriteText(FillPathNonZeroWinding.Symbol); 
+            stream.WriteText(FillPathNonZeroWinding.Symbol);
             stream.WriteNewLine();
         }
 

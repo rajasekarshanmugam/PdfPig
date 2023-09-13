@@ -34,7 +34,7 @@
         /// <summary>
         /// Whether the field allows multiline text.
         /// </summary>
-        public bool IsMultiline { get;}
+        public bool IsMultiline { get; }
 
         /// <inheritdoc />
         /// <summary>
@@ -49,11 +49,11 @@
         /// <param name="pageNumber">The number of the page this field appears on.</param>
         /// <param name="bounds">The location of this field on the page.</param>
         public AcroTextField(DictionaryToken dictionary, string fieldType, AcroTextFieldFlags fieldFlags,
-            AcroFieldCommonInformation information, 
+            AcroFieldCommonInformation information,
             string value,
             int? maxLength,
             int? pageNumber,
-            PdfRectangle? bounds) : 
+            PdfRectangle? bounds) :
             base(dictionary, fieldType, (uint)fieldFlags, AcroFieldType.Text, information, pageNumber, bounds)
         {
             Flags = fieldFlags;

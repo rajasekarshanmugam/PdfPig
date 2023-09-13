@@ -1,14 +1,14 @@
 ﻿namespace UglyToad.PdfPig.DocumentLayoutAnalysis.Export
 {
+    using Content;
+    using Graphics;
+    using Graphics.Colors;
+    using Graphics.Core;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Xml;
-    using Content;
-    using Graphics;
-    using Graphics.Colors;
-    using Graphics.Core;
 
     /// <summary>
     /// Exports a page as an SVG.

@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.CharStrings
 {
+    using Commands;
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Commands;
-    using Core;
 
     internal class Type1CharStrings
     {

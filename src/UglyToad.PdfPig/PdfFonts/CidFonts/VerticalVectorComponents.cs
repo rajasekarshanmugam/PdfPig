@@ -22,7 +22,7 @@
         /// Where w0 is the width of the given glyph.
         /// </remarks>
         public double Position { get; }
-        
+
         /// <summary>
         /// The vertical component of the displacement vector.
         /// </summary>

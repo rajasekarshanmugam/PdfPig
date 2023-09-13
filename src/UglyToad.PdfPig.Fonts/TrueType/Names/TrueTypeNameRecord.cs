@@ -28,7 +28,7 @@
         /// Used to reference this record by other tables in the font.
         /// </summary>
         public ushort NameId { get; }
-        
+
         /// <summary>
         /// The value of this record.
         /// </summary>
@@ -37,9 +37,9 @@
         /// <summary>
         /// Create a new <see cref="TrueTypeNameRecord"/>.
         /// </summary>
-        public TrueTypeNameRecord(TrueTypePlatformIdentifier platformId, 
+        public TrueTypeNameRecord(TrueTypePlatformIdentifier platformId,
             ushort platformEncodingId,
-            ushort languageId, 
+            ushort languageId,
             ushort nameId,
             string value)
         {

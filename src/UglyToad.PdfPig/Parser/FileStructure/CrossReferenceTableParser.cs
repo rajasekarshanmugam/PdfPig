@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Parser.FileStructure
 {
+    using Core;
+    using CrossReference;
+    using Parts.CrossReference;
     using System.Collections.Generic;
     using System.Linq;
-    using CrossReference;
-    using Core;
-    using Parts.CrossReference;
     using Tokenization;
     using Tokenization.Scanner;
     using Tokens;
@@ -13,7 +13,7 @@
     {
         private const string InUseEntry = "n";
         private const string FreeEntry = "f";
-        
+
         public static CrossReferenceTablePart Parse(ISeekableTokenScanner scanner, long offset, bool isLenientParsing)
         {
             var builder = new CrossReferenceTablePartBuilder
@@ -70,7 +70,7 @@
                         readingLine = false;
 
                         count = ProcessTokens(tokens, builder, isLenientParsing, count, ref definition);
-                        
+
                         tokens.Clear();
 
                         continue;
@@ -129,7 +129,7 @@
 
                 throw new PdfDocumentFormatException($"Found a line with 2 unexpected entries in the cross reference table: {tokens[0]}, {tokens[1]}.");
             }
-            
+
             if (tokens.Count <= 2)
             {
                 if (!isLenientParsing)

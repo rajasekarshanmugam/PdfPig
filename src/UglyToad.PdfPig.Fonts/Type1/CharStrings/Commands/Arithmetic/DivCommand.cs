@@ -12,9 +12,9 @@
 
         public static bool TakeFromStackBottom { get; } = false;
         public static bool ClearsOperandStack { get; } = false;
-        
+
         public static LazyType1Command Lazy { get; } = new LazyType1Command(Name, Run);
-        
+
         public static void Run(Type1BuildCharContext context)
         {
             var first = context.Stack.PopTop();

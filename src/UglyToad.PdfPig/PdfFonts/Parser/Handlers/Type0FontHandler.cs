@@ -1,6 +1,5 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser.Handlers
 {
-    using System;
     using CidFonts;
     using Cmap;
     using Composite;
@@ -9,6 +8,7 @@
     using Fonts;
     using Parts;
     using PdfPig.Parser.Parts;
+    using System;
     using Tokenization.Scanner;
     using Tokens;
     using Util;
@@ -148,7 +148,7 @@
                 {
                     throw new InvalidOperationException($"Missing CMap named {encodingName.Data}.");
                 }
-                
+
                 result = cmap ?? throw new InvalidOperationException($"Missing CMap named {encodingName.Data}.");
 
                 isCMapPredefined = true;
@@ -226,7 +226,7 @@
                 registry = cidFont.SystemInfo.Registry;
                 ordering = cidFont.SystemInfo.Ordering;
             }
-            
+
             var unicodeCMapName = $"{registry}-{ordering}-UCS2";
 
             if (!CMapCache.TryGet(unicodeCMapName, out var unicodeCMap))

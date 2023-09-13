@@ -74,7 +74,7 @@
         public static readonly NameToken Byterange = new NameToken("ByteRange");
 
         #endregion
-        
+
         // C
         public static readonly NameToken C = new NameToken("C");
         public static readonly NameToken C0 = new NameToken("C0");

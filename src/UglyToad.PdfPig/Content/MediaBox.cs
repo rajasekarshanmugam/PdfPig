@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
-    using System;
     using Core;
+    using System;
 
     /// <summary>
     /// The boundary of the physical medium to display or print on.

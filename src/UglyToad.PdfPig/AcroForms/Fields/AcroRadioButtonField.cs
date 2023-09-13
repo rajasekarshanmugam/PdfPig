@@ -23,7 +23,7 @@
         /// Whether the radio button is currently on/active.
         /// </summary>
         public bool IsSelected { get; }
-        
+
         /// <inheritdoc />
         /// <summary>
         /// Create a new <see cref="AcroRadioButtonField"/>.

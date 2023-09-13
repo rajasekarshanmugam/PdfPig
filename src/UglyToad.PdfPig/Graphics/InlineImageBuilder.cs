@@ -1,13 +1,13 @@
 ﻿namespace UglyToad.PdfPig.Graphics
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Colors;
     using Content;
     using Core;
     using Filters;
     using PdfPig.Core;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Tokenization.Scanner;
     using Tokens;
     using Util;

@@ -1,12 +1,12 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Simple
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Fonts;
     using Fonts.AdobeFontMetrics;
     using Fonts.Encodings;
     using Fonts.TrueType;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
 
     /// <summary>

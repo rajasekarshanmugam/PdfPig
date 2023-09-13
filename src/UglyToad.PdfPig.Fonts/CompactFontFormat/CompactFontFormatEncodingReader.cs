@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
-    using System;
-    using System.Collections.Generic;
     using Charsets;
     using Encodings;
     using Fonts;
+    using System;
+    using System.Collections.Generic;
 
     internal static class CompactFontFormatEncodingReader
     {
@@ -100,7 +100,7 @@
 
             return supplements;
         }
-        
+
         private static string ReadString(int index, IReadOnlyList<string> stringIndex)
         {
             if (index >= 0 && index <= 390)

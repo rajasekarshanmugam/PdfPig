@@ -1,7 +1,6 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.PathConstruction
 {
     using System.IO;
-    using PdfPig.Core;
 
     /// <inheritdoc />
     /// <summary>
@@ -17,7 +16,7 @@
 
         /// <inheritdoc />
         public string Operator => Symbol;
-        
+
         /// <summary>
         /// The x coordinate of the second control point.
         /// </summary>

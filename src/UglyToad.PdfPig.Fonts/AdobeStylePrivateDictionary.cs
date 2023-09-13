@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
 
     /// <summary>
     /// Holds common properties between Adobe Type 1 and Compact Font Format private dictionaries.
@@ -33,7 +33,7 @@
         /// Default value of <see cref="LanguageGroup"/>.
         /// </summary>
         public const int DefaultLanguageGroup = 0;
-        
+
         /// <summary>
         /// Required. An array containing an even number of integers.
         /// The first pair is the baseline overshoot position and the baseline.
@@ -132,7 +132,7 @@
         /// <see cref="LanguageGroup"/> 1 counters during font processing.
         /// </summary>
         public decimal ExpansionFactor { get; }
-        
+
         /// <summary>
         /// Creates a new <see cref="AdobeStylePrivateDictionary"/>.
         /// </summary>
@@ -229,7 +229,7 @@
             /// <see cref="AdobeStylePrivateDictionary.LanguageGroup"/>.
             /// </summary>
             public int? LanguageGroup { get; set; }
-            
+
             /// <summary>
             /// <see cref="AdobeStylePrivateDictionary.ExpansionFactor"/>.
             /// </summary>

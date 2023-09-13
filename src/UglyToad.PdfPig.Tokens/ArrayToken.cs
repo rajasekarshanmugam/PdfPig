@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Tokens
 {
+    using Core;
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Core;
 
     /// <summary>
     /// An array object is a one-dimensional collection of objects arranged sequentially.
@@ -83,7 +83,7 @@
 
             return builder.ToString();
         }
-        
+
         /// <inheritdoc />
         public bool Equals(IToken obj)
         {

@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
-    using System;
-    using System.Collections.Generic;
     using Annotations;
     using Core;
+    using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Full details for a link annotation which references an external resource.

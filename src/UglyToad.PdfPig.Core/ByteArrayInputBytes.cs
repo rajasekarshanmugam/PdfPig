@@ -126,7 +126,7 @@
             var startFrom = currentOffset + 1;
 
             Array.Copy(bytes, startFrom, buffer, 0, readLength);
-            
+
             if (readLength > 0)
             {
                 currentOffset += readLength;

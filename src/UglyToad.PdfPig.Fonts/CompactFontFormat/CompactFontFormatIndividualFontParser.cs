@@ -1,14 +1,14 @@
 ﻿namespace UglyToad.PdfPig.Fonts.CompactFontFormat
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Charsets;
     using CharStrings;
     using Core;
     using Dictionaries;
     using Encodings;
     using Fonts;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Type1.CharStrings;
 
     internal class CompactFontFormatIndividualFontParser
@@ -29,7 +29,7 @@
             var individualData = new CompactFontFormatData(topDictionaryIndex.ToArray());
 
             var topDictionary = topLevelDictionaryReader.Read(individualData, stringIndex);
-            
+
             var privateDictionary = CompactFontFormatPrivateDictionary.GetDefault();
 
             if (topDictionary.PrivateDictionaryLocation.HasValue && topDictionary.PrivateDictionaryLocation.Value.Size > 0)
@@ -90,7 +90,7 @@
                     charset = CompactFontFormatIsoAdobeCharset.Value;
                 }
             }
-            
+
             if (topDictionary.IsCidFont)
             {
                 return ReadCidFont(data, topDictionary, charStringIndex.Count, stringIndex, privateDictionary,
@@ -231,7 +231,7 @@
             var privateDictionaries = new List<CompactFontFormatPrivateDictionary>();
             var fontDictionaries = new List<CompactFontFormatTopLevelDictionary>();
             var fontLocalSubroutines = new List<CompactFontFormatIndex>();
-            
+
             foreach (var index in fontDict)
             {
                 var topLevelDictionaryCid = topLevelDictionaryReader.Read(new CompactFontFormatData(index), stringIndex);
@@ -290,7 +290,7 @@
 
             var union = Union<Type1CharStrings, Type2CharStrings>.Two(charStrings);
 
-            return new CompactFontFormatCidFont(topLevelDictionary, privateDictionary, charset,  union,
+            return new CompactFontFormatCidFont(topLevelDictionary, privateDictionary, charset, union,
                 fontDictionaries, privateDictionaries, fdSelect);
         }
 

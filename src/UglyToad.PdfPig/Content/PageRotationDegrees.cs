@@ -32,9 +32,9 @@
                     case 90:
                         return -(decimal)(0.5 * Math.PI);
                     case 180:
-                        return -(decimal) Math.PI;
+                        return -(decimal)Math.PI;
                     case 270:
-                        return -(decimal) (1.5 * Math.PI);
+                        return -(decimal)(1.5 * Math.PI);
                     default:
                         throw new InvalidOperationException($"Invalid value for rotation: {Value}.");
                 }

@@ -3,7 +3,7 @@
     internal class CryptDictionary
     {
         public static CryptDictionary Identity { get; } = new CryptDictionary();
-        
+
         public Method Name { get; }
 
         public TriggerEvent Event { get; }

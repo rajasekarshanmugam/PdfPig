@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser
 {
-    using System;
-    using System.Collections.Generic;
     using Fonts;
     using Fonts.Encodings;
     using PdfPig.Parser.Parts;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -61,7 +61,7 @@
             {
                 return null;
             }
-            
+
             Encoding baseEncoding;
             if (encodingDictionary.TryGet(NameToken.BaseEncoding, out var baseEncodingToken) && baseEncodingToken is NameToken baseEncodingName)
             {

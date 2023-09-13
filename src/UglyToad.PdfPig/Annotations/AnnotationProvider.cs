@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Annotations
 {
+    using Core;
+    using Parser.Parts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
-    using Parser.Parts;
     using Tokenization.Scanner;
     using Tokens;
     using Util;
@@ -31,7 +31,7 @@
             {
                 if (!DirectObjectFinder.TryGet(token, tokenScanner, out DictionaryToken annotationDictionary))
                 {
-                        continue;
+                    continue;
                 }
 
                 var type = annotationDictionary.Get<NameToken>(NameToken.Subtype, tokenScanner);
@@ -83,10 +83,10 @@
                         {
                             quadPointRectangles.Add(new QuadPointsQuadrilateral(new[]
                             {
-                                new PdfPoint(values[0], values[1]), 
-                                new PdfPoint(values[2], values[3]), 
-                                new PdfPoint(values[4], values[5]), 
-                                new PdfPoint(values[6], values[7]) 
+                                new PdfPoint(values[0], values[1]),
+                                new PdfPoint(values[2], values[3]),
+                                new PdfPoint(values[4], values[5]),
+                                new PdfPoint(values[6], values[7])
                             }));
 
                             values.Clear();

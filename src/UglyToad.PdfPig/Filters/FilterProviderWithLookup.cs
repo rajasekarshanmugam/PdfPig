@@ -1,10 +1,10 @@
 ﻿namespace UglyToad.PdfPig.Filters
 {
+    using Core;
+    using Parser.Parts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
-    using Parser.Parts;
     using Tokenization.Scanner;
     using Tokens;
     using UglyToad.PdfPig.Util;
@@ -53,15 +53,15 @@
 
                     return GetNamedFilters(result);
                 case NameToken name:
-                    return GetNamedFilters(new[] {name});
+                    return GetNamedFilters(new[] { name });
                 case IndirectReferenceToken irt:
                     if (DirectObjectFinder.TryGet<NameToken>(irt, scanner, out var indirectName))
                     {
-                        return GetNamedFilters(new []{ indirectName });
+                        return GetNamedFilters(new[] { indirectName });
                     }
                     else if (DirectObjectFinder.TryGet<ArrayToken>(irt, scanner, out var indirectArray))
                     {
-                        return GetNamedFilters(indirectArray.Data.Select(x => (NameToken) x).ToList());
+                        return GetNamedFilters(indirectArray.Data.Select(x => (NameToken)x).ToList());
                     }
                     else
                     {

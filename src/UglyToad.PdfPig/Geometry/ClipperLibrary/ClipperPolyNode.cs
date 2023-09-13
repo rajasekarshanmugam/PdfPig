@@ -122,7 +122,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
         internal ClipperJoinType JoinType;
         internal ClipperEndType EndType;
         internal List<ClipperPolyNode> Children = new List<ClipperPolyNode>();
-        
+
         public bool IsHole => IsHoleNode();
 
         public bool IsOpen { get; set; }
@@ -157,7 +157,7 @@ namespace UglyToad.PdfPig.Geometry.ClipperLibrary
             {
                 return Children[0];
             }
-            
+
             return GetNextSiblingUp();
         }
 

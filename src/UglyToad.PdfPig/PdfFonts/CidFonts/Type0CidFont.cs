@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.CidFonts
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Geometry;
+    using System;
+    using System.Collections.Generic;
     using Tokens;
 
     /// <inheritdoc/>
@@ -26,7 +26,7 @@
 
         public CharacterIdentifierSystemInfo SystemInfo { get; }
 
-        public FontDetails Details => fontProgram?.Details ?? Descriptor?.ToDetails(BaseFont?.Data) 
+        public FontDetails Details => fontProgram?.Details ?? Descriptor?.ToDetails(BaseFont?.Data)
                                       ?? FontDetails.GetDefault(BaseFont?.Data);
 
         public TransformationMatrix FontMatrix { get; }
@@ -39,8 +39,8 @@
 
         public Type0CidFont(ICidFontProgram fontProgram, NameToken type, NameToken subType, NameToken baseFont,
             CharacterIdentifierSystemInfo systemInfo,
-            FontDescriptor descriptor, 
-            VerticalWritingMetrics verticalWritingMetrics, 
+            FontDescriptor descriptor,
+            VerticalWritingMetrics verticalWritingMetrics,
             IReadOnlyDictionary<int, double> widths,
             double? defaultWidth)
         {
@@ -80,7 +80,7 @@
             {
                 return defaultWidth.Value;
             }
-            
+
             if (Descriptor == null)
             {
                 return 1000;

@@ -38,7 +38,7 @@
         {
             Text = text;
         }
-        
+
         /// <summary>
         /// Create a new <see cref="MoveToNextLineShowText"/>.
         /// </summary>

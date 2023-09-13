@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.TextPositioning
 {
-    using System.IO;
     using PdfPig.Core;
+    using System.IO;
 
     /// <inheritdoc />
     /// <summary>
@@ -48,7 +48,7 @@
         public void Run(IOperationContext operationContext)
         {
             var currentTextLineMatrix = operationContext.TextMatrices.TextLineMatrix;
-            
+
             var matrix = TransformationMatrix.FromValues(1, 0, 0, 1, (double)Tx, (double)Ty);
 
             var transformed = matrix.Multiply(currentTextLineMatrix);

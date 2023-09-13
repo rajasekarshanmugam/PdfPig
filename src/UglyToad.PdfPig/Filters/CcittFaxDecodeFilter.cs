@@ -85,7 +85,7 @@
 
                 return compressionType;
             }
-            
+
             if (k > 0)
             {
                 // Group 3 2D

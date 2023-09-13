@@ -31,7 +31,7 @@
                     {
                         continue;
                     }
-                    
+
                     var valueToken = nodeNames[i + 1];
 
                     var value = valuesFactory(valueToken);

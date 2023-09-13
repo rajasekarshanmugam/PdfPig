@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Tokenization.Scanner
 {
-    using System;
     using Core;
+    using System;
     using Tokens;
 
     /// <summary>

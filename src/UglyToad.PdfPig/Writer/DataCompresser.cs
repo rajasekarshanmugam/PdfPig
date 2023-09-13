@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Writer
 {
+    using Filters;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Filters;
     using Tokens;
 
     internal static class DataCompresser

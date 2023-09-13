@@ -45,7 +45,7 @@
             var maxContours = data.ReadUnsignedShort();
             var maxCompositePoints = data.ReadUnsignedShort();
             var maxCompositeContours = data.ReadUnsignedShort();
-            
+
             var maxZones = data.ReadUnsignedShort();
             var maxTwilightPoints = data.ReadUnsignedShort();
             var maxStorage = data.ReadUnsignedShort();

@@ -1,7 +1,6 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.PathConstruction
 {
     using System.IO;
-    using PdfPig.Core;
 
     /// <inheritdoc />
     /// <summary>
@@ -26,7 +25,7 @@
         /// The y coordinate for the subpath to begin at.
         /// </summary>
         public decimal Y { get; }
-        
+
         /// <summary>
         /// Create a new <see cref="BeginNewSubpath"/>.
         /// </summary>

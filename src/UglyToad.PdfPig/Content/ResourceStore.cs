@@ -1,11 +1,11 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
-    using System;
-    using System.Collections.Generic;
     using Core;
     using Graphics.Colors;
     using Parser.Parts;
     using PdfFonts;
+    using System;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
     using Util;
@@ -158,7 +158,7 @@
                     }
 
                     try
-                    { 
+                    {
                         loadedFonts[reference] = fontFactory.Get(fontObject);
                     }
                     catch
@@ -168,7 +168,7 @@
                             throw;
                         }
                     }
-                    
+
                 }
                 else if (pair.Value is DictionaryToken fd)
                 {

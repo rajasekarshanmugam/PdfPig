@@ -1,8 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Graphics.Operations.TextState
 {
-    using System.IO;
     using PdfPig.Core;
-    using Core;
+    using System.IO;
 
     /// <inheritdoc />
     /// <summary>

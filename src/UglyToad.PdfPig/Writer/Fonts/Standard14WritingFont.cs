@@ -1,13 +1,13 @@
 ﻿namespace UglyToad.PdfPig.Writer.Fonts
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
     using Core;
     using PdfPig.Fonts;
     using PdfPig.Fonts.AdobeFontMetrics;
     using PdfPig.Fonts.Encodings;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
     using Tokens;
 
     internal class Standard14WritingFont : IWritingFont

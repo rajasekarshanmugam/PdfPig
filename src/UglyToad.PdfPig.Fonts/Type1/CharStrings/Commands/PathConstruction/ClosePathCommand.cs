@@ -14,7 +14,7 @@
         public static bool ClearsOperandStack { get; } = true;
 
         public static LazyType1Command Lazy { get; } = new LazyType1Command(Name, Run);
-        
+
         public static void Run(Type1BuildCharContext context)
         {
             context.Path.CloseSubpath();

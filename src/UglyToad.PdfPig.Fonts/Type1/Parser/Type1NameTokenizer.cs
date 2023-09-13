@@ -1,9 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Fonts.Type1.Parser
 {
-    using System.Text;
     using Core;
-    using Tokens;
+    using System.Text;
     using Tokenization;
+    using Tokens;
 
     /// <inheritdoc />
     public class Type1NameTokenizer : ITokenizer

@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Filters
 {
+    using IO;
     using System;
     using System.IO;
-    using IO;
     using Util;
 
     /// <summary>
@@ -18,7 +18,7 @@
         private readonly byte[] decodedRow;
 
         private readonly bool optionByteAligned;
-        
+
         private readonly CcittFaxCompressionType type;
 
         private int decodedLength;
@@ -455,7 +455,7 @@
 
             public int Value { get; set; }
 
-            public bool CanBeFill { get; set; } 
+            public bool CanBeFill { get; set; }
             public bool IsLeaf { get; set; }
 
             public void Set(bool next, Node node)

@@ -1,8 +1,5 @@
 ﻿namespace UglyToad.PdfPig
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
     using AcroForms;
     using Content;
     using Core;
@@ -10,10 +7,13 @@
     using Encryption;
     using Exceptions;
     using Filters;
+    using Outline;
     using Parser;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
     using Tokenization.Scanner;
     using Tokens;
-    using Outline;
     using Util.JetBrains.Annotations;
 
     /// <inheritdoc />
@@ -24,7 +24,7 @@
     {
         private bool isDisposed;
         private readonly Lazy<AcroForm> documentForm;
-        
+
         [NotNull]
         private readonly HeaderVersion version;
 
@@ -77,11 +77,11 @@
 
         internal PdfDocument(
             IInputBytes inputBytes,
-            HeaderVersion version, 
+            HeaderVersion version,
             CrossReferenceTable crossReferenceTable,
             IPageFactory pageFactory,
             Catalog catalog,
-            DocumentInformation information, 
+            DocumentInformation information,
             EncryptionDictionary encryptionDictionary,
             IPdfTokenScanner pdfScanner,
             ILookupFilterProvider filterProvider,
@@ -111,7 +111,7 @@
         /// <param name="options">Optional parameters controlling parsing.</param>
         /// <returns>A <see cref="PdfDocument"/> providing access to the file contents.</returns>
         public static PdfDocument Open(byte[] fileBytes, ParsingOptions options = null) => PdfDocumentFactory.Open(fileBytes, options);
- 
+
         /// <summary>
         /// Opens a file and creates a <see cref="PdfDocument"/> for reading from the provided file path.
         /// </summary>
@@ -234,7 +234,7 @@
 
             return form != null;
         }
-        
+
         /// <inheritdoc />
         /// <summary>
         /// Dispose the <see cref="T:UglyToad.PdfPig.PdfDocument" /> and close any unmanaged resources.

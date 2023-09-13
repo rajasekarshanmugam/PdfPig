@@ -1,9 +1,8 @@
 ﻿namespace UglyToad.PdfPig.CrossReference
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
-    using Exceptions;
     using Tokens;
     using Util;
     using Util.JetBrains.Annotations;

@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Composite
 {
-    using System;
     using Cmap;
     using Core;
+    using System;
     using Util.JetBrains.Annotations;
 
     /// <summary>
@@ -24,7 +24,7 @@
         /// </summary>
         public bool IsUsingIdentityAsUnicodeMap { get; }
 
-        public ToUnicodeCMap([CanBeNull]CMap cMap)
+        public ToUnicodeCMap([CanBeNull] CMap cMap)
         {
             this.cMap = cMap;
 

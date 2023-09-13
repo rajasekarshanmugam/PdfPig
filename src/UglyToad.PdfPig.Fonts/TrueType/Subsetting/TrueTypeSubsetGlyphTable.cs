@@ -1,7 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Subsetting
 {
-    using System;
     using Glyphs;
+    using System;
 
     /// <summary>
     /// Details of the new glyph 'glyf' table created when subsetting a TrueType font.

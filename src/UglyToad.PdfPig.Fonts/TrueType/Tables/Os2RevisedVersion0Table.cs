@@ -1,8 +1,8 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using Core;
     using System.Collections.Generic;
     using System.IO;
-    using Core;
 
     /// <summary>
     /// Version 0 was defined in TrueType revision 1.5 and includes fields not in the Apple specification.
