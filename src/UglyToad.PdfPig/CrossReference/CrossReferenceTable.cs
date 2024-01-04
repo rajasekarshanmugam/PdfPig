@@ -65,7 +65,7 @@
         /// <summary>
         /// The offset of a cross-reference table or stream in the document.
         /// </summary>
-        public struct CrossReferenceOffset
+        public readonly struct CrossReferenceOffset
         {
             /// <summary>
             /// The offset in bytes from the start of the document where the stream or table starts.

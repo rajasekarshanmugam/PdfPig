@@ -351,6 +351,30 @@
         }
 
         /// <summary>
+        /// Gets a <see cref="PdfRectangle"/> which entirely contains the geometry of the defined path.
+        /// </summary>
+        /// <returns>For paths which don't define any geometry this returns <see langword="null"/>.</returns>
+        public static PdfRectangle? GetBoundingRectangle(IReadOnlyList<PdfSubpath> path)
+        {
+            if (path == null || path.Count == 0)
+            {
+                return null;
+            }
+
+            var bboxes = path.Select(x => x.GetBoundingRectangle()).Where(x => x.HasValue).Select(x => x.Value).ToList();
+            if (bboxes.Count == 0)
+            {
+                return null;
+            }
+
+            var minX = bboxes.Min(x => x.Left);
+            var minY = bboxes.Min(x => x.Bottom);
+            var maxX = bboxes.Max(x => x.Right);
+            var maxY = bboxes.Max(x => x.Top);
+            return new PdfRectangle(minX, minY, maxX, maxY);
+        }
+
+        /// <summary>
         /// A command in a <see cref="PdfSubpath"/>.
         /// </summary>
         public interface IPathCommand

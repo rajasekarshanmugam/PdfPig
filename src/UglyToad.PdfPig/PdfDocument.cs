@@ -1,5 +1,8 @@
 ﻿namespace UglyToad.PdfPig
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
     using AcroForms;
     using Content;
     using Core;
@@ -7,13 +10,11 @@
     using Encryption;
     using Exceptions;
     using Filters;
-    using Outline;
     using Parser;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
     using Tokenization.Scanner;
     using Tokens;
+    using Outline;
+    using Outline.Destinations;
     using Util.JetBrains.Annotations;
 
     /// <inheritdoc />
@@ -38,10 +39,11 @@
 
         private readonly ILookupFilterProvider filterProvider;
         private readonly BookmarksProvider bookmarksProvider;
-        private readonly InternalParsingOptions parsingOptions;
+        private readonly ParsingOptions parsingOptions;
 
         [NotNull]
         private readonly Pages pages;
+        private readonly NamedDestinations namedDestinations;
 
         /// <summary>
         /// The metadata associated with this document.
@@ -75,11 +77,9 @@
         /// </summary>
         public bool IsEncrypted => encryptionDictionary != null;
 
-        internal PdfDocument(
-            IInputBytes inputBytes,
+        internal PdfDocument(IInputBytes inputBytes,
             HeaderVersion version,
             CrossReferenceTable crossReferenceTable,
-            IPageFactory pageFactory,
             Catalog catalog,
             DocumentInformation information,
             EncryptionDictionary encryptionDictionary,
@@ -87,7 +87,7 @@
             ILookupFilterProvider filterProvider,
             AcroFormFactory acroFormFactory,
             BookmarksProvider bookmarksProvider,
-            InternalParsingOptions parsingOptions)
+            ParsingOptions parsingOptions)
         {
             this.inputBytes = inputBytes;
             this.version = version ?? throw new ArgumentNullException(nameof(version));
@@ -98,7 +98,8 @@
             this.parsingOptions = parsingOptions;
 
             Information = information ?? throw new ArgumentNullException(nameof(information));
-            pages = new Pages(catalog, pageFactory, pdfScanner);
+            pages = catalog.Pages;
+            namedDestinations = catalog.NamedDestinations;
             Structure = new Structure(catalog, crossReferenceTable, pdfScanner);
             Advanced = new AdvancedPdfDocumentAccess(pdfScanner, filterProvider, catalog);
             documentForm = new Lazy<AcroForm>(() => acroFormFactory.GetAcroForm(catalog));
@@ -133,6 +134,26 @@
         public static PdfDocument Open(Stream stream, ParsingOptions options = null) => PdfDocumentFactory.Open(stream, options);
 
         /// <summary>
+        /// TODO
+        /// </summary>
+        /// <typeparam name="TPage"></typeparam>
+        /// <param name="pageFactory"></param>
+        public void AddPageFactory<TPage>(IPageFactory<TPage> pageFactory)
+        {
+            pages.AddPageFactory(pageFactory);
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <typeparam name="TPage"></typeparam>
+        /// <typeparam name="TPageFactory"></typeparam>
+        public void AddPageFactory<TPage, TPageFactory>() where TPageFactory : IPageFactory<TPage>
+        {
+            pages.AddPageFactory<TPage, TPageFactory>();
+        }
+
+        /// <summary>
         /// Get the page with the specified page number (1 indexed).
         /// </summary>
         /// <param name="pageNumber">The number of the page to return, this starts from 1.</param>
@@ -148,7 +169,37 @@
 
             try
             {
-                return pages.GetPage(pageNumber, parsingOptions);
+                return pages.GetPage(pageNumber, namedDestinations, parsingOptions);
+            }
+            catch (Exception ex)
+            {
+                if (IsEncrypted)
+                {
+                    throw new PdfDocumentEncryptedException("Document was encrypted which may have caused error when retrieving page.", encryptionDictionary, ex);
+                }
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get the page with the specified page number (1 indexed), using the specified page factory.
+        /// </summary>
+        /// <typeparam name="TPage"></typeparam>
+        /// <param name="pageNumber">The number of the page to return, this starts from 1.</param>
+        /// <returns>The page.</returns>
+        public TPage GetPage<TPage>(int pageNumber)
+        {
+            if (isDisposed)
+            {
+                throw new ObjectDisposedException("Cannot access page after the document is disposed.");
+            }
+
+            parsingOptions.Logger.Debug($"Accessing page {pageNumber}.");
+
+            try
+            {
+                return pages.GetPage<TPage>(pageNumber, namedDestinations, parsingOptions);
             }
             catch (Exception ex)
             {
@@ -169,6 +220,17 @@
             for (var i = 0; i < NumberOfPages; i++)
             {
                 yield return GetPage(i + 1);
+            }
+        }
+
+        /// <summary>
+        /// Gets all pages in this document in order, using the specified page factory.
+        /// </summary>
+        public IEnumerable<TPage> GetPages<TPage>()
+        {
+            for (var i = 0; i < NumberOfPages; i++)
+            {
+                yield return GetPage<TPage>(i + 1);
             }
         }
 
@@ -246,6 +308,7 @@
                 Advanced.Dispose();
                 pdfScanner.Dispose();
                 inputBytes.Dispose();
+                pages.Dispose();
             }
             catch (Exception ex)
             {

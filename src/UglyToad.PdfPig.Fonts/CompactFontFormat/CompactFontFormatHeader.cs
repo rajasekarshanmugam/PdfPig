@@ -3,7 +3,7 @@
     /// <summary>
     /// The header table for the binary data of a Compact Font Format file.
     /// </summary>
-    public struct CompactFontFormatHeader
+    public readonly struct CompactFontFormatHeader
     {
         /// <summary>
         /// The major version of this font format. Starting at 1.

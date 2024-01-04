@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
     using Content;
+    using Logging;
     using PdfFonts;
     using PdfPig.Graphics;
     using PdfPig.Tokens;
     using PdfPig.Core;
+    using System;
     using Tokens;
     using UglyToad.PdfPig.Graphics.Core;
     using UglyToad.PdfPig.Graphics.Operations.TextPositioning;
@@ -26,15 +28,25 @@
 
         public PdfPath CurrentPath { get; set; }
 
-        public IColorSpaceContext ColorSpaceContext { get; }
-
         public PdfPoint CurrentPosition { get; set; }
 
         public TestOperationContext()
         {
-            StateStack.Push(new CurrentGraphicsState());
+            StateStack.Push(new CurrentGraphicsState()
+            {
+                ColorSpaceContext = new ColorSpaceContext(GetCurrentState,
+                    new ResourceStore(new TestPdfTokenScanner(),
+                        new TestFontFactory(),
+                        new TestFilterProvider(),
+                        new ParsingOptions()
+                        {
+                            UseLenientParsing = true,
+                            ClipPaths = false,
+                            SkipMissingFonts = true,
+                            Logger = new NoOpLog()
+                        }))
+            });
             CurrentSubpath = new PdfSubpath();
-            ColorSpaceContext = new ColorSpaceContext(GetCurrentState, new ResourceStore(new TestPdfTokenScanner(), new TestFontFactory()));
         }
 
         public CurrentGraphicsState GetCurrentState()
@@ -269,6 +281,11 @@
         public void SetCharacterSpacing(double spacing)
         {
             GetCurrentState().FontState.CharacterSpacing = spacing;
+        }
+
+        public void PaintShading(NameToken shading)
+        {
+
         }
 
         private class TestFontFactory : IFontFactory

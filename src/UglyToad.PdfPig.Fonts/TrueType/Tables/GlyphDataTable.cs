@@ -1,17 +1,17 @@
 ﻿namespace UglyToad.PdfPig.Fonts.TrueType.Tables
 {
+    using System;
+    using System.Collections.Generic;
     using Core;
     using Glyphs;
     using Parser;
-    using System;
-    using System.Collections.Generic;
 
     /// <inheritdoc />
     /// <summary>
     /// The 'glyf' table contains the data that defines the appearance of the glyphs in the font. 
     /// This includes specification of the points that describe the contours that make up a glyph outline and the instructions that grid-fit that glyph.
     /// </summary>
-    internal class GlyphDataTable : ITrueTypeTable
+    internal sealed class GlyphDataTable : ITrueTypeTable
     {
         private readonly IReadOnlyList<uint> glyphOffsets;
         private readonly PdfRectangle maxGlyphBounds;
@@ -70,19 +70,21 @@
                 return true;
             }
 
-            tableBytes.Seek(offset);
-
-            // ReSharper disable once UnusedVariable
-            var contourCount = tableBytes.ReadSignedShort();
-
-            var minX = tableBytes.ReadSignedShort();
-            var minY = tableBytes.ReadSignedShort();
-            var maxX = tableBytes.ReadSignedShort();
-            var maxY = tableBytes.ReadSignedShort();
-
-            bounds = new PdfRectangle(minX, minY, maxX, maxY);
+            bounds = Glyphs[glyphIndex].Bounds;
 
             return true;
+        }
+
+        public bool TryGetGlyphPath(int glyphIndex, out IReadOnlyList<PdfSubpath> subpaths)
+        {
+            subpaths = null;
+
+            if (glyphIndex < 0 || glyphIndex > Glyphs.Count - 1)
+            {
+                return false;
+            }
+
+            return Glyphs[glyphIndex].TryGetGlyphPath(out subpaths);
         }
 
         public static GlyphDataTable Load(TrueTypeDataBytes data, TrueTypeHeaderTable table, TableRegister.Builder tableRegister)
@@ -188,11 +190,25 @@
             var yCoordinates = ReadCoordinates(data, pointCount, flags, SimpleGlyphFlags.YSingleByte,
                 SimpleGlyphFlags.ThisYIsTheSame);
 
+            int endPtIndex = endPointsOfContours.Length - 1;
+            int endPtOfContourIndex = -1;
             var points = new GlyphPoint[xCoordinates.Length];
+
             for (var i = xCoordinates.Length - 1; i >= 0; i--)
             {
+                if (endPtOfContourIndex == -1)
+                {
+                    endPtOfContourIndex = endPointsOfContours[endPtIndex];
+                }
+                bool endPt = endPtOfContourIndex == i;
+                if (endPt && endPtIndex > 0)
+                {
+                    endPtIndex--;
+                    endPtOfContourIndex = -1;
+                }
+
                 var isOnCurve = (flags[i] & SimpleGlyphFlags.OnCurve) == SimpleGlyphFlags.OnCurve;
-                points[i] = new GlyphPoint(xCoordinates[i], yCoordinates[i], isOnCurve);
+                points[i] = new GlyphPoint(xCoordinates[i], yCoordinates[i], isOnCurve, endPt);
             }
 
             return new Glyph(true, instructions, endPointsOfContours, points, bounds);
@@ -276,7 +292,6 @@
                 {
                     // TODO: Not implemented, it is unclear how to do this.
                 }
-
             } while (HasFlag(flags, CompositeGlyphFlags.MoreComponents));
 
             // Now build the final glyph from the components.
@@ -375,7 +390,7 @@
         /// Stores the composite glyph information we read when initially scanning the glyph table.
         /// Once we have all composite glyphs we can start building them from simple glyphs.
         /// </summary>
-        private struct TemporaryCompositeLocation
+        private readonly struct TemporaryCompositeLocation
         {
             /// <summary>
             /// Stores the position after reading the contour count and bounds.

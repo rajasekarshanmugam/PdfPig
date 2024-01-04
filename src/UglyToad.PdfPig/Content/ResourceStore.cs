@@ -1,19 +1,22 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
+    using System;
+    using System.Collections.Generic;
     using Core;
     using Graphics.Colors;
     using Parser.Parts;
     using PdfFonts;
-    using System;
-    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
+    using Filters;
     using Util;
 
     internal class ResourceStore : IResourceStore
     {
         private readonly IPdfTokenScanner scanner;
         private readonly IFontFactory fontFactory;
+        private readonly ILookupFilterProvider filterProvider;
+        private readonly ParsingOptions parsingOptions;
 
         private readonly Dictionary<IndirectReference, IFont> loadedFonts = new Dictionary<IndirectReference, IFont>();
         private readonly Dictionary<NameToken, IFont> loadedDirectFonts = new Dictionary<NameToken, IFont>();
@@ -21,29 +24,41 @@
 
         private readonly Dictionary<NameToken, DictionaryToken> extendedGraphicsStates = new Dictionary<NameToken, DictionaryToken>();
 
-        private readonly Dictionary<NameToken, ResourceColorSpace> namedColorSpaces = new Dictionary<NameToken, ResourceColorSpace>();
+        private readonly StackDictionary<NameToken, ResourceColorSpace> namedColorSpaces = new StackDictionary<NameToken, ResourceColorSpace>();
+        private readonly Dictionary<NameToken, ColorSpaceDetails> loadedNamedColorSpaceDetails = new Dictionary<NameToken, ColorSpaceDetails>();
 
         private readonly Dictionary<NameToken, DictionaryToken> markedContentProperties = new Dictionary<NameToken, DictionaryToken>();
 
+        private readonly Dictionary<NameToken, Shading> shadingsProperties = new Dictionary<NameToken, Shading>();
+
+        private readonly Dictionary<NameToken, PatternColor> patternsProperties = new Dictionary<NameToken, PatternColor>();
+
         private (NameToken name, IFont font) lastLoadedFont;
 
-        public ResourceStore(IPdfTokenScanner scanner, IFontFactory fontFactory)
+        public ResourceStore(IPdfTokenScanner scanner,
+            IFontFactory fontFactory,
+            ILookupFilterProvider filterProvider,
+            ParsingOptions parsingOptions)
         {
             this.scanner = scanner;
             this.fontFactory = fontFactory;
+            this.filterProvider = filterProvider;
+            this.parsingOptions = parsingOptions;
         }
 
-        public void LoadResourceDictionary(DictionaryToken resourceDictionary, InternalParsingOptions parsingOptions)
+        public void LoadResourceDictionary(DictionaryToken resourceDictionary)
         {
             lastLoadedFont = (null, null);
+            loadedNamedColorSpaceDetails.Clear();
 
+            namedColorSpaces.Push();
             currentResourceState.Push();
 
             if (resourceDictionary.TryGet(NameToken.Font, out var fontBase))
             {
                 var fontDictionary = DirectObjectFinder.Get<DictionaryToken>(fontBase, scanner);
 
-                LoadFontDictionary(fontDictionary, parsingOptions);
+                LoadFontDictionary(fontDictionary);
             }
 
             if (resourceDictionary.TryGet(NameToken.Xobject, out var xobjectBase))
@@ -110,6 +125,16 @@
                 }
             }
 
+            if (resourceDictionary.TryGet(NameToken.Pattern, scanner, out DictionaryToken patternDictionary))
+            {
+                // NB: in PDF, all patterns shall be local to the context in which they are defined.
+                foreach (var namePatternPair in patternDictionary.Data)
+                {
+                    var name = NameToken.Create(namePatternPair.Key);
+                    patternsProperties[name] = PatternParser.Create(namePatternPair.Value, scanner, this, filterProvider);
+                }
+            }
+
             if (resourceDictionary.TryGet(NameToken.Properties, scanner, out DictionaryToken markedContentPropertiesList))
             {
                 foreach (var pair in markedContentPropertiesList.Data)
@@ -124,15 +149,39 @@
                     markedContentProperties[key] = namedProperties;
                 }
             }
+
+            if (resourceDictionary.TryGet(NameToken.Shading, scanner, out DictionaryToken shadingList))
+            {
+                foreach (var pair in shadingList.Data)
+                {
+                    var key = NameToken.Create(pair.Key);
+                    if (DirectObjectFinder.TryGet(pair.Value, scanner, out DictionaryToken namedPropertiesDictionary))
+                    {
+                        shadingsProperties[key] = ShadingParser.Create(namedPropertiesDictionary, scanner, this, filterProvider);
+                    }
+                    else if (DirectObjectFinder.TryGet(pair.Value, scanner, out StreamToken namedPropertiesStream))
+                    {
+                        // Shading types 4 to 7 shall be defined by a stream containing descriptive data characterizing
+                        // the shading's gradient fill.
+                       shadingsProperties[key] = ShadingParser.Create(namedPropertiesStream, scanner, this, filterProvider);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("Shading");
+                    }
+                }
+            }
         }
 
         public void UnloadResourceDictionary()
         {
             lastLoadedFont = (null, null);
+            loadedNamedColorSpaceDetails.Clear();
             currentResourceState.Pop();
+            namedColorSpaces.Pop();
         }
 
-        private void LoadFontDictionary(DictionaryToken fontDictionary, InternalParsingOptions parsingOptions)
+        private void LoadFontDictionary(DictionaryToken fontDictionary)
         {
             lastLoadedFont = (null, null);
 
@@ -168,7 +217,6 @@
                             throw;
                         }
                     }
-
                 }
                 else if (pair.Value is DictionaryToken fd)
                 {
@@ -236,13 +284,58 @@
             return true;
         }
 
-        public StreamToken GetXObject(NameToken name)
+        public ColorSpaceDetails GetColorSpaceDetails(NameToken name, DictionaryToken dictionary)
         {
-            var reference = currentResourceState[name];
+            if (dictionary == null)
+            {
+                dictionary = new DictionaryToken(new Dictionary<NameToken, IToken>());
+            }
 
-            var stream = DirectObjectFinder.Get<StreamToken>(new IndirectReferenceToken(reference), scanner);
+            // Null color space for images
+            if (name is null)
+            {
+                return ColorSpaceDetailsParser.GetColorSpaceDetails(null, dictionary, scanner, this, filterProvider);
+            }
 
-            return stream;
+            if (name.TryMapToColorSpace(out ColorSpace colorspaceActual))
+            {
+                // TODO - We need to find a way to store profile that have an actual dictionnary, e.g. ICC profiles - without parsing them again
+                return ColorSpaceDetailsParser.GetColorSpaceDetails(colorspaceActual, dictionary, scanner, this, filterProvider);
+            }
+
+            // Named color spaces
+            if (loadedNamedColorSpaceDetails.TryGetValue(name, out ColorSpaceDetails csdLoaded))
+            {
+                return csdLoaded;
+            }
+
+            if (TryGetNamedColorSpace(name, out ResourceColorSpace namedColorSpace) &&
+                namedColorSpace.Name.TryMapToColorSpace(out ColorSpace mapped))
+            {
+                if (namedColorSpace.Data is null)
+                {
+                    return ColorSpaceDetailsParser.GetColorSpaceDetails(mapped, dictionary, scanner, this, filterProvider);
+                }
+                else if (namedColorSpace.Data is ArrayToken array)
+                {
+                    var csd = ColorSpaceDetailsParser.GetColorSpaceDetails(mapped, dictionary.With(NameToken.ColorSpace, array), scanner, this, filterProvider);
+                    loadedNamedColorSpaceDetails[name] = csd;
+                    return csd;
+                }
+            }
+
+            throw new InvalidOperationException($"Could not find color space for token '{name}'.");
+        }
+
+        public bool TryGetXObject(NameToken name, out StreamToken stream)
+        {
+            stream = null;
+            if (!currentResourceState.TryGetValue(name, out var indirectReference))
+            {
+                return false;
+            }
+
+            return DirectObjectFinder.TryGet(new IndirectReferenceToken(indirectReference), scanner, out stream);
         }
 
         public DictionaryToken GetExtendedGraphicsStateDictionary(NameToken name)
@@ -253,6 +346,16 @@
         public DictionaryToken GetMarkedContentPropertiesDictionary(NameToken name)
         {
             return markedContentProperties.TryGetValue(name, out var result) ? result : null;
+        }
+
+        public Shading GetShading(NameToken name)
+        {
+            return shadingsProperties[name];
+        }
+
+        public IReadOnlyDictionary<NameToken, PatternColor> GetPatterns()
+        {
+            return patternsProperties;
         }
     }
 }

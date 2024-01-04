@@ -3,7 +3,7 @@
     using Core;
     using System;
 
-    internal struct PdfVector
+    internal readonly struct PdfVector
     {
         public double X { get; }
 

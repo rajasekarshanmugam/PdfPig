@@ -9,6 +9,7 @@
     using Tokens;
     using Util.JetBrains.Annotations;
     using Debug = System.Diagnostics.Debug;
+
     /// <summary>
     /// Defines glyphs using a CIDFont
     /// </summary>
@@ -87,7 +88,6 @@
                     {
                         return value != null;
                     }
-
                 }
                 if (HaveUnicode2CMap) // 2022-12-24 @fnatzke left as fall-back. Possible?
                 {
@@ -160,6 +160,18 @@
             var characterIdentifier = CMap.ConvertToCid(characterCode);
 
             return CidFont.GetDisplacementVector(characterIdentifier).Scale(1 / 1000.0);
+        }
+
+        /// <inheritdoc/>
+        public bool TryGetPath(int characterCode, out IReadOnlyList<PdfSubpath> path)
+        {
+            return CidFont.TryGetPath(characterCode, out path);
+        }
+
+        /// <inheritdoc/>
+        public bool TryGetNormalisedPath(int characterCode, out IReadOnlyList<PdfSubpath> path)
+        {
+            return CidFont.TryGetNormalisedPath(characterCode, out path);
         }
     }
 }

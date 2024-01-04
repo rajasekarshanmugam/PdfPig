@@ -1,18 +1,20 @@
 ﻿namespace UglyToad.PdfPig.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using static UglyToad.PdfPig.Core.PdfSubpath;
 
     /// <summary>
     /// Specifies the conversion from the transformed coordinate space to the original untransformed coordinate space.
     /// </summary>
-    public struct TransformationMatrix
+    public readonly struct TransformationMatrix
     {
         /// <summary>
         /// The default <see cref="TransformationMatrix"/>.
         /// </summary>
-        public static TransformationMatrix Identity = new TransformationMatrix(1, 0, 0,
+        public static readonly TransformationMatrix Identity = new TransformationMatrix(1, 0, 0,
             0, 1, 0,
             0, 0, 1);
 
@@ -26,7 +28,8 @@
         /// <summary>
         /// Create a new <see cref="TransformationMatrix"/> with the X and Y scaling values set.
         /// </summary>
-        public static TransformationMatrix GetScaleMatrix(double scaleX, double scaleY) => new TransformationMatrix(scaleX, 0, 0,
+        public static TransformationMatrix GetScaleMatrix(double scaleX, double scaleY) => new TransformationMatrix(
+            scaleX, 0, 0,
             0, scaleY, 0,
             0, 0, 1);
 
@@ -38,7 +41,13 @@
             double cos;
             double sin;
 
-            switch (degreesCounterclockwise)
+            var deg = degreesCounterclockwise % 360;
+            if (deg < 0)
+            {
+                deg += 360;
+            }
+
+            switch (deg)
             {
                 case 0:
                 case 360:
@@ -76,22 +85,27 @@
         /// The value at (0, 0) - The scale for the X dimension.
         /// </summary>
         public readonly double A;
+
         /// <summary>
         /// The value at (0, 1).
         /// </summary>
         public readonly double B;
+
         /// <summary>
         /// The value at (1, 0).
         /// </summary>
         public readonly double C;
+
         /// <summary>
         /// The value at (1, 1) - The scale for the Y dimension.
         /// </summary>
         public readonly double D;
+
         /// <summary>
         /// The value at (2, 0) - translation in X.
         /// </summary>
         public readonly double E;
+
         /// <summary>
         /// The value at (2, 1) - translation in Y.
         /// </summary>
@@ -127,47 +141,47 @@
                 switch (row)
                 {
                     case 0:
+                    {
+                        switch (col)
                         {
-                            switch (col)
-                            {
-                                case 0:
-                                    return A;
-                                case 1:
-                                    return B;
-                                case 2:
-                                    return row1;
-                                default:
+                            case 0:
+                                return A;
+                            case 1:
+                                return B;
+                            case 2:
+                                return row1;
+                            default:
                                     throw new ArgumentOutOfRangeException($"Trying to access {row}, {col} which was not in the value array.");
-                            }
                         }
+                    }
                     case 1:
+                    {
+                        switch (col)
                         {
-                            switch (col)
-                            {
-                                case 0:
-                                    return C;
-                                case 1:
-                                    return D;
-                                case 2:
-                                    return row2;
-                                default:
+                            case 0:
+                                return C;
+                            case 1:
+                                return D;
+                            case 2:
+                                return row2;
+                            default:
                                     throw new ArgumentOutOfRangeException($"Trying to access {row}, {col} which was not in the value array.");
-                            }
                         }
+                    }
                     case 2:
+                    {
+                        switch (col)
                         {
-                            switch (col)
-                            {
-                                case 0:
-                                    return E;
-                                case 1:
-                                    return F;
-                                case 2:
-                                    return row3;
-                                default:
+                            case 0:
+                                return E;
+                            case 1:
+                                return F;
+                            case 2:
+                                return row3;
+                            default:
                                     throw new ArgumentOutOfRangeException($"Trying to access {row}, {col} which was not in the value array.");
-                            }
                         }
+                    }
                     default:
                         throw new ArgumentOutOfRangeException($"Trying to access {row}, {col} which was not in the value array.");
                 }
@@ -215,10 +229,20 @@
         [Pure]
         public PdfPoint Transform(PdfPoint original)
         {
-            var x = A * original.X + C * original.Y + E;
-            var y = B * original.X + D * original.Y + F;
+            (double x, double y) xy = Transform(original.X, original.Y);
+            return new PdfPoint(xy.x, xy.y);
+        }
 
-            return new PdfPoint(x, y);
+        /// <summary>
+        /// Transform a point using this transformation matrix.
+        /// </summary>
+        /// <param name="x">The original point X coordinate.</param>
+        /// <param name="y">The original point Y coordinate.</param>
+        /// <returns>A new point which is the result of applying this transformation matrix.</returns>
+        [Pure]
+        public (double x, double y) Transform(double x, double y)
+        {
+            return (A * x + C * y + E, B * x + D * y + F);
         }
 
         /// <summary>
@@ -248,6 +272,59 @@
                 Transform(original.BottomLeft),
                 Transform(original.BottomRight)
             );
+        }
+
+        /// <summary>
+        /// Transform a subpath using this transformation matrix.
+        /// </summary>
+        /// <param name="subpath">The original subpath.</param>
+        /// <returns>A new subpath which is the result of applying this transformation matrix.</returns>
+        public PdfSubpath Transform(PdfSubpath subpath)
+        {
+            var trSubpath = new PdfSubpath();
+            foreach (var c in subpath.Commands)
+            {
+                if (c is Move move)
+                {
+                    var loc = Transform(move.Location);
+                    trSubpath.MoveTo(loc.X, loc.Y);
+                }
+                else if (c is Line line)
+                {
+                    //var from = Transform(line.From);
+                    var to = Transform(line.To);
+                    trSubpath.LineTo(to.X, to.Y);
+                }
+                else if (c is BezierCurve curve)
+                {
+                    var first = Transform(curve.FirstControlPoint);
+                    var second = Transform(curve.SecondControlPoint);
+                    var end = Transform(curve.EndPoint);
+                    trSubpath.BezierCurveTo(first.X, first.Y, second.X, second.Y, end.X, end.Y);
+                }
+                else if (c is Close)
+                {
+                    trSubpath.CloseSubpath();
+                }
+                else
+                {
+                    throw new Exception("Unknown PdfSubpath type");
+                }
+            }
+            return trSubpath;
+        }
+
+        /// <summary>
+        /// Transform a path using this transformation matrix.
+        /// </summary>
+        /// <param name="path">The original path.</param>
+        /// <returns>A new path which is the result of applying this transformation matrix.</returns>
+        public IEnumerable<PdfSubpath> Transform(IEnumerable<PdfSubpath> path)
+        {
+            foreach (var subpath in path)
+            {
+                yield return Transform(subpath);
+            }
         }
 
         /// <summary>
@@ -466,6 +543,18 @@
         public override string ToString()
         {
             return $"{A}, {B}, {row1}\r\n{C}, {D}, {row2}\r\n{E}, {F}, {row3}";
+        }
+
+        /// <inheritdoc/>
+        public static bool operator ==(TransformationMatrix left, TransformationMatrix right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <inheritdoc/>
+        public static bool operator !=(TransformationMatrix left, TransformationMatrix right)
+        {
+            return !(left == right);
         }
     }
 }

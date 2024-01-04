@@ -81,6 +81,11 @@
         };
 
         /// <summary>
+        /// Single global instance
+        /// </summary>
+        public static TokenWriter Instance { get; } = new TokenWriter();
+
+        /// <summary>
         /// Writes the given input token to the output stream with the correct PDF format and encoding including whitespace and line breaks as applicable.
         /// </summary>
         /// <param name="token">The token to write to the stream.</param>
@@ -270,6 +275,12 @@
             // Complete!
             outputStream.Write(Eof, 0, Eof.Length);
         }
+
+        /// <summary>
+        /// Indicates that we are writing page contents.
+        /// Can be used by a derived class.
+        /// </summary>
+        public bool WritingPageContents { get; set; }
 
         /// <inheritdoc cref="ITokenWriter.WriteObject" />
         public void WriteObject(long objectNumber, int generation, byte[] data, Stream outputStream)
