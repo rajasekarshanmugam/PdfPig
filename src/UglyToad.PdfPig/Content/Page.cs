@@ -1,23 +1,24 @@
 ﻿namespace UglyToad.PdfPig.Content
 {
-    using Annotations;
-    using Graphics;
-    using Graphics.Operations;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
-    using Tokenization.Scanner;
+    using Annotations;
+    using Geometry;
+    using Graphics.Operations;
     using Tokens;
     using Util;
     using Util.JetBrains.Annotations;
+    using Tokenization.Scanner;
+    using Graphics;
+    using System.Linq;
 
     /// <summary>
     /// Contains the content and provides access to methods of a single page in the <see cref="PdfDocument"/>.
     /// </summary>
     public class Page
     {
-        private readonly AnnotationProvider annotationProvider;
+        internal readonly AnnotationProvider annotationProvider;
         internal readonly IPdfTokenScanner pdfScanner;
         private readonly Lazy<string> textLazy;
 
@@ -107,10 +108,13 @@
             Content = content;
             textLazy = new Lazy<string>(() => GetText(Content));
 
-            Width = mediaBox.Bounds.Width;
-            Height = mediaBox.Bounds.Height;
+            // Special case where cropbox is outside mediabox: use cropbox instead of intersection
+            var viewBox = mediaBox.Bounds.Intersect(cropBox.Bounds) ?? cropBox.Bounds;
 
-            Size = mediaBox.Bounds.GetPageSize();
+            Width = viewBox.Width;
+            Height = viewBox.Height;
+            Size = viewBox.GetPageSize();
+
             ExperimentalAccess = new Experimental(this, annotationProvider);
             this.annotationProvider = annotationProvider;
             this.pdfScanner = pdfScanner ?? throw new ArgumentNullException(nameof(pdfScanner));

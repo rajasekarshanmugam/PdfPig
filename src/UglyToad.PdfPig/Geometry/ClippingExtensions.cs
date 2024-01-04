@@ -1,12 +1,12 @@
 ﻿namespace UglyToad.PdfPig.Geometry
 {
-    using ClipperLibrary;
-    using Core;
-    using Graphics;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using UglyToad.PdfPig.Logging;
+    using ClipperLibrary;
+    using Core;
+    using Graphics;
+    using Logging;
     using static Core.PdfSubpath;
 
     /// <summary>
@@ -222,10 +222,6 @@
                 }
                 else if (command is Close)
                 {
-                    if (movePoint == null)
-                    {
-                        throw new ArgumentException("ToClipperPolygon(): Move command was null, cannot close the subpath.");
-                    }
                     yield return movePoint;
                 }
             }

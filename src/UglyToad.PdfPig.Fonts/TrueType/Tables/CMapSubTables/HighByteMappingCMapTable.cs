@@ -47,7 +47,6 @@
                 var value = data.ReadUnsignedShort();
                 maximumSubHeaderIndex = Math.Max(maximumSubHeaderIndex, value / 8);
                 subHeaderKeys[i] = value;
-
             }
 
             var subHeaderCount = maximumSubHeaderIndex + 1;
@@ -96,7 +95,7 @@
             return new HighByteMappingCMapTable(platformId, encodingId, characterCodeToGlyphId);
         }
 
-        public struct SubHeader
+        public readonly struct SubHeader
         {
             /// <summary>
             /// First valid low byte for the sub header.

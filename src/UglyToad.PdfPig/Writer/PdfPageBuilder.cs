@@ -7,20 +7,74 @@
     using Graphics.Operations;
     using Graphics.Operations.General;
     using Graphics.Operations.PathConstruction;
-    using Graphics.Operations.PathPainting;
     using Graphics.Operations.SpecialGraphicsState;
     using Graphics.Operations.TextObjects;
     using Graphics.Operations.TextPositioning;
     using Graphics.Operations.TextShowing;
     using Graphics.Operations.TextState;
     using Images;
-    using Images.Png;
-    using PdfFonts;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using PdfFonts;
     using Tokens;
+    using Graphics.Operations.PathPainting;
+    using Images.Png;
+    using UglyToad.PdfPig.Actions;
+
+    internal class NameConflictSolver
+    {
+        private string prefix;
+        private int key = 0;
+        private HashSet<string> xobjectNamesUsed = new HashSet<string>();
+
+        public NameConflictSolver(string prefix)
+        {
+            this.prefix = prefix;
+        }
+
+        private string ExtractPrefix(string name)
+        {
+            if (name == null)
+                return prefix;
+            var i = 0;
+            while (i < name.Length && (name[i] < '0' || name[i] > '9'))
+            {
+                i++;
+            }
+
+            
+            return i != 0 ? name.Substring(0,i) : prefix;
+        }
+
+        public string NewName(string orginalName = null)
+        {
+            var newPrefix = ExtractPrefix(orginalName);
+
+            var name = $"{newPrefix}{key}";
+            while (xobjectNamesUsed.Contains(name))
+            {
+                name = $"{newPrefix}{++key}";
+            }
+            xobjectNamesUsed.Add(name);
+            return name;
+        }
+
+        public string FixName(string name)
+        {
+            if (xobjectNamesUsed.Contains(name))
+            {
+                return NewName(name);
+            }
+            else
+            {
+                xobjectNamesUsed.Add(name);
+                return name;
+            }
+        }
+
+    }
 
     /// <summary>
     /// A builder used to add construct a page in a PDF document.
@@ -32,11 +86,14 @@
 
         // all page data other than content streams
         internal readonly Dictionary<NameToken, IToken> pageDictionary = new Dictionary<NameToken, IToken>();
-
+        
         // streams
         internal readonly List<IPageContentStream> contentStreams;
         private IPageContentStream currentStream;
 
+        // links to be resolved when all page references are available
+        internal readonly List<(DictionaryToken token, PdfAction action)> links;
+        
         // maps fonts added using PdfDocumentBuilder to page font names
         private readonly Dictionary<Guid, NameToken> documentFonts = new Dictionary<Guid, NameToken>();
         internal int nextFontId = 1;
@@ -44,7 +101,9 @@
         //a sequence number of ShowText operation to determine whether letters belong to same operation or not (letters that belong to different operations have less changes to belong to same word)
         private int textSequence;
 
-        private int imageKey = 1;
+        private NameConflictSolver xobjectsNames = new NameConflictSolver("I");
+
+        private NameConflictSolver gStateNames = new NameConflictSolver("GS");
 
         internal int? rotation;
 
@@ -76,13 +135,14 @@
             PageNumber = number;
 
             currentStream = new DefaultContentStream();
-            contentStreams = new List<IPageContentStream>() { currentStream };
+            contentStreams = new List<IPageContentStream>() {currentStream};
         }
 
         internal PdfPageBuilder(int number, PdfDocumentBuilder documentBuilder, IEnumerable<CopiedContentStream> copied,
-            Dictionary<NameToken, IToken> pageDict)
+            Dictionary<NameToken, IToken> pageDict, List<(DictionaryToken token, PdfAction action)> links)
         {
             this.documentBuilder = documentBuilder ?? throw new ArgumentNullException(nameof(documentBuilder));
+            this.links = links;
             PageNumber = number;
             pageDictionary = pageDict;
             contentStreams = new List<IPageContentStream>();
@@ -493,7 +553,7 @@
             {
                 value = NameToken.Create($"F{nextFontId++}");
                 var resources = pageDictionary.GetOrCreateDict(NameToken.Resources);
-                var fonts = resources.GetOrCreateDict(NameToken.Font);
+                var fonts  = resources.GetOrCreateDict(NameToken.Font);
                 while (fonts.ContainsKey(value))
                 {
                     value = NameToken.Create($"F{nextFontId++}");
@@ -516,14 +576,18 @@
                 return AddJpeg(stream, placementRectangle);
             }
         }
+        
 
         /// <summary>
         /// Adds the JPEG image represented by the input stream at the specified location.
         /// </summary>
-        public AddedImage AddJpeg(Stream fileStream, PdfRectangle placementRectangle)
+        public AddedImage AddJpeg(Stream fileStream, PdfRectangle placementRectangle = default)
         {
             var startFrom = fileStream.Position;
             var info = JpegHandler.GetInformation(fileStream);
+
+            if (placementRectangle.Equals(default(PdfRectangle)))
+                placementRectangle = new PdfRectangle(0, 0, info.Width, info.Height);
 
             byte[] data;
             using (var memory = new MemoryStream())
@@ -549,12 +613,12 @@
             var resources = pageDictionary.GetOrCreateDict(NameToken.Resources);
             var xObjects = resources.GetOrCreateDict(NameToken.Xobject);
 
-            var key = NameToken.Create($"I{imageKey++}");
+            var key = NameToken.Create( xobjectsNames.NewName());
             xObjects[key] = reference;
 
             currentStream.Add(Push.Value);
             // This needs to be the placement rectangle.
-            currentStream.Add(new ModifyCurrentTransformationMatrix(new[]
+            currentStream.Add(new ModifyCurrentTransformationMatrix(new []
             {
                 (decimal)placementRectangle.Width, 0,
                 0, (decimal)placementRectangle.Height,
@@ -583,7 +647,7 @@
             var resources = pageDictionary.GetOrCreateDict(NameToken.Resources);
             var xObjects = resources.GetOrCreateDict(NameToken.Xobject);
 
-            var key = NameToken.Create($"I{imageKey++}");
+            var key = NameToken.Create(xobjectsNames.NewName());
             xObjects[key] = new IndirectReferenceToken(image.Reference);
 
             currentStream.Add(Push.Value);
@@ -612,9 +676,12 @@
         /// <summary>
         /// Adds the PNG image represented by the input stream at the specified location.
         /// </summary>
-        public AddedImage AddPng(Stream pngStream, PdfRectangle placementRectangle)
+        public AddedImage AddPng(Stream pngStream, PdfRectangle placementRectangle = default)
         {
             var png = Png.Open(pngStream);
+
+            if (placementRectangle.Equals(default(PdfRectangle)))
+                placementRectangle = new PdfRectangle(0, 0, png.Width, png.Height);
 
             byte[] data;
             var pixelBuffer = new byte[3];
@@ -666,7 +733,7 @@
                     {NameToken.Width, widthToken},
                     {NameToken.Height, heightToken},
                     {NameToken.ColorSpace, NameToken.Devicegray},
-                    {NameToken.BitsPerComponent, new NumericToken(png.Header.BitDepth)},
+                    {NameToken.BitsPerComponent, new NumericToken(8)},
                     {NameToken.Decode, new ArrayToken(new IToken[] { new NumericToken(0), new NumericToken(1) })},
                     {NameToken.Length, new NumericToken(compressedSmask.Length)},
                     {NameToken.Filter, NameToken.FlateDecode}
@@ -683,7 +750,7 @@
                 {NameToken.Subtype, NameToken.Image},
                 {NameToken.Width, widthToken},
                 {NameToken.Height, heightToken},
-                {NameToken.BitsPerComponent, new NumericToken(png.Header.BitDepth)},
+                {NameToken.BitsPerComponent, new NumericToken(8)},
                 {NameToken.ColorSpace, NameToken.Devicergb},
                 {NameToken.Filter, NameToken.FlateDecode},
                 {NameToken.Length, new NumericToken(compressed.Length)}
@@ -693,13 +760,13 @@
             {
                 imgDictionary.Add(NameToken.Smask, smaskReference);
             }
-
+            
             var reference = documentBuilder.AddImage(new DictionaryToken(imgDictionary), compressed);
 
             var resources = pageDictionary.GetOrCreateDict(NameToken.Resources);
             var xObjects = resources.GetOrCreateDict(NameToken.Xobject);
 
-            var key = NameToken.Create($"I{imageKey++}");
+            var key = NameToken.Create(xobjectsNames.NewName());
 
             xObjects[key] = reference;
 
@@ -772,7 +839,7 @@
 
             // Special cases
             // Since we don't directly add font's to the pages resources, we have to go look at the document's font
-            if (srcResourceDictionary.TryGet(NameToken.Font, srcPage.pdfScanner, out DictionaryToken fontsDictionary))
+            if(srcResourceDictionary.TryGet(NameToken.Font, srcPage.pdfScanner, out DictionaryToken fontsDictionary))
             {
                 var pageFontsDictionary = resources.GetOrCreateDict(NameToken.Font);
 
@@ -821,15 +888,15 @@
             {
                 var pageXobjectsDictionary = resources.GetOrCreateDict(NameToken.Xobject);
 
-                var xobjectNamesUsed = Enumerable.Range(0, imageKey).Select(i => $"I{i}");
                 foreach (var xobjectSet in xobjectsDictionary.Data)
                 {
                     var xobjectName = xobjectSet.Key;
-                    if (xobjectName[0] == 'I' && xobjectNamesUsed.Any(s => s == xobjectName))
-                    {
-                        // This would mean that the imported xobject collide with one of the added image. so we have to rename it
-                        var newName = $"I{imageKey++}";
 
+                    // This would mean that the imported xobject collide with one of the added image. so we have to rename it
+                    var newName = xobjectsNames.FixName(xobjectName);
+
+                    if (xobjectName != newName)
+                    {
                         // Set all the pertinent SetFontAndSize operations with the new name
                         operations = operations.Select(op =>
                         {
@@ -845,9 +912,9 @@
 
                             return op;
                         }).ToList();
-
-                        xobjectName = newName;
                     }
+
+                    xobjectName = newName;
 
                     if (!(xobjectSet.Value is IndirectReferenceToken fontReferenceToken))
                     {
@@ -855,6 +922,49 @@
                     }
 
                     pageXobjectsDictionary[xobjectName] = documentBuilder.CopyToken(srcPage.pdfScanner, fontReferenceToken);
+                }
+            }
+
+            // Since we don't directly add xobjects's to the pages resources, we have to go look at the document's xobjects
+            if (srcResourceDictionary.TryGet(NameToken.ExtGState, srcPage.pdfScanner, out DictionaryToken gsDictionary))
+            {
+                var pageGstateDictionary = resources.GetOrCreateDict(NameToken.ExtGState);
+
+                foreach (var gstate in gsDictionary.Data)
+                {
+                    var gstateName = gstate.Key;
+                    var newName = gStateNames.FixName(gstateName);
+
+                    if (newName != gstateName)
+                    {
+                        // This would mean that the imported xobject collide with one of the added image. so we have to rename it
+
+                        // Set all the pertinent SetFontAndSize operations with the new name
+                        operations = operations.Select(op =>
+                        {
+                            if (!(op is SetGraphicsStateParametersFromDictionary invokeNamedOperation))
+                            {
+                                return op;
+                            }
+
+                            if (invokeNamedOperation.Name.Data == gstateName)
+                            {
+                                return new SetGraphicsStateParametersFromDictionary(NameToken.Create(newName));
+                            }
+
+                            return op;
+                        }).ToList();
+
+                        gstateName = newName;
+                    }
+
+                    if (!(gstate.Value is IndirectReferenceToken fontReferenceToken))
+                    {
+                        throw new PdfDocumentFormatException($"Expected a IndirectReferenceToken for the XObject, got a {gstate.Value.GetType().Name}");
+                    }
+
+                    pageGstateDictionary[gstateName] = documentBuilder.CopyToken(srcPage.pdfScanner, fontReferenceToken);
+
                 }
             }
 
@@ -895,7 +1005,16 @@
 
                 var documentSpace = textMatrix.Transform(renderingMatrix.Transform(fontMatrix.Transform(rect)));
 
-                var letter = new Letter(c.ToString(), documentSpace, advanceRect.BottomLeft, advanceRect.BottomRight, width, (double)fontSize, FontDetails.GetDefault(name),
+                var letter = new Letter(
+                    c.ToString(), 
+                    documentSpace, 
+                    advanceRect.BottomLeft, 
+                    advanceRect.BottomRight, 
+                    width, 
+                    (double)fontSize, 
+                    FontDetails.GetDefault(name),
+                    TextRenderingMode.Fill,
+                    GrayColor.Black,
                     GrayColor.Black,
                     (double)fontSize,
                     textSequence);
@@ -964,7 +1083,7 @@
 
             public DefaultContentStream() : this(new List<IGraphicsStateOperation>())
             {
-
+                
             }
             public DefaultContentStream(List<IGraphicsStateOperation> operations)
             {
@@ -1005,7 +1124,7 @@
             private readonly IndirectReferenceToken token;
             public bool ReadOnly => true;
             public bool HasContent => true;
-
+            
             public CopiedContentStream(IndirectReferenceToken indirectReferenceToken)
             {
                 token = indirectReferenceToken;
@@ -1021,7 +1140,7 @@
                 throw new NotSupportedException("Writing to a copied content stream is not supported.");
             }
 
-            public List<IGraphicsStateOperation> Operations =>
+            public List<IGraphicsStateOperation> Operations => 
                 throw new NotSupportedException("Reading raw operations is not supported from a copied content stream.");
         }
 
@@ -1064,6 +1183,6 @@
             }
         }
 
-
+        
     }
 }

@@ -187,7 +187,7 @@
             int? pageNumber = null;
             if (fieldDictionary.TryGet(NameToken.P, tokenScanner, out IndirectReferenceToken pageReference))
             {
-                pageNumber = catalog.GetPageByReference(pageReference.Data)?.PageNumber;
+                pageNumber = catalog.Pages.GetPageByReference(pageReference.Data)?.PageNumber;
             }
 
             PdfRectangle? bounds = null;
@@ -403,7 +403,7 @@
                     {
                         if (optionArrayToken.Length != 2)
                         {
-                            throw new PdfDocumentFormatException($"An option array containing array elements should contain 2 strings, instead got: {optionArrayToken}.");
+                            throw new PdfDocumentFormatException($"An option array containing array elements should contain 2 strings, instead got: {optionArrayToken.Length}.");
                         }
 
                         string exportValue;

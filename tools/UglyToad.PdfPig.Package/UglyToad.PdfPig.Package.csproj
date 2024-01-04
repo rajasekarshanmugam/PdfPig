@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45;net451;net452;net46;net461;net462;net47;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net451;net452;net46;net461;net462;net47;net6.0</TargetFrameworks>
     <PackageId>PdfPig</PackageId>
     <DebugType>full</DebugType>
     <Authors>UglyToad</Authors>
@@ -11,12 +11,13 @@
     <PackageTags>PDF;Reader;Document;Adobe;PDFBox;PdfPig;pdf-extract;pdf-to-text;pdf;file;text;C#;dotnet;.NET</PackageTags>
     <RepositoryUrl>https://github.com/UglyToad/PdfPig</RepositoryUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>0.1.8-alpha-001</Version>
-    <AssemblyVersion>0.1.5.0</AssemblyVersion>
-    <FileVersion>0.1.5.0</FileVersion>
+    <Version>0.1.9-alpha001</Version>
+    <AssemblyVersion>0.1.8.0</AssemblyVersion>
+    <FileVersion>0.1.8.0</FileVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/UglyToad/PdfPig/master/documentation/pdfpig.png</PackageIconUrl>
     <PackageIcon>pdfpig.png</PackageIcon>
     <Product>PdfPig</Product>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <LangVersion>latest</LangVersion>
@@ -27,7 +28,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='net451' OR '$(TargetFramework)'=='net452' OR '$(TargetFramework)'=='net46' OR '$(TargetFramework)'=='net461' OR '$(TargetFramework)'=='net462' OR '$(TargetFramework)'=='net47'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net451' OR '$(TargetFramework)'=='net452' OR '$(TargetFramework)'=='net46' OR '$(TargetFramework)'=='net461' OR '$(TargetFramework)'=='net462' OR '$(TargetFramework)'=='net47'">
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +40,7 @@
     <ProjectReference Include="..\..\src\UglyToad.PdfPig\UglyToad.PdfPig.csproj" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" Link="README.md" PackagePath="\" />
     <None Include="pdfpig.png" Pack="true" PackagePath="\" />
   </ItemGroup>
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">

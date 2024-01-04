@@ -1,5 +1,7 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Simple
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Cmap;
     using Composite;
     using Core;
@@ -7,7 +9,6 @@
     using Fonts.CompactFontFormat;
     using Fonts.Encodings;
     using Fonts.Type1;
-    using System.Collections.Generic;
     using Tokens;
     using Util.JetBrains.Annotations;
 
@@ -202,7 +203,6 @@
                 rect = first.GetCharacterBoundingBox(characterName);
             }
 
-
             if (!rect.HasValue)
             {
                 return new PdfRectangle(0, 0, widths[characterCode - firstChar], 0);
@@ -215,6 +215,62 @@
         public TransformationMatrix GetFontMatrix()
         {
             return fontMatrix;
+        }
+
+        /// <inheritdoc/>
+        public bool TryGetPath(int characterCode, out IReadOnlyList<PdfSubpath> path)
+        {
+            path = null;
+            IReadOnlyList<PdfSubpath> tempPath = null;
+            if (characterCode < firstChar || characterCode > lastChar)
+            {
+                return false;
+            }
+
+            if (fontProgram == null)
+            {
+                return false;
+            }
+
+            if (fontProgram.TryGetFirst(out var t1Font))
+            {
+                var name = encoding.GetName(characterCode);
+                tempPath = t1Font.GetCharacterPath(name);
+            }
+            else if (fontProgram.TryGetSecond(out var cffFont))
+            {
+                var first = cffFont.FirstFont;
+                string characterName;
+                if (encoding != null)
+                {
+                    characterName = encoding.GetName(characterCode);
+                }
+                else
+                {
+                    characterName = cffFont.GetCharacterName(characterCode);
+                }
+
+                tempPath = first.GetCharacterPath(characterName);
+            }
+
+            if (tempPath != null)
+            {
+                path = tempPath;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public bool TryGetNormalisedPath(int characterCode, out IReadOnlyList<PdfSubpath> path)
+        {
+            if (TryGetPath(characterCode, out path))
+            {
+                path = fontMatrix.Transform(path).ToList();
+                return true;
+            }
+            return false;
         }
     }
 }

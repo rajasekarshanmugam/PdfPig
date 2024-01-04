@@ -35,7 +35,7 @@
 
             if (value.Length != 6)
             {
-                throw new ArgumentException("The cm operator must pass 6 numbers. Instead got: " + value);
+                throw new ArgumentException("The cm operator must pass 6 numbers. Instead got: " + value.Length);
             }
             Value = value;
         }

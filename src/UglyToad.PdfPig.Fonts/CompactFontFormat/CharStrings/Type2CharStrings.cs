@@ -21,7 +21,6 @@
         /// </summary>
         public IReadOnlyDictionary<string, CommandSequence> CharStrings { get; }
 
-
         public Type2CharStrings(IReadOnlyDictionary<string, CommandSequence> charStrings)
         {
             CharStrings = charStrings ?? throw new ArgumentNullException(nameof(charStrings));
@@ -197,7 +196,7 @@
                 return stringBuilder.ToString();
             }
 
-            public struct CommandIdentifier
+            public readonly struct CommandIdentifier
             {
                 public int CommandIndex { get; }
 
@@ -224,7 +223,7 @@
         /// <summary>
         /// The path of the glyph.
         /// </summary>
-        public PdfSubpath Path { get; }
+        public IReadOnlyList<PdfSubpath> Path { get; }
 
         /// <summary>
         /// The width of the glyph as a difference from the nominal width X for the font. Optional.
@@ -234,7 +233,7 @@
         /// <summary>
         /// Create a new <see cref="Type2Glyph"/>.
         /// </summary>
-        public Type2Glyph(PdfSubpath path, double? width)
+        public Type2Glyph(IReadOnlyList<PdfSubpath> path, double? width)
         {
             Path = path ?? throw new ArgumentNullException(nameof(path));
             Width = width;

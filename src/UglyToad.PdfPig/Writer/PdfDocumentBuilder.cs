@@ -1,20 +1,25 @@
 ﻿
 namespace UglyToad.PdfPig.Writer
 {
-    using Content;
-    using Core;
-    using Fonts;
-    using PdfPig.Fonts.Standard14Fonts;
-    using PdfPig.Fonts.TrueType;
-    using PdfPig.Fonts.TrueType.Parser;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using Content;
+    using Core;
+    using Fonts;
+    using Actions;
+    using PdfPig.Fonts.TrueType;
+    using PdfPig.Fonts.Standard14Fonts;
+    using PdfPig.Fonts.TrueType.Parser;
+    using Outline;
+    using Outline.Destinations;
     using Tokenization.Scanner;
     using Tokens;
+
     using Util.JetBrains.Annotations;
+    using System.Xml.Linq;
 
     /// <summary>
     /// Provides methods to construct new PDF documents.
@@ -26,6 +31,7 @@ namespace UglyToad.PdfPig.Writer
         private readonly Dictionary<Guid, FontStored> fonts = new Dictionary<Guid, FontStored>();
         private bool completed = false;
         private int fontId = 0;
+        private decimal version = 1.7m;
 
         private readonly static ArrayToken DefaultProcSet = new ArrayToken(new List<NameToken>
         {
@@ -49,7 +55,18 @@ namespace UglyToad.PdfPig.Writer
         /// <summary>
         /// The values of the fields to include in the document information dictionary.
         /// </summary>
-        public DocumentInformationBuilder DocumentInformation { get; } = new DocumentInformationBuilder();
+        public DocumentInformationBuilder DocumentInformation { get; set; } = new DocumentInformationBuilder();
+
+        /// <summary>
+        /// The bookmark nodes to include in the document outline dictionary.
+        /// </summary>
+        public Bookmarks Bookmarks { get; set; }
+
+        /// <summary>
+        /// The document level metadata, which is XML in the XMP (Extensible Metadata Platform) format. Will only be added, if the PDF is
+        /// created with an ArchiveStandard other than PdfAStandard.None.
+        /// </summary>
+        public XDocument XmpMetadata { get; set; }
 
         /// <summary>
         /// The current page builders in the document and the corresponding 1 indexed page numbers. Use <see cref="AddPage(double,double)"/>
@@ -67,7 +84,7 @@ namespace UglyToad.PdfPig.Writer
         /// </summary>
         public PdfDocumentBuilder()
         {
-            context = new PdfStreamWriter(new MemoryStream(), true);
+            context = new PdfStreamWriter(new MemoryStream(), true, recordVersion: x => version = x);
             context.InitializePdf(1.7m);
         }
 
@@ -77,7 +94,7 @@ namespace UglyToad.PdfPig.Writer
         /// <param name="version">Pdf version to use in header.</param>
         public PdfDocumentBuilder(decimal version)
         {
-            context = new PdfStreamWriter(new MemoryStream(), true);
+            context = new PdfStreamWriter(new MemoryStream(), true, recordVersion: x => version = x);
             context.InitializePdf(version);
         }
 
@@ -94,12 +111,13 @@ namespace UglyToad.PdfPig.Writer
             switch (type)
             {
                 case PdfWriterType.ObjectInMemoryDedup:
-                    context = new PdfDedupStreamWriter(stream, disposeStream, tokenWriter);
+                    context = new PdfDedupStreamWriter(stream, disposeStream, tokenWriter, x => version = x);
                     break;
                 default:
-                    context = new PdfStreamWriter(stream, disposeStream, tokenWriter);
+                    context = new PdfStreamWriter(stream, disposeStream, tokenWriter, x => version = x);
                     break;
             }
+
             context.InitializePdf(version);
         }
 
@@ -268,7 +286,6 @@ namespace UglyToad.PdfPig.Writer
             return AddPage(rectangle.Width, rectangle.Height);
         }
 
-
         internal IToken CopyToken(IPdfTokenScanner source, IToken token)
         {
             if (!existingCopies.TryGetValue(source, out var refs))
@@ -280,15 +297,18 @@ namespace UglyToad.PdfPig.Writer
             return WriterUtil.CopyToken(context, token, source, refs);
         }
 
-        internal class PageInfo
+        private class PageInfo
         {
             public DictionaryToken Page { get; set; }
             public IReadOnlyList<DictionaryToken> Parents { get; set; }
         }
+
         private readonly ConditionalWeakTable<IPdfTokenScanner, Dictionary<IndirectReference, IndirectReferenceToken>> existingCopies =
             new ConditionalWeakTable<IPdfTokenScanner, Dictionary<IndirectReference, IndirectReferenceToken>>();
+
         private readonly ConditionalWeakTable<PdfDocument, Dictionary<int, PageInfo>> existingTrees =
             new ConditionalWeakTable<PdfDocument, Dictionary<int, PageInfo>>();
+
         /// <summary>
         /// Add a new page with the specified size, this page will be included in the output when <see cref="Build"/> is called.
         /// </summary>
@@ -296,6 +316,18 @@ namespace UglyToad.PdfPig.Writer
         /// <param name="pageNumber">Page to copy.</param>
         /// <returns>A builder for editing the page.</returns>
         public PdfPageBuilder AddPage(PdfDocument document, int pageNumber)
+        {
+            return AddPage(document, pageNumber, null);
+        }
+
+        /// <summary>
+        /// Add a new page with the specified size, this page will be included in the output when <see cref="Build"/> is called.
+        /// </summary>
+        /// <param name="document">Source document.</param>
+        /// <param name="pageNumber">Page to copy.</param>
+        /// <param name="copyLink">If set, links are copied based on the result of the delegate.</param>
+        /// <returns>A builder for editing the page.</returns>
+        public PdfPageBuilder AddPage(PdfDocument document, int pageNumber, Func<PdfAction, PdfAction> copyLink)
         {
             if (!existingCopies.TryGetValue(document.Structure.TokenScanner, out var refs))
             {
@@ -307,7 +339,7 @@ namespace UglyToad.PdfPig.Writer
             {
                 pagesInfos = new Dictionary<int, PageInfo>();
                 int i = 1;
-                foreach (var (pageDict, parents) in WriterUtil.WalkTree(document.Structure.Catalog.PageTree))
+                foreach (var (pageDict, parents) in WriterUtil.WalkTree(document.Structure.Catalog.Pages.PageTree))
                 {
                     pagesInfos[i] = new PageInfo
                     {
@@ -325,6 +357,8 @@ namespace UglyToad.PdfPig.Writer
                 throw new KeyNotFoundException($"Page {pageNumber} was not found in the source document.");
             }
 
+            var page = document.GetPage(pageNumber);
+
             // copy content streams
             var streams = new List<PdfPageBuilder.CopiedContentStream>();
             if (pageInfo.Page.TryGet(NameToken.Contents, out IToken contentsToken))
@@ -333,6 +367,7 @@ namespace UglyToad.PdfPig.Writer
                 // dedup if on to avoid issues
                 var prev = context.AttemptDeduplication;
                 context.AttemptDeduplication = false;
+                context.WritingPageContents = true;
                 if (contentsToken is ArrayToken array)
                 {
                     foreach (var item in array.Data)
@@ -351,10 +386,12 @@ namespace UglyToad.PdfPig.Writer
                         WriterUtil.CopyToken(context, ir, document.Structure.TokenScanner, refs) as IndirectReferenceToken));
                 }
                 context.AttemptDeduplication = prev;
+                context.WritingPageContents = false;
             }
 
             // manually copy page dict / resources as we need to modify some
             var copiedPageDict = new Dictionary<NameToken, IToken>();
+            var links = new List<(DictionaryToken token, PdfAction action)>();
             Dictionary<NameToken, IToken> resources = new Dictionary<NameToken, IToken>();
 
             // just put all parent resources into new page
@@ -377,7 +414,6 @@ namespace UglyToad.PdfPig.Writer
                     copiedPageDict[NameToken.Rotate] = WriterUtil.CopyToken(context, rt, document.Structure.TokenScanner, refs);
                 }
             }
-
 
             foreach (var kvp in pageInfo.Page.Data)
             {
@@ -414,9 +450,7 @@ namespace UglyToad.PdfPig.Writer
                         continue;
                     }
 
-                    // -> ignore links to resolve issues with refencing non-existing pages
-                    // at some point should add support for copying the links if the
-                    // pages are copied as well but for now just fix corruption
+                    // if copyLink is unset, ignore links to resolve issues with refencing non-existing pages
                     var toAdd = new List<IToken>();
                     foreach (var annot in arr.Data)
                     {
@@ -426,10 +460,38 @@ namespace UglyToad.PdfPig.Writer
                             // malformed
                             continue;
                         }
+
                         if (tk.TryGet(NameToken.Subtype, out var st) && st is NameToken nm && nm == NameToken.Link)
                         {
-                            // link -> ignore
-                            continue;
+                            if (copyLink == null)
+                            {
+                                // ingore link if don't know how to copy
+                                continue;
+                            }
+
+                            var link = page.annotationProvider.GetAction(tk);
+                            if (link == null)
+                            {
+                                // ignore unknown link actions
+                                continue;
+                            }
+
+                            var copiedLink = copyLink(link);
+                            if (copiedLink == null)
+                            {
+                                // ignore if caller wants to skip the link
+                                continue;
+                            }
+
+                            if (copiedLink != link)
+                            {
+                                // defer to write links when all pages are added
+                                var copiedToken = (DictionaryToken)WriterUtil.CopyToken(context, tk, document.Structure.TokenScanner, refs);
+                                links.Add((copiedToken, copiedLink));
+                                continue;
+                            }
+
+                            // copy as is if caller returns the same link
                         }
                         toAdd.Add(WriterUtil.CopyToken(context, tk, document.Structure.TokenScanner, refs));
                     }
@@ -444,7 +506,7 @@ namespace UglyToad.PdfPig.Writer
 
             copiedPageDict[NameToken.Resources] = new DictionaryToken(resources);
 
-            var builder = new PdfPageBuilder(pages.Count + 1, this, streams, copiedPageDict);
+            var builder = new PdfPageBuilder(pages.Count + 1, this, streams, copiedPageDict, links);
             pages[builder.PageNumber] = builder;
             return builder;
 
@@ -546,6 +608,7 @@ namespace UglyToad.PdfPig.Writer
             }
 
             int leafNum = 0;
+            var pageReferences = pages.ToDictionary(p => p.Key, p => context.ReserveObjectNumber());
 
             foreach (var page in pages)
             {
@@ -588,9 +651,27 @@ namespace UglyToad.PdfPig.Writer
                     }
                     pageDictionary[NameToken.Contents] = new ArrayToken(streams);
                 }
-                context.AttemptDeduplication = prev; ;
+                context.AttemptDeduplication = prev;
 
-                leafChildren[leafNum].Add(context.WriteToken(new DictionaryToken(pageDictionary)));
+                // write links
+                if (page.Value.links != null && page.Value.links.Count > 0)
+                {
+                    var annots = new List<IToken>();
+
+                    if (pageDictionary.TryGetValue(NameToken.Annots, out var existingAnnots))
+                    {
+                        annots.AddRange(((ArrayToken)existingAnnots).Data);
+                    }
+
+                    foreach (var (token, action) in page.Value.links)
+                    {
+                        annots.Add(CreateLinkAnnotationToken(token, action, pageReferences));
+                    }
+
+                    pageDictionary[NameToken.Annots] = new ArrayToken(annots);
+                }
+
+                leafChildren[leafNum].Add(context.WriteToken(new DictionaryToken(pageDictionary), pageReferences[page.Key]));
 
                 if (leafChildren[leafNum].Count >= desiredLeafSize)
                 {
@@ -623,11 +704,25 @@ namespace UglyToad.PdfPig.Writer
                 catalogDictionary[NameToken.Pages] = rootPageInfo.Ref;
             }
 
+            if (Bookmarks != null && Bookmarks.Roots.Count > 0)
+            {
+                var bookmarks = CreateBookmarkTree(Bookmarks.Roots, pageReferences, null);
+                var outline = new Dictionary<NameToken, IToken>
+                {
+                    {NameToken.Type, NameToken.Outlines},
+                    {NameToken.Count, new NumericToken(Bookmarks.Roots.Count)},
+                    {NameToken.First, bookmarks[0]},
+                    {NameToken.Last, bookmarks[bookmarks.Length - 1]},
+                };
+
+                catalogDictionary[NameToken.Outlines] = context.WriteToken(new DictionaryToken(outline));
+            }
+
             if (ArchiveStandard != PdfAStandard.None)
             {
                 Func<IToken, IndirectReferenceToken> writerFunc = x => context.WriteToken(x);
 
-                PdfABaselineRuleBuilder.Obey(catalogDictionary, writerFunc, DocumentInformation, ArchiveStandard);
+                PdfABaselineRuleBuilder.Obey(catalogDictionary, writerFunc, DocumentInformation, ArchiveStandard, version, XmpMetadata);
 
                 switch (ArchiveStandard)
                 {
@@ -637,6 +732,11 @@ namespace UglyToad.PdfPig.Writer
                     case PdfAStandard.A2B:
                         break;
                     case PdfAStandard.A2A:
+                        PdfA1ARuleBuilder.Obey(catalogDictionary);
+                        break;
+                    case PdfAStandard.A3B:
+                        break;
+                    case PdfAStandard.A3A:
                         PdfA1ARuleBuilder.Obey(catalogDictionary);
                         break;
                 }
@@ -744,6 +844,207 @@ namespace UglyToad.PdfPig.Writer
             });
         }
 
+        private IndirectReferenceToken[] CreateBookmarkTree(IReadOnlyList<BookmarkNode> nodes, Dictionary<int, IndirectReferenceToken> pageReferences, IndirectReferenceToken parent)
+        {
+            var childObjectNumbers = new IndirectReferenceToken[nodes.Count];
+            for (var i = 0; i < nodes.Count; i++)
+            {
+                childObjectNumbers[i] = context.ReserveObjectNumber();
+            }
+
+            for (var i = 0; i < nodes.Count; i++)
+            {
+                var node = nodes[i];
+                var objectNumber = childObjectNumbers[i];
+                var data = new Dictionary<NameToken, IToken>
+                {
+                    {NameToken.Title, new StringToken(node.Title)},
+                    {NameToken.Count, new NumericToken(node.Children.Count)}
+                };
+
+                if (parent != null)
+                {
+                    data[NameToken.Parent] = parent;
+                }
+                if (i > 0)
+                {
+                    data[NameToken.Prev] = childObjectNumbers[i - 1];
+                }
+                if (i < childObjectNumbers.Length - 1)
+                {
+                    data[NameToken.Next] = childObjectNumbers[i + 1];
+                }
+
+                if (node.Children.Count > 0)
+                {
+                    var children = CreateBookmarkTree(node.Children, pageReferences, objectNumber);
+                    data[NameToken.First] = children[0];
+                    data[NameToken.Last] = children[children.Length - 1];
+                }
+
+                switch (node)
+                {
+                    case DocumentBookmarkNode documentBookmarkNode:
+                        data[NameToken.Dest] = CreateExplicitDestinationToken(documentBookmarkNode.Destination, pageReferences);
+                        break;
+
+                    case UriBookmarkNode uriBookmarkNode:
+                        data[NameToken.A] = new DictionaryToken(new Dictionary<NameToken, IToken>()
+                        {
+                            [NameToken.S] = NameToken.Uri,
+                            [NameToken.Uri] = new StringToken(uriBookmarkNode.Uri),
+                        });
+                        break;
+
+                    default:
+                        throw new NotSupportedException($"{node.GetType().Name} is not a supported bookmark node type.");
+                }
+
+                context.WriteToken(new DictionaryToken(data), objectNumber);
+            }
+
+            return childObjectNumbers;
+        }
+
+        private static ArrayToken CreateExplicitDestinationToken(ExplicitDestination destination, Dictionary<int, IndirectReferenceToken> pageReferences)
+        {
+            if (!pageReferences.TryGetValue(destination.PageNumber, out var page))
+            {
+                throw new KeyNotFoundException($"Page {destination.PageNumber} was not found in the source document.");
+            }
+
+            switch (destination.Type)
+            {
+                case ExplicitDestinationType.XyzCoordinates:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.XYZ,
+                        new NumericToken(destination.Coordinates.Left ?? 0),
+                        new NumericToken(destination.Coordinates.Top ?? 0),
+                        new NumericToken(0)
+                    });
+
+                case ExplicitDestinationType.FitPage:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.Fit
+                    });
+
+                case ExplicitDestinationType.FitHorizontally:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.FitH,
+                        new NumericToken(destination.Coordinates.Top ?? 0)
+                    });
+
+                case ExplicitDestinationType.FitVertically:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.FitV,
+                        new NumericToken(destination.Coordinates.Left ?? 0)
+                    });
+
+                case ExplicitDestinationType.FitRectangle:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.FitR,
+                        new NumericToken(destination.Coordinates.Left ?? 0),
+                        new NumericToken(destination.Coordinates.Top ?? 0),
+                        new NumericToken(destination.Coordinates.Right ?? 0),
+                        new NumericToken(destination.Coordinates.Bottom ?? 0)
+                    });
+
+                case ExplicitDestinationType.FitBoundingBox:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.FitB,
+                    });
+
+                case ExplicitDestinationType.FitBoundingBoxHorizontally:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.FitBH,
+                        new NumericToken(destination.Coordinates.Left ?? 0)
+                    });
+
+                case ExplicitDestinationType.FitBoundingBoxVertically:
+                    return new ArrayToken(new IToken[]
+                    {
+                        page,
+                        NameToken.FitBV,
+                        new NumericToken(destination.Coordinates.Left ?? 0)
+                    });
+
+                default:
+                    throw new NotSupportedException($"{destination.Type} is not a supported bookmark destination type.");
+            }
+        }
+
+        private static DictionaryToken CreateLinkAnnotationToken(DictionaryToken token, PdfAction action, Dictionary<int, IndirectReferenceToken> pageReferences)
+        {
+            var data = new Dictionary<NameToken, IToken>();
+
+            foreach (var item in token.Data)
+            {
+                var nameToken = NameToken.Create(item.Key);
+                if (nameToken == NameToken.A || nameToken == NameToken.Dest)
+                {
+                    // ignore /A and /Dest
+                    continue;
+                }
+
+                data[nameToken] = item.Value;
+            }
+
+            data[NameToken.A] = CreateActionToken(action, pageReferences);
+            return new DictionaryToken(data);
+        }
+
+        private static DictionaryToken CreateActionToken(PdfAction action, Dictionary<int, IndirectReferenceToken> pageReferences)
+        {
+            switch (action)
+            {
+                case UriAction uriAction:
+                    return new DictionaryToken(new Dictionary<NameToken, IToken>()
+                    {
+                        [NameToken.S] = NameToken.Uri,
+                        [NameToken.Uri] = new StringToken(uriAction.Uri),
+                    });
+
+                case GoToAction goToAction:
+                    return new DictionaryToken(new Dictionary<NameToken, IToken>()
+                    {
+                        [NameToken.S] = NameToken.GoTo,
+                        [NameToken.D] = CreateExplicitDestinationToken(goToAction.Destination, pageReferences),
+                    });
+
+                case GoToEAction goToEAction:
+                    return new DictionaryToken(new Dictionary<NameToken, IToken>()
+                    {
+                        [NameToken.S] = NameToken.GoToE,
+                        [NameToken.F] = new StringToken(goToEAction.FileSpecification),
+                        [NameToken.D] = CreateExplicitDestinationToken(goToEAction.Destination, pageReferences),
+                    });
+
+                case GoToRAction goToRAction:
+                    return new DictionaryToken(new Dictionary<NameToken, IToken>()
+                    {
+                        [NameToken.S] = NameToken.GoToR,
+                        [NameToken.F] = new StringToken(goToRAction.Filename),
+                        [NameToken.D] = CreateExplicitDestinationToken(goToRAction.Destination, pageReferences),
+                    });
+
+                default:
+                    throw new NotSupportedException($"{action.GetType().Name} is not a supported PDF action type.");
+            }
+        }
 
         internal class FontStored
         {
@@ -793,6 +1094,11 @@ namespace UglyToad.PdfPig.Writer
         public class DocumentInformationBuilder
         {
             /// <summary>
+            /// Consumer applications can store custom metadata in the document information dictionary.
+            /// </summary>
+            public Dictionary<string, string> CustomMetadata { get; } = new Dictionary<string, string>();
+
+            /// <summary>
             /// <see cref="DocumentInformation.Title"/>.
             /// </summary>
             public string Title { get; set; }
@@ -822,9 +1128,29 @@ namespace UglyToad.PdfPig.Writer
             /// </summary>
             public string Producer { get; set; } = "PdfPig";
 
+            /// <summary>
+            /// <see cref="DocumentInformation.CreationDate"/>.
+            /// </summary>
+            public string CreationDate { get; set; }
+
+            /// <summary>
+            /// <see cref="DocumentInformation.ModifiedDate"/>.
+            /// </summary>
+            public string ModifiedDate { get; set; }
+
             internal Dictionary<NameToken, IToken> ToDictionary()
             {
                 var result = new Dictionary<NameToken, IToken>();
+
+                foreach (var pair in CustomMetadata)
+                {
+                    if (pair.Key == null || pair.Value == null)
+                    {
+                        continue;
+                    }
+
+                    result[NameToken.Create(pair.Key)] = new StringToken(pair.Value);
+                }
 
                 if (Title != null)
                 {
@@ -854,6 +1180,16 @@ namespace UglyToad.PdfPig.Writer
                 if (Producer != null)
                 {
                     result[NameToken.Producer] = new StringToken(Producer);
+                }
+
+                if (CreationDate != null)
+                {
+                    result[NameToken.CreationDate] = new StringToken(CreationDate);
+                }
+
+                if (ModifiedDate != null)
+                {
+                    result[NameToken.ModDate] = new StringToken(ModifiedDate);
                 }
 
                 return result;

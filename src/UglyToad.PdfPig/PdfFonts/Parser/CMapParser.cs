@@ -1,11 +1,12 @@
 ﻿namespace UglyToad.PdfPig.PdfFonts.Parser
 {
-    using Cmap;
-    using Core;
-    using Parts;
     using System;
     using System.IO;
     using System.Linq;
+    using Cmap;
+    using Core;
+    using Parts;
+    using System.Collections.Generic;
     using Tokenization.Scanner;
     using Tokens;
 
@@ -20,7 +21,12 @@
 
         public CMap Parse(IInputBytes inputBytes)
         {
-            var scanner = new CoreTokenScanner(inputBytes);
+            var scanner = new CoreTokenScanner(inputBytes,
+                false,
+                namedDictionaryRequiredKeys: new Dictionary<NameToken, IReadOnlyList<NameToken>>
+                {
+                    { NameToken.CidSystemInfo, new[] { NameToken.Registry, NameToken.Ordering, NameToken.Supplement } }
+                });
 
             var builder = new CharacterMapBuilder();
 

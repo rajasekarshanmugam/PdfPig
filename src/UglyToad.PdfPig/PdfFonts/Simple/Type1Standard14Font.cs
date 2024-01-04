@@ -1,4 +1,4 @@
-﻿// ReSharper disable CompareOfFloatsByEqualityOperator
+﻿//// ReSharper disable CompareOfFloatsByEqualityOperator
 namespace UglyToad.PdfPig.PdfFonts.Simple
 {
     using Core;
@@ -6,6 +6,7 @@ namespace UglyToad.PdfPig.PdfFonts.Simple
     using Fonts.AdobeFontMetrics;
     using Fonts.Encodings;
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using Tokens;
 
@@ -119,6 +120,26 @@ namespace UglyToad.PdfPig.PdfFonts.Simple
         public TransformationMatrix GetFontMatrix()
         {
             return fontMatrix;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// <para>Not implemeted.</para>
+        /// </summary>
+        public bool TryGetPath(int characterCode, out IReadOnlyList<PdfSubpath> path)
+        {
+            // https://github.com/apache/pdfbox/blob/trunk/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/font/Standard14Fonts.java
+            path = null;
+            return false;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// <para>Not implemeted.</para>
+        /// </summary>
+        public bool TryGetNormalisedPath(int characterCode, out IReadOnlyList<PdfSubpath> path)
+        {
+            return TryGetPath(characterCode, out path);
         }
     }
 }

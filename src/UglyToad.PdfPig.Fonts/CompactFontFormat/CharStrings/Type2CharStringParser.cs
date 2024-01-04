@@ -2,7 +2,6 @@
 namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
 {
     using Charsets;
-    using Core;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,7 +15,7 @@ namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
     /// A Type 2 charstring program is a sequence of unsigned 8-bit bytes that encode numbers and operators.
     /// The byte value specifies a operator, a number, or subsequent bytes that are to be interpreted in a specific manner
     /// </remarks>
-    internal class Type2CharStringParser
+    internal static class Type2CharStringParser
     {
         private const byte HstemByte = 1;
         private const byte VstemByte = 3;
@@ -92,10 +91,7 @@ namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
                 new LazyType2Command("vmoveto", 1, ctx =>
                 {
                     var dy = ctx.Stack.PopBottom();
-
-                    ctx.Path.MoveTo(ctx.CurrentLocation.X, ctx.CurrentLocation.Y + dy);
-                    ctx.CurrentLocation = ctx.CurrentLocation.MoveY(dy);
-
+                    ctx.AddVerticallMoveTo(dy);
                     ctx.Stack.Clear();
                 })
             },
@@ -249,13 +245,7 @@ namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
                 {
                     var dx = ctx.Stack.PopBottom();
                     var dy = ctx.Stack.PopBottom();
-
-                    var newLocation = new PdfPoint(ctx.CurrentLocation.X + dx,
-                        ctx.CurrentLocation.Y + dy);
-
-                    ctx.Path.MoveTo(newLocation.X, newLocation.Y);
-                    ctx.CurrentLocation = newLocation;
-
+                    ctx.AddRelativeMoveTo(dx,dy);
                     ctx.Stack.Clear();
                 })
             },
@@ -263,10 +253,7 @@ namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
                 new LazyType2Command("hmoveto", 1, ctx =>
                 {
                     var dx = ctx.Stack.PopBottom();
-
-                    ctx.Path.MoveTo(ctx.CurrentLocation.X + dx, ctx.CurrentLocation.Y);
-                    ctx.CurrentLocation = ctx.CurrentLocation.MoveX(dx);
-
+                    ctx.AddHorizontalMoveTo(dx);
                     ctx.Stack.Clear();
                 })
             },
@@ -630,10 +617,19 @@ namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
             {
                 34,  new LazyType2Command("hflex", 7, ctx =>
                 {
-                    //  dx1 dx2 dy2 dx3 dx4 dx5 dx6 
+                    // dx1 dx2 dy2 dx3 dx4 dx5 dx6 
                     // Two Bezier curves with an fd of 50
+                    var dx1 = ctx.Stack.PopBottom();
+                    var dx2 = ctx.Stack.PopBottom();
+                    var dy2 = ctx.Stack.PopBottom();
+                    var dx3 = ctx.Stack.PopBottom();
+                    var dx4 = ctx.Stack.PopBottom();
+                    var dx5 = ctx.Stack.PopBottom();
+                    var dx6 = ctx.Stack.PopBottom();
 
-                    // TODO: implement
+                    ctx.AddRelativeBezierCurve(dx1, 0, dx2, dy2, dx3, 0);
+                    ctx.AddRelativeBezierCurve(dx4, 0, dx5, -dy2, dx6, 0);
+
                     ctx.Stack.Clear();
                 })
             },
@@ -658,11 +654,26 @@ namespace UglyToad.PdfPig.Fonts.CompactFontFormat.CharStrings
                     ctx.Stack.Clear();
                 })
             },
-            { 36,  new LazyType2Command("hflex1", 9, ctx =>
             {
-                // TODO: implement
-                ctx.Stack.Clear();
-            })},
+                36,  new LazyType2Command("hflex1", 9, ctx =>
+                {
+                    // dx1 dy1 dx2 dy2 dx3 dx4 dx5 dy5 dx6
+                    var dx1 = ctx.Stack.PopBottom();
+                    var dy1 = ctx.Stack.PopBottom();
+                    var dx2 = ctx.Stack.PopBottom();
+                    var dy2 = ctx.Stack.PopBottom();
+                    var dx3 = ctx.Stack.PopBottom();
+                    var dx4 = ctx.Stack.PopBottom();
+                    var dx5 = ctx.Stack.PopBottom();
+                    var dy5 = ctx.Stack.PopBottom();
+                    var dx6 = ctx.Stack.PopBottom();
+
+                    ctx.AddRelativeBezierCurve(dx1, dy1, dx2, dy2, dx3, 0);
+                    ctx.AddRelativeBezierCurve(dx4, 0, dx5, dy5, dx6, -dy5 -dy2 -dy1);
+
+                    ctx.Stack.Clear();
+                })
+            },
             { 37,  new LazyType2Command("flex1", 11, ctx =>
             {
                 // dx1 dy1 dx2 dy2 dx3 dy3 dx4 dy4 dx5 dy5 d6 

@@ -1,7 +1,7 @@
 namespace UglyToad.PdfPig.Tokens
 {
-    using Core;
     using System;
+    using Core;
 
     /// <summary>
     /// Represents a string of text contained in a PDF document.
@@ -38,21 +38,23 @@ namespace UglyToad.PdfPig.Tokens
             switch (EncodedWith)
             {
                 case Encoding.Utf16BE:
-                    {
-                        var data = System.Text.Encoding.BigEndianUnicode.GetBytes(Data);
+                {
+                    var data = System.Text.Encoding.BigEndianUnicode.GetBytes(Data);
 
-                        var result = new byte[data.Length + 2];
-                        result[0] = 0xFE;
-                        result[1] = 0xFF;
+                    var result = new byte[data.Length + 2];
+                    result[0] = 0xFE;
+                    result[1] = 0xFF;
 
-                        Array.Copy(data, 0, result, 2, data.Length);
+                    Array.Copy(data, 0, result, 2, data.Length);
 
-                        return result;
-                    }
+                    return result;
+                }
                 case Encoding.Utf16:
-                    {
-                        return System.Text.Encoding.Unicode.GetBytes(Data);
-                    }
+                {
+                    return System.Text.Encoding.Unicode.GetBytes(Data);
+                }
+                case Encoding.PdfDocEncoding:
+                    return PdfDocEncoding.StringToBytes(Data);
                 default:
                     return OtherEncodings.StringAsLatin1Bytes(Data);
             }
@@ -96,7 +98,11 @@ namespace UglyToad.PdfPig.Tokens
             /// <summary>
             /// UTF-16 Big Endian.
             /// </summary>
-            Utf16BE = 2
+            Utf16BE = 2,
+            /// <summary>
+            /// The PdfDocEncoding for strings in the body of a PDF file.
+            /// </summary>
+            PdfDocEncoding = 3,
         }
     }
 }
